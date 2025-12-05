@@ -2,7 +2,7 @@ const XP_PER_LEVEL = 500;
 
 // URL del login (ajustar si es otra)
 const LOGIN_URL = "index.html";
-const PROFILE_URL = "html/perfil.html";
+const PROFILE_URL = "../html/perfil.html";
 
 /**
  * Inicializa el header base dentro de #app-header.
