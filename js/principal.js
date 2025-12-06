@@ -221,24 +221,28 @@ async function cargarClubes() {
             const esCreador = club.ownerUsername === username;
             const img = club.imagen || '../images/BooksyLogo.png';
             
-            const clubCard = crearTarjetaClub(club, esMiembro, esCreador, img);
-            
-            // Agregar a la grilla correspondiente
+            // Agregar a "Mis Clubes" si es miembro
             if (esMiembro) {
-                misClubesGrid.appendChild(clubCard);
+                const clubCardMiembro = crearTarjetaClub(club, esMiembro, esCreador, img);
+                misClubesGrid.appendChild(clubCardMiembro);
                 // Añadir navegación al hacer click en la tarjeta
-                clubCard.addEventListener("click", (e) => {
+                clubCardMiembro.addEventListener("click", (e) => {
                     if (!e.target.classList.contains("editar-btn")) {
                         window.location.href = `club_lectura.html?clubId=${club.id}`;
                     }
                 });
-            } else if (clubesAgregados < 1) { // LÍMITE: Solo agregamos el primer club disponible
-                clubesGrid.appendChild(clubCard);
-                clubesAgregados++; // Incrementamos el contador
+                // Configurar eventos de botones para la tarjeta de miembro
+                configurarEventosClub(clubCardMiembro, club, esMiembro, esCreador, username);
             }
-
-            // Configurar eventos de botones
-            configurarEventosClub(clubCard, club, esMiembro, esCreador, username);
+            
+            // Agregar a "Clubes de Lectura" si NO es miembro y aún hay espacio
+            if (!esMiembro && clubesAgregados < 1) {
+                const clubCardPublico = crearTarjetaClub(club, esMiembro, esCreador, img);
+                clubesGrid.appendChild(clubCardPublico);
+                clubesAgregados++; // Incrementamos el contador
+                // Configurar eventos de botones para la tarjeta pública
+                configurarEventosClub(clubCardPublico, club, esMiembro, esCreador, username);
+            }
         });
         
         // === COMPROBACIÓN: Si Mis Clubes está vacío, mostrar mensaje ===
