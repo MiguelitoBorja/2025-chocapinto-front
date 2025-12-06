@@ -983,7 +983,7 @@ async function concluirLectura(periodoId) {
             confirmText: "Concluir Lectura",
             cancelText: "Cancelar",
             confirmClass: "green-btn",
-            cancelClass: "gray-btn"
+            cancelClass: "orange-btn"
         }
     );
 }
