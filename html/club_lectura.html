@@ -590,6 +590,7 @@
     <link rel="stylesheet" href="../css/componentes/notificaciones.css">
     <link rel="stylesheet" href="../css/componentes/loader.css">
     <link rel="stylesheet" href="../css/componentes/confirmacion.css">
+    <link rel="stylesheet" href="../css/componentes/agenda.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -913,6 +914,78 @@
 </div>
 
 <div id="notifications" class="notification-container"></div>
+
+<!-- Modal de Agenda -->
+<div id="modalAgenda" class="modal-overlay">
+  <div class="agenda-modal-content">
+    <div class="agenda-modal-header">
+      <h2>📅 Agenda del Club</h2>
+      <div class="agenda-actions">
+        <button class="btn-primary" id="btnCrearSesion" onclick="mostrarModalCrearSesion()" style="display: none;">
+          + Nueva Sesión
+        </button>
+        <button class="close-btn" onclick="cerrarModalAgenda()">✕</button>
+      </div>
+    </div>
+
+    <div class="agenda-modal-body">
+      <div class="agenda-tabs">
+        <button class="agenda-tab active" id="btnSesionesProximas" onclick="cambiarVistaAgenda('proximas')">
+          Próximas Sesiones
+        </button>
+        <button class="agenda-tab" id="btnSesionesPasadas" onclick="cambiarVistaAgenda('pasadas')">
+          Historial
+        </button>
+      </div>
+
+      <div id="sesionesContainer">
+        <!-- Las sesiones se cargarán aquí dinámicamente -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Crear Sesión -->
+<div id="modalCrearSesion" class="modal-overlay">
+  <div class="crear-sesion-modal-content">
+    <h2>Crear Nueva Sesión</h2>
+    
+    <form id="formCrearSesion" onsubmit="crearSesion(event)">
+      <div class="form-group">
+        <label for="sesionTitulo">Título de la sesión *</label>
+        <input type="text" id="sesionTitulo" name="titulo" required placeholder="Ej: Debate capítulos 1-5">
+      </div>
+
+      <div class="form-group">
+        <label for="sesionLibroId">Libro asociado</label>
+        <select id="sesionLibroId" name="clubBookId">
+          <option value="">Sesión general (sin libro específico)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="sesionFechaHora">Fecha y hora *</label>
+        <input type="datetime-local" id="sesionFechaHora" name="fechaHora" required>
+      </div>
+
+      <div class="form-group">
+        <label for="sesionLugar">Lugar *</label>
+        <input type="text" id="sesionLugar" name="lugar" required placeholder="Dirección o link de videollamada">
+      </div>
+
+      <div class="form-group">
+        <label for="sesionDescripcion">Notas o consigna</label>
+        <textarea id="sesionDescripcion" name="descripcion" placeholder="Ej: Traer frases subrayadas, foco en el personaje X..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="cerrarModalCrearSesion()">Cancelar</button>
+        <button type="submit" class="btn-primary">Crear Sesión</button>
+      </div>
+    </form>
+  </div>
+</div>
+
    <script type="module"src="../componentes/loader.js"></script>
    <script type="module" src="../componentes/notificacion.js"></script>
    <script type="module" src="../js/clubnew.js"></script>

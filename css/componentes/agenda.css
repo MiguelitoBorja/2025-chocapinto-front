@@ -1,0 +1,498 @@
+/* ========== MODAL DE AGENDA ========== */
+#modalAgenda {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.agenda-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.agenda-modal-header {
+  padding: 24px;
+  border-bottom: 1px solid #eaf6ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agenda-modal-header h2 {
+  margin: 0;
+  color: #2c5a91;
+  font-size: 24px;
+}
+
+.agenda-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.agenda-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ========== TABS DE NAVEGACIÓN ========== */
+.agenda-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #eaf6ff;
+  padding-bottom: 12px;
+}
+
+.agenda-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: #636e72;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.agenda-tab:hover {
+  background: #eaf6ff;
+  color: #2c5a91;
+}
+
+.agenda-tab.active {
+  background: #2c5a91;
+  color: white;
+}
+
+/* ========== CONTAINER DE SESIONES ========== */
+#sesionesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ========== TARJETA DE SESIÓN ========== */
+.sesion-card {
+  background: white;
+  border: 1px solid #eaf6ff;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.sesion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.sesion-card.sesion-pasada {
+  opacity: 0.7;
+  background: #f8f9fa;
+}
+
+.sesion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.sesion-fecha-hora {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sesion-fecha {
+  font-size: 14px;
+  color: #2c5a91;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.sesion-hora {
+  font-size: 13px;
+  color: #636e72;
+}
+
+.sesion-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  padding: 6px;
+  background: transparent;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #636e72;
+}
+
+.btn-icon:hover {
+  background: #eaf6ff;
+  border-color: #2c5a91;
+  color: #2c5a91;
+}
+
+.btn-icon.btn-danger:hover {
+  background: #ffe0e0;
+  border-color: #d63031;
+  color: #d63031;
+}
+
+.sesion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sesion-titulo {
+  margin: 0;
+  font-size: 18px;
+  color: #2c5a91;
+}
+
+.sesion-libro {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.sesion-libro img {
+  width: 50px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.libro-titulo {
+  font-weight: 600;
+  color: #2c5a91;
+  font-size: 14px;
+}
+
+.libro-autor {
+  font-size: 13px;
+  color: #636e72;
+}
+
+.sesion-descripcion {
+  padding: 12px;
+  background: #eaf6ff;
+  border-left: 3px solid #2c5a91;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #636e72;
+  line-height: 1.6;
+}
+
+.sesion-lugar {
+  font-size: 14px;
+  color: #636e72;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+/* ========== CONFIRMACIONES ========== */
+.sesion-confirmaciones {
+  border-top: 1px solid #eaf6ff;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.confirmaciones-resumen {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.confirmacion-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.confirmacion-asistire {
+  background: #d4edda;
+  color: #155724;
+}
+
+.confirmacion-talvez {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.confirmacion-novoy {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.confirmacion-usuario {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-confirmacion {
+  padding: 8px 16px;
+  background: white;
+  border: 2px solid #dfe6e9;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #636e72;
+  transition: all 0.3s ease;
+}
+
+.btn-confirmacion:hover {
+  border-color: #2c5a91;
+  color: #2c5a91;
+}
+
+.btn-confirmacion.active {
+  background: #2c5a91;
+  border-color: #2c5a91;
+  color: white;
+}
+
+/* ========== ASISTENCIA REAL ========== */
+.sesion-asistencia-real {
+  border-top: 1px solid #eaf6ff;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.asistencia-titulo {
+  font-weight: 600;
+  color: #2c5a91;
+  margin-bottom: 12px;
+}
+
+.asistentes-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.asistente-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #eaf6ff;
+  cursor: pointer;
+}
+
+.asistente-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-inicial {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0984e3, #74b9ff);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ========== ESTADO VACÍO ========== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #636e72;
+}
+
+.empty-state svg {
+  margin-bottom: 20px;
+  color: #dfe6e9;
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* ========== MODAL DE CREAR SESIÓN ========== */
+#modalCrearSesion {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.crear-sesion-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.crear-sesion-modal-content h2 {
+  margin: 0 0 24px 0;
+  color: #2c5a91;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c5a91;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* ========== BOTONES ========== */
+.btn-primary {
+  padding: 10px 20px;
+  background: #2c5a91;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #1e4068;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: white;
+  color: #2c5a91;
+  border: 2px solid #2c5a91;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #eaf6ff;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #636e72;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #ffe0e0;
+  color: #d63031;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .agenda-modal-content {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .sesion-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .confirmacion-usuario {
+    flex-direction: column;
+  }
+
+  .btn-confirmacion {
+    width: 100%;
+  }
+
+  .agenda-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #btnCrearSesion {
+    width: 100%;
+  }
+}

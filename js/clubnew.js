@@ -11,6 +11,7 @@ import { initCommentsModal } from './club-componentes/club-modal-comments.js';
 import { initHistoryModal } from './club-componentes/club-modal-history.js';
 import { initInfoModals } from './club-componentes/club-modal-info.js';
 import { initUtils } from './club-componentes/club-utils.js';
+import { initAgenda } from './club-componentes/club-agenda.js';
 
 import { API_URL } from './env.js';
 import { showLoader, hideLoader } from "../componentes/loader.js";
@@ -146,6 +147,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 8) AHORA que los botones existen → conectar listeners
       // ========================
       initCore();
+      
+      // ========================
+      // 9) INICIALIZAR AGENDA (con rol del usuario)
+      // ========================
+      if (window.clubData && window.clubData.id) {
+        const membership = window.clubData.memberships?.find(
+          m => m.userId === userId
+        );
+        const userRole = membership?.role || "LECTOR";
+        initAgenda(window.clubData.id, userRole);
+      }
 
     } catch (error) {
       hideLoader();
