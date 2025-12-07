@@ -429,10 +429,6 @@ function inicializarAplicacion() {
     configurarBusquedaTiempoReal();
 }
 
-
-// Inicializar cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", inicializarAplicacion);
-
 // ========== FUNCIONES GLOBALES ==========
 // Exponer funciones que necesitan ser accesibles desde HTML
 
