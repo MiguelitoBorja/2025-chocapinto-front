@@ -361,6 +361,36 @@
   padding: 20px;
 }
 
+/* ========== MODAL DE EDITAR SESIÓN ========== */
+#modalEditarSesion {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1002;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ========== MODAL DE REGISTRAR ASISTENCIA ========== */
+#modalRegistrarAsistencia {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1003;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
 .crear-sesion-modal-content {
   background: white;
   border-radius: 16px;
