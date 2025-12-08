@@ -5,16 +5,17 @@ let graficoInstancia = null;
 const modalAvatarStyles = document.createElement('style');
 modalAvatarStyles.textContent = `
 /* Estilos para avatares en modales */
-.ranking-avatar-container, .member-avatar-container {
+.ranking-avatar-container, .member-avatar-container, .request-avatar-container {
     position: relative;
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
-.ranking-avatar-img, .member-avatar-img {
+.ranking-avatar-img, .member-avatar-img, .request-avatar-img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -22,7 +23,7 @@ modalAvatarStyles.textContent = `
     border: 2px solid #eaf6ff;
 }
 
-.ranking-avatar-initials, .member-avatar-initials {
+.ranking-avatar-initials, .member-avatar-initials, .request-avatar-initials {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -30,6 +31,7 @@ modalAvatarStyles.textContent = `
     color: white;
     font-weight: 600;
     font-size: 16px;
+    display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid #eaf6ff;
@@ -37,8 +39,21 @@ modalAvatarStyles.textContent = `
 }
 
 /* Backwards compatibility - hide old avatar classes */
-.ranking-avatar, .member-avatar {
+.ranking-avatar, .member-avatar, .request-avatar {
     display: none !important;
+}
+
+/* Request date styling */
+.request-date {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+.request-date svg {
+    opacity: 0.7;
 }
 `;
 
@@ -937,19 +952,49 @@ function mostrarListaSolicitudes(solicitudes) {
     const lista = document.getElementById('requestsList');
     
     const html = solicitudes.map(solicitud => {
-        const fechaFormateada = new Date(solicitud.fecha_solicitud);
+        const fechaSolicitud = new Date(solicitud.fecha_solicitud);
+        const ahora = new Date();
+        const diffMs = ahora - fechaSolicitud;
+        const diffMinutos = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMinutos / 60);
+        const diffDias = Math.floor(diffHoras / 24);
+        
+        let tiempoTranscurrido;
+        if (diffDias > 0) {
+            tiempoTranscurrido = `Hace ${diffDias} día${diffDias !== 1 ? 's' : ''}`;
+        } else if (diffHoras > 0) {
+            tiempoTranscurrido = `Hace ${diffHoras} hora${diffHoras !== 1 ? 's' : ''}`;
+        } else if (diffMinutos > 0) {
+            tiempoTranscurrido = `Hace ${diffMinutos} minuto${diffMinutos !== 1 ? 's' : ''}`;
+        } else {
+            tiempoTranscurrido = 'Hace un momento';
+        }
         
         const inicial = solicitud.username ? solicitud.username.charAt(0).toUpperCase() : '?';
+        const hasAvatar = solicitud.avatar && solicitud.avatar.trim() !== '';
+        
+        const avatarHTML = hasAvatar 
+            ? `<img src="${solicitud.avatar}" alt="Avatar de ${solicitud.username}" class="request-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+            : '';
+        
+        const initialsHTML = `<div class="request-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${inicial}</div>`;
         
         return `
             <div class="request-item">
                 <div class="request-user">
-                    <div class="request-avatar">
-                        ${inicial}
+                    <div class="request-avatar-container">
+                        ${avatarHTML}
+                        ${initialsHTML}
                     </div>
                     <div class="request-info">
                         <div class="request-name">${solicitud.username || 'Usuario desconocido'}</div>
-                        <div class="request-date">Solicitado el ${fechaFormateada}</div>
+                        <div class="request-date">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ${tiempoTranscurrido}
+                        </div>
                     </div>
                 </div>
                 <div class="request-actions">

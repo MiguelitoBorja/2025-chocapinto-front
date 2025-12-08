@@ -72,91 +72,110 @@ document.addEventListener("DOMContentLoaded", async () => {
           title: clubData.name || "Club de lectura",
           subtitle: `${clubData.members?.length || 0} miembros`,
         });
-     }
+     
+        const userId = parseInt(localStorage.getItem("userId"));
+        
+        // Obtener el rol del usuario
+        const userRoleInfo = window.getUserRoleInClub
+          ? window.getUserRoleInClub(clubData, userId)
+          : { role: 'LECTOR', isOwner: false, isModerator: false };
 
+        const isOwner = userRoleInfo.isOwner;
+        const isModerador = userRoleInfo.isModerator;
+        const isLector = userRoleInfo.role === 'LECTOR';
 
-      const userId = parseInt(localStorage.getItem("userId"));
-      const esAdmin = window.canUserManageClub
-        ? window.canUserManageClub(clubData, userId)
-        : false;
+        console.log("🔐 Rol del usuario:", userRoleInfo.role, { isOwner, isModerador, isLector });
 
-      console.log("¿Es admin?", esAdmin);
-
-      // ========================
-      // 6) SOLO SI ES ADMIN, CREAR LOS BOTONES
-      // ========================
-      if (esAdmin) {
-
-        // ELIMINAR CLUB
+        // ========================
+        // 4) BOTÓN DE NOTIFICACIONES (TODOS LOS USUARIOS)
+        // ========================
         addHeaderAction({
-          id: "eliminarClubBtnHeader",
-          label: "Eliminar club",
-          icon: "🗑️",
-          variant: "primary",
-          // sin onClick, lo conecta club-core.js
-        });
-
-        // ================================
-        // SOLICITUDES
-        // ================================
-
-        const solicitudesBtn = addHeaderAction({
-          id: "requestsBtn",
-          icon: "📬",   
+          id: "notificacionesBtn",
+          icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>`,
           variant: "secondary",
           onClick: () => {
-            if (window.abrirModalSolicitudes) {
-              window.abrirModalSolicitudes();   // abre el modal existente
-            } else {
-              console.warn("⚠️ abrirModalSolicitudes no está disponible");
-            }
+            console.log("🔔 Botón de notificaciones clickeado");
+            // TODO: Implementar lógica de notificaciones
           }
         });
 
-        // Crear badge SOLO para este botón
-        if (solicitudesBtn) {
-          const badge = document.createElement("span");
-          badge.className = "header-notification-badge";
-          badge.style.display = "none";
-          solicitudesBtn.appendChild(badge);
-
-          // Método exclusivo de este botón
-          solicitudesBtn.setBadge = function (value) {
-            if (!value || value <= 0) {
-              badge.style.display = "none";
-            } else {
-              badge.textContent = value > 99 ? "99+" : value;
-              badge.style.display = "flex";
-            }
-          };
+        // ========================
+        // 5) BOTÓN ELIMINAR CLUB (SOLO OWNER)
+        // ========================
+        if (isOwner) {
+          addHeaderAction({
+            id: "eliminarClubBtnHeader",
+            label: "Eliminar club",
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>`,
+            variant: "primary",
+            // sin onClick, lo conecta club-core.js
+          });
         }
 
-      }
+        // ================================
+        // 6) BOTÓN DE SOLICITUDES (OWNER Y MODERADOR)
+        // ================================
+        if (isOwner || isModerador) {
+          const solicitudesBtn = addHeaderAction({
+            id: "requestsBtn",
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="8.5" cy="7" r="4"/>
+              <path d="M17 11l2 2 4-4"/>
+            </svg>`,   
+            variant: "secondary",
+            onClick: () => {
+              if (window.abrirModalSolicitudes) {
+                window.abrirModalSolicitudes();
+              } else {
+                console.warn("⚠️ abrirModalSolicitudes no está disponible");
+              }
+            }
+          });
+          
+          console.log("✅ Botón de solicitudes creado:", !!solicitudesBtn);
+        }
 
-      // ========================
-      // 7) SIEMPRE (admin o no), botón salir
-      // ========================
-      addHeaderAction({
-        id: "salirClubBtnHeader",
-        label: "Salir del club",
-        icon: "🚪",
-        variant: "ghost",
-      });
+        // ========================
+        // 7) BOTÓN SALIR DEL CLUB (MODERADOR Y LECTOR)
+        // ========================
+        if (isModerador || isLector) {
+          addHeaderAction({
+            id: "salirClubBtnHeader",
+            label: "Salir del club",
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>`,
+            variant: "ghost",
+          });
+        }
 
-      // ========================
-      // 8) AHORA que los botones existen → conectar listeners
-      // ========================
-      initCore();
-      
-      // ========================
-      // 9) INICIALIZAR AGENDA (con rol del usuario)
-      // ========================
-      if (window.clubData && window.clubData.id) {
-        const membership = window.clubData.members?.find(
-          m => m.id === userId
-        );
-        const userRole = membership?.role || "LECTOR";
-        initAgenda(window.clubData.id, userRole);
+        // ========================
+        // 8) AHORA que los botones existen → conectar listeners
+        // ========================
+        initCore();
+        
+        // ========================
+        // 9) INICIALIZAR AGENDA (con rol del usuario)
+        // ========================
+        if (window.clubData && window.clubData.id) {
+          initAgenda(window.clubData.id, userRoleInfo.role);
+        }
+
+        // ========================
+        // 10) ACTUALIZAR BADGE DE SOLICITUDES (después de crear los botones)
+        // ========================
+        if (typeof window.actualizarBadgeSolicitudes === 'function') {
+          window.actualizarBadgeSolicitudes(clubData);
+        }
       }
 
     } catch (error) {
@@ -165,25 +184,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }, 800);
 });
-
-async function actualizarBadgeSolicitudes() {
-  try {
-    const clubId = localStorage.getItem("clubId");
-    if (!clubId || !solicitudesBtn?.setBadge) return;
-
-    const res = await fetch(`${window.API_URL}/clubs/${clubId}/solicitudes`);
-    const data = await res.json();
-
-    if (data.success) {
-      solicitudesBtn.setBadge(data.solicitudes.length);
-    }
-  } catch (err) {
-    console.error("Error al actualizar badge de solicitudes:", err);
-  }
-}
-
-// Llamada inicial
-actualizarBadgeSolicitudes();
-
-// (opcional) refrescar cada 30 segundos
-setInterval(actualizarBadgeSolicitudes, 30000);

@@ -375,73 +375,49 @@ function mostrarBotonesAccion(club) {
     
     // Usar el nuevo sistema basado en ClubMember
     const userRole = getUserRoleInClub(club, userId);
-    const canManage = canUserManageClub(club, userId);
-    const canDelete = canUserDeleteClub(club, userId);
     const canManageRequests = canUserManageRequests(club, userId);
     
-  
-    // Botones del header
-    const eliminarBtnHeader = document.getElementById("eliminarClubBtnHeader");
-    const salirBtnHeader = document.getElementById("salirClubBtnHeader");
-    const requestsBtn = document.getElementById("requestsBtn");
-    
-    
-    
-    // Mostrar/ocultar botón de eliminar club (solo owner)
-    if (eliminarBtnHeader) {
-        eliminarBtnHeader.style.display = canDelete ? "inline-flex" : "none";
-        
-    }
-    
-    // Mostrar/ocultar botón de salir del club (moderadores y lectores pueden salir)
-    if (salirBtnHeader) {
-        // Solo el OWNER no puede salir del club, moderadores y lectores sí pueden
-        const canLeave = !canDelete; // Si no puede eliminar (no es owner), puede salir
-        salirBtnHeader.style.display = canLeave ? "inline-flex" : "none";
-        
-    }
-    
-    // Mostrar/ocultar botón de solicitudes (owner y moderadores)
-    if (requestsBtn) {
-        if (canManageRequests) {
-            requestsBtn.style.display = "inline-flex";
-            
-        } else {
-            requestsBtn.style.display = "none";
-            
-        }
-    } else {
-        console.warn('⚠️ Botón requestsBtn no encontrado en el DOM - puede que no esté implementado en esta página');
-    }
-    
-    // Actualizar badge de solicitudes
-    actualizarBadgeSolicitudes(club);
+    // Ya no actualizamos el badge aquí porque los botones aún no existen
+    // El badge se actualiza manualmente en clubnew.js después de crear los botones
     
     // Configurar permisos adicionales de la UI
     configurarPermisos(club);
 }
 
 function actualizarBadgeSolicitudes(club) {
-    const requestsBadge = document.getElementById('requestsBadge');
+    const requestsBtn = document.getElementById('requestsBtn');
     const userId = localStorage.getItem("userId");
     const canManageRequests = canUserManageRequests(club, userId);
     
-    if (!requestsBadge) return;
+    console.log('🔔 Actualizando badge de solicitudes');
+    console.log('   - Botón encontrado:', !!requestsBtn);
+    console.log('   - Puede gestionar solicitudes:', canManageRequests);
+    console.log('   - Solicitudes en club:', club.solicitudes);
     
-    if (canManageRequests && club.solicitudes && club.solicitudes.length > 0) {
+    if (!requestsBtn || !canManageRequests) {
+        console.log('   ❌ No se puede actualizar badge (botón no existe o sin permisos)');
+        return;
+    }
+    
+    if (club.solicitudes && club.solicitudes.length > 0) {
         const pendientes = club.solicitudes.filter(s => s.estado === "pendiente");
         
-        if (pendientes.length > 0) {
-            requestsBadge.textContent = pendientes.length;
-            requestsBadge.style.display = 'flex';
-            
+        console.log('   - Total solicitudes:', club.solicitudes.length);
+        console.log('   - Solicitudes pendientes:', pendientes.length);
+        
+        // Usar el método setBadge si está disponible
+        if (typeof requestsBtn.setBadge === 'function') {
+            requestsBtn.setBadge(pendientes.length);
+            console.log('   ✅ Badge actualizado con valor:', pendientes.length);
         } else {
-            requestsBadge.style.display = 'none';
-            
+            console.log('   ⚠️ Método setBadge no disponible en el botón');
         }
     } else {
-        requestsBadge.style.display = 'none';
-        
+        console.log('   - No hay solicitudes, ocultando badge');
+        // Ocultar badge si no hay solicitudes
+        if (typeof requestsBtn.setBadge === 'function') {
+            requestsBtn.setBadge(0);
+        }
     }
 }
 
@@ -628,6 +604,7 @@ function initCore() {
     window.renderClub = renderClub;
     window.mostrarDatosClub = mostrarDatosClub;
     window.mostrarBotonesAccion = mostrarBotonesAccion;
+    window.actualizarBadgeSolicitudes = actualizarBadgeSolicitudes;
     window.gestionarSolicitud = gestionarSolicitud;
     window.eliminarClub = eliminarClub;
     window.salirDelClub = salirDelClub;
@@ -656,6 +633,7 @@ function actualizarContadorMiembros(clubData) {
 window.initCore = initCore;
 window.renderClub = renderClub;
 window.actualizarContadorMiembros = actualizarContadorMiembros;
+window.actualizarBadgeSolicitudes = actualizarBadgeSolicitudes;
 
 // Export for ES6 modules
-export { initCore, renderClub, actualizarContadorMiembros };
+export { initCore, renderClub, actualizarContadorMiembros, actualizarBadgeSolicitudes };

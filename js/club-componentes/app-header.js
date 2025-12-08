@@ -267,6 +267,53 @@ export function initAppHeader(options = {}) {
   margin-top: 2px;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .header-context-text {
+    display: none;
+  }
+  
+  .user-info {
+    display: none;
+  }
+  
+  .app-header-inner {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  
+  .app-header-left {
+    gap: 12px;
+  }
+  
+  .app-header-right {
+    gap: 16px;
+  }
+  
+  .header-actions {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-logo-img {
+    height: 50px;
+  }
+  
+  .header-context-icon-image img {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+  }
+}
+
 
 
 
