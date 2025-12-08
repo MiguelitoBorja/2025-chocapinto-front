@@ -48,12 +48,10 @@ async function cargarSesiones(tipo = "proximas") {
   try {
     showLoader("Cargando sesiones...");
     
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sesiones/club/${clubIdActual}?tipo=${tipo}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
+    
+    const response = await fetch(`${API_URL}/api/sesiones/club/${clubIdActual}?tipo=${tipo}`
+
+    );
 
     const data = await response.json();
     
@@ -76,6 +74,7 @@ async function cargarSesiones(tipo = "proximas") {
  */
 function renderizarSesiones(tipo) {
   const container = document.getElementById("sesionesContainer");
+  console.log(userRole);
   if (!container) return;
 
   if (sesionesData.length === 0) {
@@ -249,12 +248,7 @@ export function cerrarModalCrearSesion() {
  */
 async function cargarLibrosParaSesion() {
   try {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/club/${clubIdActual}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
+    const response = await fetch(`${API_URL}/club/${clubIdActual}`);
 
     const data = await response.json();
     
@@ -263,10 +257,13 @@ async function cargarLibrosParaSesion() {
       if (select) {
         select.innerHTML = '<option value="">Sesión general (sin libro específico)</option>';
         
-        data.club.clubBooks.forEach(cb => {
+        // Filtrar solo libros en estado "leyendo"
+        const librosLeyendo = data.club.readBooks.filter(cb => cb.estado === "leyendo");
+        
+        librosLeyendo.forEach(cb => {
           const option = document.createElement("option");
-          option.value = cb.id;
-          option.textContent = cb.book.title;
+          option.value = cb.clubBookId;
+          option.textContent = cb.title;
           select.appendChild(option);
         });
       }
@@ -296,12 +293,10 @@ export async function crearSesion(event) {
   try {
     showLoader("Creando sesión...");
     
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sesiones`, {
+    const response = await fetch(`${API_URL}/api/sesiones`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(datos)
     });
@@ -328,12 +323,10 @@ export async function crearSesion(event) {
  */
 export async function confirmarAsistenciaSesion(sesionId, estado) {
   try {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sesiones/${sesionId}/confirmar`, {
+    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}/confirmar`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         estado,
@@ -384,12 +377,10 @@ export async function eliminarSesion(sesionId) {
   try {
     showLoader("Eliminando sesión...");
     
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sesiones/${sesionId}`, {
+    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         username: localStorage.getItem("username")

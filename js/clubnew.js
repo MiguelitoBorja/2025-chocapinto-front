@@ -152,8 +152,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 9) INICIALIZAR AGENDA (con rol del usuario)
       // ========================
       if (window.clubData && window.clubData.id) {
-        const membership = window.clubData.memberships?.find(
-          m => m.userId === userId
+        const membership = window.clubData.members?.find(
+          m => m.id === userId
         );
         const userRole = membership?.role || "LECTOR";
         initAgenda(window.clubData.id, userRole);
