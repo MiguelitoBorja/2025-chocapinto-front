@@ -4,10 +4,12 @@ import { showLoader, hideLoader } from "../../componentes/loader.js";
 import { mostrarConfirmacion } from "../../componentes/confirmacion.js";
 
 
+
 let sesionesData = [];
 let clubIdActual = null;
 let userRole = null;
 let actualizacionInterval = null;
+let calendar = null;
 
 /**
  * Inicializa el módulo de agenda
@@ -80,7 +82,10 @@ export function mostrarAgenda() {
   const modal = document.getElementById("modalAgenda");
   if (modal) {
     modal.style.display = "flex";
-    cargarSesiones();
+    
+    // En móviles mostrar lista, en desktop calendario
+    const esMobile = window.innerWidth <= 768;
+    cambiarVistaAgenda(esMobile ? 'lista' : 'calendario');
   }
 }
 
@@ -97,6 +102,12 @@ export function cerrarModalAgenda() {
   if (actualizacionInterval) {
     clearInterval(actualizacionInterval);
     actualizacionInterval = null;
+  }
+  
+  // Destruir calendario al cerrar
+  if (calendar) {
+    calendar.destroy();
+    calendar = null;
   }
 }
 
@@ -454,21 +465,347 @@ export async function confirmarAsistenciaSesion(sesionId, estado) {
 }
 
 /**
- * Cambia entre sesiones próximas y pasadas
+ * Renderiza el calendario con FullCalendar
  */
-export function cambiarVistaAgenda(tipo) {
-  const btnProximas = document.getElementById("btnSesionesProximas");
-  const btnPasadas = document.getElementById("btnSesionesPasadas");
+async function renderizarCalendario() {
+  const container = document.getElementById("calendarioContainer");
+  if (!container) return;
+
+  try {
+    showLoader("Cargando calendario...");
+    
+    // Destruir calendario anterior si existe
+    if (calendar) {
+      calendar.destroy();
+    }
+    
+    // Limpiar contenedor
+    container.innerHTML = '';
+    
+    // Crear instancia de FullCalendar
+    calendar = new FullCalendar.Calendar(container, {
+      initialView: 'dayGridMonth',
+      locale: 'es',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek'
+      },
+      buttonText: {
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana'
+      },
+      height: 'auto',
+      aspectRatio: 1.5,
+      firstDay: 1,
+      dayMaxEvents: 3,
+      eventMaxStack: 2,
+      fixedWeekCount: false,
+      
+      events: async function(info, successCallback, failureCallback) {
+        try {
+          const eventos = await cargarEventosParaCalendario(info.start, info.end);
+          successCallback(eventos);
+        } catch (error) {
+          console.error("Error cargando eventos:", error);
+          failureCallback(error);
+        }
+      },
+      
+      eventClick: function(info) {
+        // Solo mostrar detalles para sesiones, no para períodos de fondo
+        if (info.event.extendedProps.tipo === 'sesion') {
+          mostrarDetallesEvento(info.event);
+        }
+      },
+      
+      dateClick: function(info) {
+        if (userRole === "OWNER" || userRole === "MODERADOR") {
+          const fechaLocal = info.dateStr + 'T12:00';
+          document.getElementById("sesionFechaHora").value = fechaLocal;
+          mostrarModalCrearSesion();
+        }
+      },
+      
+      eventDidMount: function(info) {
+        if (info.event.extendedProps.descripcion) {
+          info.el.title = info.event.extendedProps.descripcion;
+        }
+        // Hacer períodos de fondo no clickeables
+        if (info.event.extendedProps.tipo === 'periodo') {
+          info.el.style.pointerEvents = 'none';
+        }
+        // Agregar cursor pointer solo a sesiones
+        if (info.event.extendedProps.tipo === 'sesion') {
+          info.el.style.cursor = 'pointer';
+        }
+      }
+    });
+    
+    calendar.render();
+    
+    // Forzar actualización de tamaño después de renderizar
+    setTimeout(() => {
+      if (calendar) {
+        calendar.updateSize();
+      }
+    }, 100);
+    
+  } catch (error) {
+    console.error("Error al renderizar calendario:", error);
+    showNotification("error", "Error al cargar el calendario");
+  } finally {
+    hideLoader();
+  }
+}
+
+/**
+ * Genera un color llamativo basado en un ID
+ */
+function generarColorPorLibro(libroId) {
+  const colores = [
+    { normal: '#e74c3c', completada: '#e8a398' }, // Rojo
+    { normal: '#9b59b6', completada: '#c9a9d3' }, // Púrpura
+    { normal: '#3498db', completada: '#9cc4e4' }, // Azul
+    { normal: '#1abc9c', completada: '#8dd8ca' }, // Turquesa
+    { normal: '#f39c12', completada: '#f8c471' }, // Naranja
+    { normal: '#e67e22', completada: '#f0b27a' }, // Naranja oscuro
+    { normal: '#2ecc71', completada: '#82e0aa' }, // Verde
+    { normal: '#c0392b', completada: '#d98880' }, // Rojo oscuro
+    { normal: '#8e44ad', completada: '#bb8fce' }, // Púrpura oscuro
+    { normal: '#16a085', completada: '#7fb3d5' }, // Verde azulado
+    { normal: '#d35400', completada: '#e59866' }, // Calabaza
+    { normal: '#27ae60', completada: '#7dcea0' }, // Verde esmeralda
+  ];
   
-  if (tipo === "proximas") {
-    btnProximas.classList.add("active");
-    btnPasadas.classList.remove("active");
-  } else {
-    btnPasadas.classList.add("active");
-    btnProximas.classList.remove("active");
+  if (!libroId) {
+    return { normal: '#95a5a6', completada: '#bdc3c7' }; // Gris para sesiones sin libro
   }
   
-  cargarSesiones(tipo);
+  return colores[libroId % colores.length];
+}
+
+/**
+ * Carga eventos (sesiones y períodos) para el calendario
+ */
+async function cargarEventosParaCalendario(start, end) {
+  try {
+    console.log('Cargando eventos para calendario...');
+    
+    const [sesionesRes, estadoRes, historialRes] = await Promise.all([
+      fetch(`${API_URL}/api/sesiones/club/${clubIdActual}?tipo=todas`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      }),
+      fetch(`${API_URL}/api/club/${clubIdActual}/estado-actual`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      }),
+      fetch(`${API_URL}/api/club/${clubIdActual}/periodos/historial`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      })
+    ]);
+    
+    if (!sesionesRes.ok) {
+      console.error('Error al cargar sesiones:', sesionesRes.status);
+    }
+    if (!estadoRes.ok) {
+      console.error('Error al cargar estado:', estadoRes.status);
+    }
+    if (!historialRes.ok) {
+      console.error('Error al cargar historial:', historialRes.status);
+    }
+    
+    const sesionesData = await sesionesRes.json();
+    const estadoData = await estadoRes.json();
+    const historialData = await historialRes.json();
+    
+    console.log('Datos recibidos:', { sesionesData, estadoData, historialData });
+    
+    const eventos = [];
+    
+    // Agregar sesiones como eventos puntuales
+    if (sesionesData.success && sesionesData.sesiones) {
+      sesionesData.sesiones.forEach(sesion => {
+        const libroId = sesion.clubBook?.book?.id || sesion.clubBook?.bookId || sesion.bookId;
+        const colores = generarColorPorLibro(libroId);
+        const color = sesion.estado === 'COMPLETADA' ? colores.completada : colores.normal;
+        
+        console.log('Sesión:', sesion.titulo, 'LibroID:', libroId, 'Estado:', sesion.estado, 'Color:', color);
+        
+        eventos.push({
+          id: `sesion-${sesion.id}`,
+          title: sesion.titulo,
+          start: sesion.fechaHora,
+          backgroundColor: color,
+          borderColor: color,
+          textColor: '#ffffff',
+          extendedProps: {
+            tipo: 'sesion',
+            data: sesion,
+            descripcion: `${sesion.titulo} - ${sesion.lugar}`
+          }
+        });
+      });
+    }
+    
+    // Agregar período activo si existe
+    if (estadoData.success && estadoData.periodo) {
+      const periodo = estadoData.periodo;
+      const esVotacion = estadoData.estado === 'VOTACION';
+      eventos.push({
+        id: `periodo-${periodo.id}`,
+        title: esVotacion ? '📊 Votación' : '📖 Lectura',
+        start: periodo.fechaInicio,
+        end: periodo.fechaCierre,
+        backgroundColor: esVotacion ? '#f39c12' : '#27ae60',
+        borderColor: esVotacion ? '#e67e22' : '#229954',
+        display: 'background',
+        extendedProps: {
+          tipo: 'periodo',
+          data: periodo,
+          descripcion: `Período de ${esVotacion ? 'votación' : 'lectura'}: ${periodo.nombre || ''}`
+        }
+      });
+    }
+    
+    // Agregar períodos del historial como eventos de fondo
+    if (historialData.success && historialData.historial) {
+      historialData.historial.forEach(periodo => {
+        eventos.push({
+          id: `periodo-${periodo.id}`,
+          title: '📚 Concluido',
+          start: periodo.fechaInicio,
+          end: periodo.fechaCierre,
+          backgroundColor: '#95a5a6',
+          borderColor: '#7f8c8d',
+          display: 'background',
+          extendedProps: {
+            tipo: 'periodo',
+            data: periodo,
+            descripcion: `Período concluido: ${periodo.nombre || ''}`
+          }
+        });
+      });
+    }
+    
+    console.log(`Total eventos cargados: ${eventos.length}`, eventos);
+    return eventos;
+  } catch (error) {
+    console.error("Error cargando eventos:", error);
+    return [];
+  }
+}
+
+/**
+ * Muestra los detalles de un evento clickeado
+ */
+function mostrarDetallesEvento(event) {
+  const props = event.extendedProps;
+  
+  if (props.tipo === 'sesion') {
+    const sesion = props.data;
+    const fechaHora = new Date(sesion.fechaHora.replace('Z', '')).toLocaleString('es-AR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    const detallesHTML = `
+      <div class="evento-detalle-modal" onclick="if(event.target === this) this.remove()">
+        <div class="evento-detalle-content">
+          <div class="evento-detalle-header">
+            <h3>${sesion.titulo}</h3>
+            <button onclick="this.closest('.evento-detalle-modal').remove()" class="evento-detalle-close">×</button>
+          </div>
+          <div class="evento-detalle-info">
+            <div class="evento-info-item">
+              <strong>📍 Lugar:</strong>
+              <span>${sesion.lugar}</span>
+            </div>
+            <div class="evento-info-item">
+              <strong>🕐 Fecha:</strong>
+              <span>${fechaHora}</span>
+            </div>
+            ${sesion.descripcion ? `
+              <div class="evento-info-item">
+                <strong>📝 Descripción:</strong>
+                <span>${sesion.descripcion}</span>
+              </div>
+            ` : ''}
+            ${sesion.clubBook ? `
+              <div class="evento-info-item">
+                <strong>📚 Libro:</strong>
+                <span>${sesion.clubBook.book.title}</span>
+              </div>
+            ` : ''}
+            <div class="evento-info-item">
+              <strong>📊 Estado:</strong>
+              <span>${sesion.estado === 'COMPLETADA' ? '✅ Completada' : '⏳ Pendiente'}</span>
+            </div>
+          </div>
+          <div class="evento-detalle-actions">
+            <button onclick="window.cambiarVistaAgenda('lista'); this.closest('.evento-detalle-modal').remove();" class="btn-secondary">
+              📋 Ver en lista
+            </button>
+            ${(userRole === 'OWNER' || userRole === 'MODERADOR') && sesion.estado !== 'COMPLETADA' ? `
+              <button onclick="window.editarSesion(${sesion.id}); this.closest('.evento-detalle-modal').remove();" class="btn-editar-evento">
+                ✏️ Editar
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+    
+    const existingModal = document.querySelector('.evento-detalle-modal');
+    if (existingModal) existingModal.remove();
+    
+    document.body.insertAdjacentHTML('beforeend', detallesHTML);
+  }
+}
+
+/**
+ * Cambia entre vista de calendario y lista
+ */
+export function cambiarVistaAgenda(tipo) {
+  const btnCalendario = document.getElementById("btnVistaCalendario");
+  const btnLista = document.getElementById("btnVistaLista");
+  const calendarioContainer = document.getElementById("calendarioContainer");
+  const listaContainer = document.getElementById("listaContainer");
+  
+  if (tipo === "calendario") {
+    btnCalendario?.classList.add("active");
+    btnLista?.classList.remove("active");
+    
+    if (calendarioContainer) calendarioContainer.style.display = "block";
+    if (listaContainer) listaContainer.style.display = "none";
+    
+    renderizarCalendario();
+  } else if (tipo === "lista") {
+    btnLista?.classList.add("active");
+    btnCalendario?.classList.remove("active");
+    
+    if (listaContainer) listaContainer.style.display = "block";
+    if (calendarioContainer) calendarioContainer.style.display = "none";
+    
+    cargarSesiones("proximas");
+  } else {
+    // Mantener compatibilidad con llamadas antiguas (proximas/pasadas)
+    const btnProximas = document.getElementById("btnSesionesProximas");
+    const btnPasadas = document.getElementById("btnSesionesPasadas");
+    
+    if (tipo === "proximas") {
+      btnProximas?.classList.add("active");
+      btnPasadas?.classList.remove("active");
+    } else {
+      btnPasadas?.classList.add("active");
+      btnProximas?.classList.remove("active");
+    }
+    
+    cargarSesiones(tipo);
+  }
 }
 
 /**

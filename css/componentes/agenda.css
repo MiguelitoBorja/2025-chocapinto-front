@@ -526,3 +526,239 @@
     width: 100%;
   }
 }
+
+/* ========== ESTILOS DEL CALENDARIO ========== */
+#calendarioContainer {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+  min-height: 500px;
+}
+
+#listaContainer {
+  margin-top: 8px;
+}
+
+/* Personalización de FullCalendar */
+.fc {
+  --fc-border-color: #e0f2fe;
+  --fc-button-bg-color: #2c5a91;
+  --fc-button-border-color: #2c5a91;
+  --fc-button-hover-bg-color: #1e3a5f;
+  --fc-button-hover-border-color: #1e3a5f;
+  --fc-button-active-bg-color: #1e3a5f;
+  --fc-button-active-border-color: #1e3a5f;
+  --fc-today-bg-color: #eaf6ff;
+  --fc-page-bg-color: #ffffff;
+}
+
+.fc .fc-view-harness {
+  min-height: 400px;
+}
+
+.fc .fc-scrollgrid {
+  border: 1px solid var(--fc-border-color);
+}
+
+.fc .fc-toolbar {
+  margin-bottom: 1em;
+  font-size: 14px;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5em;
+  color: #2c5a91;
+  font-weight: 600;
+}
+
+.fc .fc-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #2c5a91;
+  font-weight: 500;
+  padding: 4px;
+}
+
+.fc .fc-col-header-cell {
+  background: #f8fcff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #2c5a91;
+}
+
+.fc-event {
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  border: none !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.fc-event:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.fc-daygrid-event {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fc-daygrid-event-dot {
+  display: none;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #eaf6ff !important;
+}
+
+.fc .fc-daygrid-day-frame {
+  min-height: 80px;
+}
+
+.fc .fc-more-link {
+  color: #2c5a91;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* Modal de Detalles de Evento */
+.evento-detalle-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 20px;
+}
+
+.evento-detalle-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.evento-detalle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.evento-detalle-header h3 {
+  margin: 0;
+  color: #2c5a91;
+  font-size: 20px;
+  flex: 1;
+}
+
+.evento-detalle-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.evento-detalle-close:hover {
+  background: #f0f0f0;
+}
+
+.evento-detalle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.evento-info-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: #333;
+}
+
+.evento-info-item strong {
+  color: #2c5a91;
+  min-width: 80px;
+}
+
+.evento-detalle-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-editar-evento {
+  padding: 8px 16px;
+  background: #2c5a91;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-editar-evento:hover {
+  background: #1e3a5f;
+}
+
+@media (max-width: 768px) {
+  /* Ocultar calendario en móviles */
+  #calendarioContainer {
+    display: none !important;
+  }
+
+  /* Ocultar botones de cambio de vista calendario/lista */
+  #btnVistaCalendario,
+  #btnVistaLista {
+    display: none !important;
+  }
+
+  /* Asegurar que la lista siempre esté visible */
+  #listaContainer {
+    display: block !important;
+  }
+
+  .evento-detalle-content {
+    padding: 20px;
+  }
+
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 18px;
+  }
+}

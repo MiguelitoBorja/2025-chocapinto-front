@@ -595,6 +595,8 @@
     <link rel="stylesheet" href="../css/componentes/confirmacion.css">
     <link rel="stylesheet" href="../css/componentes/agenda.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 </head>
 <body>
 
@@ -932,17 +934,35 @@
     </div>
 
     <div class="agenda-modal-body">
+      <!-- Pestañas de vista principal -->
       <div class="agenda-tabs">
-        <button class="agenda-tab active" id="btnSesionesProximas" onclick="cambiarVistaAgenda('proximas')">
-          Próximas Sesiones
+        <button class="agenda-tab active" id="btnVistaCalendario" onclick="cambiarVistaAgenda('calendario')">
+          📅 Calendario
         </button>
-        <button class="agenda-tab" id="btnSesionesPasadas" onclick="cambiarVistaAgenda('pasadas')">
-          Historial
+        <button class="agenda-tab" id="btnVistaLista" onclick="cambiarVistaAgenda('lista')">
+          📋 Lista
         </button>
       </div>
 
-      <div id="sesionesContainer">
-        <!-- Las sesiones se cargarán aquí dinámicamente -->
+      <!-- Contenedor del calendario -->
+      <div id="calendarioContainer" style="display: block;">
+        <!-- FullCalendar se renderizará aquí -->
+      </div>
+
+      <!-- Contenedor de la lista -->
+      <div id="listaContainer" style="display: none;">
+        <div class="agenda-tabs" style="margin-top: 15px;">
+          <button class="agenda-tab active" id="btnSesionesProximas" onclick="cambiarVistaAgenda('proximas')">
+            Próximas Sesiones
+          </button>
+          <button class="agenda-tab" id="btnSesionesPasadas" onclick="cambiarVistaAgenda('pasadas')">
+            Historial
+          </button>
+        </div>
+        
+        <div id="sesionesContainer">
+          <!-- Las sesiones se cargarán aquí dinámicamente -->
+        </div>
       </div>
     </div>
   </div>
