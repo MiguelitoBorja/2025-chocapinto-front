@@ -1,7 +1,7 @@
 const XP_PER_LEVEL = 500;
 
 // URL del login (ajustar si es otra)
-const LOGIN_URL = "../index.html";
+const LOGIN_URL = "../html/index.html";
 const PROFILE_URL = "../html/perfil.html";
 
 /**
@@ -492,7 +492,7 @@ function updateUsernameAndInitials() {
 
   if (!username) {
     console.error("❌ No se encontró 'username' en localStorage. Redirigiendo a login...");
-    window.location.href = "../index.html";
+    window.location.href = LOGIN_URL;
     return;
   }
 
@@ -561,7 +561,7 @@ function updateUserXpHeader() {
   // Todos deben estar logueados: si no hay userId -> error de sesión
   if (!userId) {
     console.error("❌ No se encontró 'userId' en localStorage. Redirigiendo a login...");
-    window.location.href = "../index.html";
+    window.location.href = LOGIN_URL;
     return;
   }
 

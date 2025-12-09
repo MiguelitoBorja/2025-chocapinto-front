@@ -401,7 +401,7 @@ function inicializarAplicacion() {
     // 1) Si NO hay usuario logueado → redirigimos a login
     if (!username) {
         hideLoader();
-        window.location.href = "index.html";
+        window.location.href = "../html/index.html";
         return;
     }
 

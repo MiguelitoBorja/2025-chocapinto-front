@@ -3,7 +3,7 @@ import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { mostrarConfirmacion } from "../componentes/confirmacion.js";
 
-const LOGIN_URL = "../index.html";
+const LOGIN_URL = "../html/index.html";
 
 // Configuración de avatares por nivel
 const AVATARS_POR_NIVEL = {
