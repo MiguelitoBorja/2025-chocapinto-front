@@ -700,6 +700,12 @@ function configurarFormularioLibro() {
         
         if (res.ok && data.success) {
             mostrarMensajeModal("success", `📚 "${title}" fue agregado al club exitosamente`);
+            
+            // Actualizar XP en el header
+            if (typeof window.updateUserXpHeader === 'function') {
+                window.updateUserXpHeader();
+            }
+            
             setTimeout(() => { 
                 document.getElementById('modalLibro').style.display='none'; 
                 renderClub(); 
