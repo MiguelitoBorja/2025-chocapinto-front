@@ -894,7 +894,7 @@ async function cambiarRolMiembro(miembroId, username, nuevoRol) {
         {
             confirmText: nuevoRol === 'MODERADOR' ? "Promover" : "Quitar Rol",
             cancelText: "Cancelar",
-            confirmClass: nuevoRol === 'MODERADOR' ? "blue-btn" : "orange-btn"
+            confirmClass: nuevoRol === 'MODERADOR' ? "orange-btn" : "orange-btn"
         }
     );
 }

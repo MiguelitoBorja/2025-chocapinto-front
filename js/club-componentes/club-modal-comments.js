@@ -337,6 +337,11 @@ document.addEventListener('click', async (e) => {
         await cargarComentarios(window.currentBookId, clubId);
         hideLoader();
         showNotification("success", "Comentario enviado");
+        
+        // Actualizar XP en el header
+        if (typeof window.updateUserXpHeader === 'function') {
+          window.updateUserXpHeader();
+        }
       } else {
         hideLoader();
         showNotification("error", data.message || "No se pudo enviar el comentario");

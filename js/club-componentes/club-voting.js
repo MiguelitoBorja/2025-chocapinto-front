@@ -828,6 +828,11 @@ async function votar(opcionId, libroTitulo) {
             // Cerrar modal y actualizar
             document.getElementById('modalVotacionActiva')?.remove();
             actualizarBotonDinamico();
+            
+            // Actualizar XP en el header
+            if (typeof window.updateUserXpHeader === 'function') {
+                window.updateUserXpHeader();
+            }
         } else {
             showNotification("error", `Error: ${resultado.message || 'No se pudo registrar el voto'}`);
         }

@@ -439,6 +439,11 @@ export async function confirmarAsistenciaSesion(sesionId, estado) {
     if (data.success) {
       showNotification("success", "Confirmación registrada");
       cargarSesiones();
+      
+      // Actualizar XP en el header
+      if (typeof window.updateUserXpHeader === 'function') {
+        window.updateUserXpHeader();
+      }
     } else {
       showNotification("error", data.message || "Error al confirmar asistencia");
     }
@@ -732,6 +737,11 @@ export async function registrarAsistenciaSubmit(event) {
       showNotification("success", "Asistencias registradas exitosamente");
       cerrarModalRegistrarAsistencia();
       cargarSesiones("pasadas"); // Recargar historial
+      
+      // Actualizar XP en el header
+      if (typeof window.updateUserXpHeader === 'function') {
+        window.updateUserXpHeader();
+      }
     } else {
       showNotification("error", data.message || "Error al registrar asistencias");
     }
