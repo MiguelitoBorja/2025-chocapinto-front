@@ -3,7 +3,7 @@ import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { mostrarConfirmacion } from "../componentes/confirmacion.js";
 
-const LOGIN_URL = "index.html";
+const LOGIN_URL = "../index.html";
 
 // Configuración de avatares por nivel
 const AVATARS_POR_NIVEL = {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const currentUsername = localStorage.getItem("username");
     if (!currentUsername) {
         hideLoader();
-        window.location.href = "LOGIN_URL";
+        window.location.href = LOGIN_URL;
         return;
     }
     
@@ -297,7 +297,7 @@ function confirmarCerrarSesion() {
     {
       confirmText: "Cerrar sesión",
       cancelText: "Cancelar",
-      confirmClass: "orange-btn"
+      confirmClass: "green-btn"
     }
   );
 }

@@ -1,5 +1,7 @@
 // Nuevo header reutilizable
 import { initAppHeader, setHeaderContext, addHeaderAction } from './club-componentes/app-header.js';
+import { initNotificaciones, mostrarModalNotificaciones } from './club-componentes/notificaciones-alertas.js';
+
 
 // Resto de módulos
 import { initNavigation } from './club-componentes/club-navegacion.js';
@@ -97,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </svg>`,
           variant: "secondary",
           onClick: () => {
-            console.log("🔔 Botón de notificaciones clickeado");
+            mostrarModalNotificaciones();
             // TODO: Implementar lógica de notificaciones
           }
         });
@@ -175,6 +177,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         // ========================
         if (typeof window.actualizarBadgeSolicitudes === 'function') {
           window.actualizarBadgeSolicitudes(clubData);
+        }
+        if (userId) {
+          initNotificaciones(userId);
         }
       }
 

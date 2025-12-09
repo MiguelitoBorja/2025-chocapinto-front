@@ -7,7 +7,8 @@ import { API_URL } from "./env.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { initAppHeader, setHeaderContext } from "./club-componentes/app-header.js";
-
+import { initNotificaciones } from "./club-componentes/notificaciones-alertas.js";
+import { addHeaderAction } from "./club-componentes/app-header.js";
 // ========== FUNCIONES DE UTILIDAD ==========
 
 /**
@@ -393,6 +394,7 @@ function inicializarAplicacion() {
     showLoader("Cargando aplicación...");
 
     const username = localStorage.getItem("username");
+    const userId = localStorage.getItem("userId");
     const usernameDisplay = document.getElementById("usernameDisplay");
     const usernameDisplayHover = document.getElementById("usernameDisplayHover");
 
@@ -411,11 +413,28 @@ function inicializarAplicacion() {
             usernameDisplayHover.textContent = username;
         }
     }
+    if (userId) {
+        initNotificaciones(userId);
+        console.log('📢 Sistema de notificaciones inicializado en main');
+    }
 
     // 3) Cargar datos principales
     const misClubesGrid = document.querySelector(".mis-clubes-grid");
     const clubesGrid = document.getElementById("clubesGrid");
 
+   
+    
+    addHeaderAction({
+        id: "notificacionesBtn",
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>`,
+        variant: "secondary",
+        onClick: () => {
+            mostrarModalNotificaciones();
+        }
+    });
     if (misClubesGrid && clubesGrid) {
         cargarClubes();
     }

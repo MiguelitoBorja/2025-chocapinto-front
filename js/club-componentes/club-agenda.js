@@ -1,6 +1,8 @@
 import { API_URL } from "../env.js";
 import { showNotification } from "../../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../../componentes/loader.js";
+import { mostrarConfirmacion } from "../../componentes/confirmacion.js";
+
 
 let sesionesData = [];
 let clubIdActual = null;
@@ -468,37 +470,45 @@ export function cambiarVistaAgenda(tipo) {
  * Elimina una sesión
  */
 export async function eliminarSesion(sesionId) {
-  if (!confirm("¿Estás seguro de que deseas eliminar esta sesión?")) {
-    return;
-  }
+  mostrarConfirmacion(
+    "Eliminar sesión",
+    "¿Estás seguro de que deseas eliminar esta sesión?<br><br><strong>Esta acción no se puede deshacer.</strong>",
+    async () => {
+      try {
+        showLoader("Eliminando sesión...");
+        
+        const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: localStorage.getItem("username")
+          })
+        });
 
-  try {
-    showLoader("Eliminando sesión...");
-    
-    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: localStorage.getItem("username")
-      })
-    });
-
-    const data = await response.json();
-    
-    if (data.success) {
-      showNotification("success", "Sesión eliminada exitosamente");
-      cargarSesiones();
-    } else {
-      showNotification("error", data.message || "Error al eliminar sesión");
+        const data = await response.json();
+        
+        if (data.success) {
+          showNotification("success", "Sesión eliminada exitosamente");
+          cargarSesiones();
+        } else {
+          showNotification("error", data.message || "Error al eliminar sesión");
+        }
+      } catch (error) {
+        console.error("Error al eliminar sesión:", error);
+        showNotification("error", "Error al eliminar la sesión");
+      } finally {
+        hideLoader();
+      }
+    },
+    null,
+    {
+      confirmText: "Eliminar",
+      cancelText: "Cancelar",
+      confirmClass: "red-btn"
     }
-  } catch (error) {
-    console.error("Error al eliminar sesión:", error);
-    showNotification("error", "Error al eliminar la sesión");
-  } finally {
-    hideLoader();
-  }
+  );
 }
 
 /**
