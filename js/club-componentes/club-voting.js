@@ -962,6 +962,11 @@ async function concluirLectura(periodoId) {
                         showNotification("success", mensaje);
                     }
                     
+                    // Actualizar XP en el header
+                    if (typeof window.updateUserXpHeader === 'function') {
+                        window.updateUserXpHeader();
+                    }
+                    
                     document.getElementById('modalLectura')?.remove();
                     actualizarBotonDinamico();
                 } else {
