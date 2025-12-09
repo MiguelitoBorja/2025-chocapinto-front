@@ -6,6 +6,7 @@
   <title>Booksy - Club de Lectura</title>
 
   <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/ranking.css">
   <link rel="stylesheet" href="../css/componentes/notificaciones.css">
   <link rel="stylesheet" href="../css/componentes/notificacion-alerta.css">
   <link rel="stylesheet" href="../css/componentes/loader.css">
@@ -98,7 +99,7 @@
     <p>
       ¿Deseás más información de los clubes?
       Escribinos a
-      <a href="mailto:mail@booksy.com">mail@booksy.com</a>
+      <a href="mailto:booksy912@gmail.com">booksy912@gmail.com</a>
     </p>
     <p class="footer-credits">Booksy &copy; 2025</p>
   </footer>
@@ -128,70 +129,67 @@
   <!-- ✅ JS PRINCIPAL (con header nuevo ya integrado) -->
   <script type="module" src="../js/principal.js"></script>
 
-  <!-- ================= ESTILOS DEL RANKING ================= -->
+  <!-- ================= ESTILOS DEL RANKING Y RESPONSIVE ================= -->
   <style>
-    .ranking-avatar-container {
-      position: relative;
-      width: 40px;
-      height: 40px;
+    /* Estilos responsive adicionales para modal de notificaciones */
+    @media (max-width: 768px) {
+      .notificaciones-modal-content {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 1rem !important;
+        max-height: 90vh !important;
+      }
+      
+      .notificaciones-modal-header {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        padding: 1rem !important;
+      }
+      
+      .notificaciones-modal-header h2 {
+        font-size: 1.3rem !important;
+      }
+      
+      .notificaciones-actions {
+        width: 100% !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+      }
+      
+      .notificaciones-actions button {
+        width: 100% !important;
+      }
+      
+      .notificaciones-modal-body {
+        padding: 1rem !important;
+      }
     }
-
-    .ranking-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #eaf6ff;
+    
+    /* Mejorar scroll en listas largas */
+    .mis-clubes-grid::-webkit-scrollbar,
+    .recomendaciones-row::-webkit-scrollbar,
+    .clubes-grid::-webkit-scrollbar {
+      height: 6px;
     }
-
-    .ranking-avatar-initials {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #0984e3, #74b9ff);
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #eaf6ff;
-      text-transform: uppercase;
+    
+    .mis-clubes-grid::-webkit-scrollbar-track,
+    .recomendaciones-row::-webkit-scrollbar-track,
+    .clubes-grid::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
     }
-
-    .ranking-item {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      margin-bottom: 8px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
+    
+    .mis-clubes-grid::-webkit-scrollbar-thumb,
+    .recomendaciones-row::-webkit-scrollbar-thumb,
+    .clubes-grid::-webkit-scrollbar-thumb {
+      background: #c7d8e8;
+      border-radius: 10px;
     }
-
-    .ranking-item:hover {
-      transform: translateY(-2px);
-    }
-
-    .ranking-puesto {
-      font-weight: bold;
-      font-size: 18px;
-      color: #2c5a91;
-      margin-right: 12px;
-      min-width: 24px;
-      text-align: center;
-    }
-
-    .ranking-info {
-      flex: 1;
-      margin-left: 12px;
-    }
-
-    .ranking-metrica {
-      font-weight: bold;
-      color: #0984e3;
-      font-size: 16px;
+    
+    .mis-clubes-grid::-webkit-scrollbar-thumb:hover,
+    .recomendaciones-row::-webkit-scrollbar-thumb:hover,
+    .clubes-grid::-webkit-scrollbar-thumb:hover {
+      background: #2c5a91;
     }
   </style>
 
