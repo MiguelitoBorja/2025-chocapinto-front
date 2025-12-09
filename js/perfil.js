@@ -5,18 +5,163 @@ import { mostrarConfirmacion } from "../componentes/confirmacion.js";
 
 const LOGIN_URL = "../html/index.html";
 
-// Configuración de avatares por nivel
+// Configuración de avatares por nivel (estáticos JPG hasta nivel 3, GIF animados desde nivel 4)
 const AVATARS_POR_NIVEL = {
-    1: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg'], // Nivel 1: Solo los dos grandes
-    2: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg'], // Nivel 2: Los 5 grandes
-    3: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg'],
-    4: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg', 'ElfaArquera.jpg'],
-    5: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg', 'ElfaArquera.jpg', 'Hechizera2.jpg', 'Mago.jpg'],
-    6: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg', 'ElfaArquera.jpg', 'Hechizera2.jpg', 'Mago.jpg', 'Vampiro.jpg', 'Hechizera.jpg'],
-    7: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg', 'ElfaArquera.jpg', 'Hechizera2.jpg', 'Mago.jpg', 'Vampiro.jpg', 'Hechizera.jpg', 'Cyborg.jpg', 'Filosofo.jpg'],
-    8: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg', 'ElfaArquera.jpg', 'Hechizera2.jpg', 'Mago.jpg', 'Vampiro.jpg', 'Hechizera.jpg', 'Cyborg.jpg', 'Filosofo.jpg', 'Reina.jpg'],
-    9: ['DetectiveHombre.jpg', 'DetectiveMujer.jpg', 'AventureroFantasia.jpg', 'Exploradora.jpg', 'Filosofo.jpg', 'ElfaArquera.jpg', 'Hechizera2.jpg', 'Mago.jpg', 'Vampiro.jpg', 'Hechizera.jpg', 'Cyborg.jpg', 'Filosofo.jpg', 'Reina.jpg', 'SilverShroud.jpg'],
+    // 🌟 Nivel 1 - Iniciales (básicos)
+    1: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg'
+    ],
+    
+    // 📚 Nivel 2 - Aventureros
+    2: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg'
+    ],
+    
+    // ⚔️ Nivel 3 - Héroes clásicos
+    3: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg'
+    ],
+    
+    // 🎭 Nivel 4 - Personajes especiales + primer GIF
+    4: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg',
+        'Hechizera.jpg',
+        'Vampiro.jpg',
+        'ola.gif' // Primer GIF desbloqueado
+    ],
+    
+    // 🏆 Nivel 5 - Tier épico (GIFs de LOTR)
+    5: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg',
+        'Hechizera.jpg',
+        'Vampiro.jpg',
+        'ola.gif',
+        'for_frodo.gif',
+        'gandalf_no.gif'
+    ],
+    
+    // 💀 Nivel 6 - Dark theme
+    6: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg',
+        'Hechizera.jpg',
+        'Vampiro.jpg',
+        'SilverShroud.jpg',
+        'Cyborg.jpg',
+        'ola.gif',
+        'for_frodo.gif',
+        'gandalf_no.gif',
+        'golum.gif'
+    ],
+    
+    // ⚡ Nivel 7 - Ultra épico
+    7: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg',
+        'Hechizera.jpg',
+        'Vampiro.jpg',
+        'SilverShroud.jpg',
+        'Cyborg.jpg',
+        'ola.gif',
+        'for_frodo.gif',
+        'gandalf_no.gif',
+        'golum.gif',
+        'modo_oso.gif',
+        'speed.gif'
+    ],
+    
+    // 🌟 Nivel 8 - Legendarios deportivos
+    8: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg',
+        'Hechizera.jpg',
+        'Vampiro.jpg',
+        'SilverShroud.jpg',
+        'Cyborg.jpg',
+        'ola.gif',
+        'for_frodo.gif',
+        'gandalf_no.gif',
+        'golum.gif',
+        'modo_oso.gif',
+        'speed.gif',
+        'messi.gif',
+        'River.png' // Easter egg para fans de River
+    ],
+    
+    // 👑 Nivel 9+ - TODOS desbloqueados
+    9: [
+        'DetectiveHombre.jpg',
+        'DetectiveMujer.jpg',
+        'AventureroFantasia.jpg',
+        'Exploradora.jpg',
+        'ElfaArquera.jpg',
+        'Mago.jpg',
+        'Hechizera.jpg',
+        'Vampiro.jpg',
+        'SilverShroud.jpg',
+        'Cyborg.jpg',
+        'ola.gif',
+        'for_frodo.gif',
+        'gandalf_no.gif',
+        'golum.gif',
+        'modo_oso.gif',
+        'speed.gif',
+        'messi.gif',
+        'cr7.gif',
+        'River.png'
+    ]
 };
+// Sistema de recompensas por nivel
+const RECOMPENSAS_POR_NIVEL = {
+    1: { marco: null, insignia: null, tipo: 'estatico' },
+    2: { marco: null, insignia: null, tipo: 'estatico' },
+    3: { marco: null, insignia: '📖 Lector Iniciado', tipo: 'estatico' },
+    4: { marco: 'bronce', insignia: '📖 Lector Iniciado', tipo: 'gif' },
+    5: { marco: 'bronce', insignia: '📚 Bibliófilo', tipo: 'gif' },
+    6: { marco: 'plata', insignia: '📚 Bibliófilo', tipo: 'gif' },
+    7: { marco: 'plata', insignia: '🔥 Lector Apasionado', tipo: 'gif' },
+    8: { marco: 'oro', insignia: '🔥 Lector Apasionado', tipo: 'gif-epico' },
+    9: { marco: 'oro', insignia: '⚡ Maestro Literario', tipo: 'gif-epico' },
+    10: { marco: 'diamante', insignia: '👑 Leyenda de Booksy', tipo: 'gif-legendario' }
+};
+
+// Función para obtener recompensas del nivel actual
+function obtenerRecompensas(nivel) {
+    // Si el nivel es mayor a 10, usar las recompensas de nivel 10
+    const nivelKey = nivel > 10 ? 10 : nivel;
+    return RECOMPENSAS_POR_NIVEL[nivelKey] || RECOMPENSAS_POR_NIVEL[1];
+}
 
 //Inicializador de pagina - mostrar loader inicial
 showLoader("Iniciando perfil...");
@@ -357,6 +502,10 @@ async function loadMyClubs() {
 
                                 <button class="btn-primary-club club-button"
                                     onclick="window.location.href='club_lectura.html?clubId=${club.id}'">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle;">
+                                        <path d="M5 12h14"/>
+                                        <path d="m12 5 7 7-7 7"/>
+                                    </svg>
                                     Ir al Club
                                 </button>
                             </div>
@@ -451,29 +600,94 @@ function generarGridAvataresPorNivel(userLevel) {
         avatarsDisponibles = [...new Set(avatarsDisponibles)]; // Remover duplicados
     }
     
-    // Todos los avatares posibles con sus detalles
+    // Todos los avatares posibles con sus detalles (organizados por nivel de desbloqueo)
     const todosLosAvatares = [
-        { archivo: 'DetectiveHombre.jpg', nombre: 'Detective Hombre', nivelRequerido: 1 },
-        { archivo: 'DetectiveMujer.jpg', nombre: 'Detective Mujer', nivelRequerido: 1 },
-        { archivo: 'AventureroFantasia.jpg', nombre: 'Aventurero de Fantasia', nivelRequerido: 2 },
-        { archivo: 'Exploradora.jpg', nombre: 'Exploradora', nivelRequerido: 2 },
-        { archivo: 'Filosofo.jpg', nombre: 'Filosofo', nivelRequerido: 3 },
-        { archivo: 'ElfaArquera.jpg', nombre: 'ElfaArquera', nivelRequerido: 4 },
-        { archivo: 'Hechizera2.jpg', nombre: 'Hechizera', nivelRequerido: 5 },
-        { archivo: 'Mago.jpg', nombre: 'Mago', nivelRequerido: 5 },
-        { archivo: 'Vampiro.jpg', nombre: 'Vampiro', nivelRequerido: 6 },
-        { archivo: 'Hechizera.jpg', nombre: 'Bruja', nivelRequerido: 6 },
-        { archivo: 'Cyborg.jpg', nombre: 'Cyborg', nivelRequerido: 7 },
-        { archivo: 'Filosofo.jpg', nombre: 'Filosofo', nivelRequerido: 7 },
-        { archivo: 'Reina.jpg', nombre: 'Reina', nivelRequerido: 8 },
-        { archivo: 'SilverShroud.jpg', nombre: 'SilverShroud', nivelRequerido: 9 },
+        // Nivel 1 - Básicos
+        { archivo: 'DetectiveHombre.jpg', nombre: '🕵️ Detective Hombre', nivelRequerido: 1 },
+        { archivo: 'DetectiveMujer.jpg', nombre: '🕵️ Detective Mujer', nivelRequerido: 1 },
+        
+        // Nivel 2 - Aventureros
+        { archivo: 'AventureroFantasia.jpg', nombre: '⚔️ Aventurero', nivelRequerido: 2 },
+        { archivo: 'Exploradora.jpg', nombre: '🗺️ Exploradora', nivelRequerido: 2 },
+        
+        // Nivel 3 - Héroes clásicos
+        { archivo: 'ElfaArquera.jpg', nombre: '🏹 Elfa Arquera', nivelRequerido: 3 },
+        { archivo: 'Mago.jpg', nombre: '🔮 Mago', nivelRequerido: 3 },
+        
+        // Nivel 4 - Personajes especiales + primer GIF
+        { archivo: 'Hechizera.jpg', nombre: '✨ Hechizera', nivelRequerido: 4 },
+        { archivo: 'Vampiro.jpg', nombre: '🧛 Vampiro', nivelRequerido: 4 },
+        { archivo: 'ola.gif', nombre: '👋 ¡Hola!', nivelRequerido: 4 },
+        
+        // Nivel 5 - GIFs LOTR
+        { archivo: 'for_frodo.gif', nombre: '⚔️ For Frodo!', nivelRequerido: 5 },
+        { archivo: 'gandalf_no.gif', nombre: '🧙 You Shall Not Pass', nivelRequerido: 5 },
+        
+        // Nivel 6 - Dark theme
+        { archivo: 'SilverShroud.jpg', nombre: '🦇 Silver Shroud', nivelRequerido: 6 },
+        { archivo: 'Cyborg.jpg', nombre: '🤖 Cyborg', nivelRequerido: 6 },
+        { archivo: 'golum.gif', nombre: '💍 Gollum', nivelRequerido: 6 },
+        
+        // Nivel 7 - Ultra épico
+        { archivo: 'modo_oso.gif', nombre: '🐻 Modo Oso', nivelRequerido: 7 },
+        { archivo: 'speed.gif', nombre: '⚡ Speed', nivelRequerido: 7 },
+        
+        // Nivel 8 - Legendarios deportivos
+        { archivo: 'messi.gif', nombre: '⚽ Messi', nivelRequerido: 8 },
+        { archivo: 'River.png', nombre: '🔴⚪ River Plate', nivelRequerido: 8 },
+        
+        // Nivel 9+ - Máximo nivel
+        { archivo: 'cr7.gif', nombre: '👑 CR7', nivelRequerido: 9 }
     ];
     
-    // Primero crear el HTML de información del nivel
+    // Primero crear el HTML de información del nivel con recompensas
+    const recompensasActuales = obtenerRecompensas(userLevel);
+    const proximoNivel = userLevel + 1;
+    const proximasRecompensas = obtenerRecompensas(proximoNivel);
+    
+    let infoRecompensasHTML = '';
+    if (recompensasActuales.marco || recompensasActuales.insignia) {
+        infoRecompensasHTML += '<div class="recompensas-actuales">';
+        infoRecompensasHTML += '<strong>🎁 Recompensas desbloqueadas:</strong><br>';
+        if (recompensasActuales.marco) {
+            const marcoTexto = {
+                'bronce': '🥉 Marco de Bronce',
+                'plata': '🥈 Marco de Plata', 
+                'oro': '🥇 Marco de Oro',
+                'diamante': '💎 Marco de Diamante'
+            };
+            infoRecompensasHTML += `<span class="recompensa-item">${marcoTexto[recompensasActuales.marco]}</span>`;
+        }
+        if (recompensasActuales.insignia) {
+            infoRecompensasHTML += `<span class="recompensa-item">${recompensasActuales.insignia}</span>`;
+        }
+        infoRecompensasHTML += '</div>';
+    }
+    
+    // Mostrar próximas recompensas
+    if (proximoNivel <= 10 && (proximasRecompensas.marco !== recompensasActuales.marco || proximasRecompensas.insignia !== recompensasActuales.insignia)) {
+        infoRecompensasHTML += '<div class="proximas-recompensas">';
+        infoRecompensasHTML += `<strong>⭐ Próximo nivel (${proximoNivel}):</strong><br>`;
+        if (proximasRecompensas.marco && proximasRecompensas.marco !== recompensasActuales.marco) {
+            const marcoTexto = {
+                'bronce': '🥉 Marco de Bronce',
+                'plata': '🥈 Marco de Plata',
+                'oro': '🥇 Marco de Oro',
+                'diamante': '💎 Marco de Diamante'
+            };
+            infoRecompensasHTML += `<span class="recompensa-proxima">${marcoTexto[proximasRecompensas.marco]}</span>`;
+        }
+        if (proximasRecompensas.insignia && proximasRecompensas.insignia !== recompensasActuales.insignia) {
+            infoRecompensasHTML += `<span class="recompensa-proxima">${proximasRecompensas.insignia}</span>`;
+        }
+        infoRecompensasHTML += '</div>';
+    }
+    
     const levelInfoHTML = `
         <div class="avatar-level-info">
             <h4>🌟 Tu nivel actual: ${userLevel}</h4>
             <p>Avatares disponibles: ${avatarsDisponibles.length} de ${todosLosAvatares.length}</p>
+            ${infoRecompensasHTML}
         </div>
     `;
     
@@ -587,14 +801,45 @@ async function cargarAvatarActual() {
         const res = await fetch(`${API_URL}/user/${currentUsername}`);
         const data = await res.json();
         
-        if (data.success && data.user && data.user.avatar) {
+        if (data.success && data.user) {
             const avatarImg = document.getElementById('currentAvatarImg');
             const defaultIcon = document.getElementById('defaultAvatarIcon');
+            const profilePhotoContainer = document.getElementById('profilePhotoContainer');
             
-            if (avatarImg && defaultIcon) {
+            // Aplicar avatar si existe
+            if (data.user.avatar && avatarImg && defaultIcon) {
                 avatarImg.src = data.user.avatar;
                 avatarImg.style.display = 'block';
                 defaultIcon.style.display = 'none';
+            }
+            
+            // Aplicar marco e insignia según el nivel
+            const userLevel = data.user.level || 1;
+            const recompensas = obtenerRecompensas(userLevel);
+            
+            // Aplicar marco al contenedor del avatar
+            if (profilePhotoContainer) {
+                // Limpiar clases de marco anteriores
+                profilePhotoContainer.classList.remove('marco-bronce', 'marco-plata', 'marco-oro', 'marco-diamante');
+                
+                // Aplicar nuevo marco si existe
+                if (recompensas.marco) {
+                    profilePhotoContainer.classList.add(`marco-${recompensas.marco}`);
+                }
+            }
+            
+            // Mostrar insignia en el sidebar
+            const sidebarTag = document.getElementById('sidebar-tag');
+            if (sidebarTag && recompensas.insignia) {
+                const role = data.user.role || 'No asignado';
+                sidebarTag.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                        <strong>Rol:</strong> <strong id="info-role">${role}</strong>
+                    </div>
+                    <div class="insignia-badge" title="Insignia de nivel ${userLevel}">
+                        ${recompensas.insignia}
+                    </div>
+                `;
             }
         }
     } catch (error) {

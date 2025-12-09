@@ -451,9 +451,9 @@ export async function confirmarAsistenciaSesion(sesionId, estado) {
       showNotification("success", "Confirmación registrada");
       cargarSesiones();
       
-      // Actualizar XP en el header
-      if (typeof window.updateUserXpHeader === 'function') {
-        window.updateUserXpHeader();
+      // Recargar eventos del calendario si está activo
+      if (calendar) {
+        calendar.refetchEvents();
       }
     } else {
       showNotification("error", data.message || "Error al confirmar asistencia");
@@ -463,6 +463,13 @@ export async function confirmarAsistenciaSesion(sesionId, estado) {
     showNotification("error", "Error al confirmar asistencia");
   }
 }
+
+/**
+ * Confirma asistencia desde el modal del calendario
+ */
+window.confirmarAsistenciaDesdeCalendario = async function(sesionId, estado) {
+  await confirmarAsistenciaSesion(sesionId, estado);
+};
 
 /**
  * Renderiza el calendario con FullCalendar
@@ -712,6 +719,13 @@ function mostrarDetallesEvento(event) {
       minute: '2-digit'
     });
     
+    // Determinar confirmación del usuario actual
+    const userId = parseInt(localStorage.getItem('userId'));
+    const confirmacion = sesion.confirmaciones?.find(c => c.userId === userId);
+    const yaConfirmo = confirmacion?.estado === 'ASISTIRE';
+    const yaTalVez = confirmacion?.estado === 'TAL_VEZ';
+    const yaRechazó = confirmacion?.estado === 'NO_VOY';
+    
     const detallesHTML = `
       <div class="evento-detalle-modal" onclick="if(event.target === this) this.remove()">
         <div class="evento-detalle-content">
@@ -744,7 +758,40 @@ function mostrarDetallesEvento(event) {
               <strong>📊 Estado:</strong>
               <span>${sesion.estado === 'COMPLETADA' ? '✅ Completada' : '⏳ Pendiente'}</span>
             </div>
+            ${sesion.confirmaciones ? `
+              <div class="evento-info-item">
+                <strong>👥 Confirmados:</strong>
+                <span>${sesion.confirmaciones.filter(c => c.confirmado).length} personas</span>
+              </div>
+            ` : ''}
           </div>
+          
+          ${sesion.estado !== 'COMPLETADA' ? `
+            <div class="confirmacion-buttons" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+              <p style="margin-bottom: 0.75rem; font-weight: 600; color: #2c5a91;">¿Vas a asistir?</p>
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button 
+                  onclick="window.confirmarAsistenciaDesdeCalendario(${sesion.id}, 'ASISTIRE'); this.closest('.evento-detalle-modal').remove();" 
+                  class="${yaConfirmo ? 'btn-confirmado' : 'btn-confirmar'}"
+                  ${yaConfirmo ? 'disabled' : ''}>
+                  ${yaConfirmo ? '✓ Confirmado' : '✓ Asistiré'}
+                </button>
+                <button 
+                  onclick="window.confirmarAsistenciaDesdeCalendario(${sesion.id}, 'TAL_VEZ'); this.closest('.evento-detalle-modal').remove();" 
+                  class="${yaTalVez ? 'btn-talvez-activo' : 'btn-talvez'}"
+                  ${yaTalVez ? 'disabled' : ''}>
+                  ${yaTalVez ? '? Tal vez' : '? Tal vez'}
+                </button>
+                <button 
+                  onclick="window.confirmarAsistenciaDesdeCalendario(${sesion.id}, 'NO_VOY'); this.closest('.evento-detalle-modal').remove();" 
+                  class="${yaRechazó ? 'btn-rechazado' : 'btn-rechazar'}"
+                  ${yaRechazó ? 'disabled' : ''}>
+                  ${yaRechazó ? '✗ No asistiré' : '✗ No asistiré'}
+                </button>
+              </div>
+            </div>
+          ` : ''}
+          
           <div class="evento-detalle-actions">
             <button onclick="window.cambiarVistaAgenda('lista'); this.closest('.evento-detalle-modal').remove();" class="btn-secondary">
               📋 Ver en lista

@@ -2796,6 +2796,8 @@ main {
       overflow: hidden;
       position: relative;
       animation: slideUp 0.4s ease-out;
+      padding-bottom: 20px;
+    
     }
 
     .ranking-card .close-btn {
@@ -3789,6 +3791,7 @@ main {
       overflow: hidden;
       position: relative;
       animation: slideUp 0.4s ease-out;
+      padding-bottom: 20px;
     }
 
     .members-card .close-btn {
@@ -6424,7 +6427,10 @@ main {
 }
 
 .modal-body-votacion {
-  padding: 32px 24px;
+  padding-left:24px;
+  padding-right: 24px;
+  padding-bottom: 5px;
+  padding-top: 3px;
   background: var(--white);
   overflow-y: auto;
   max-height: calc(90vh - 120px);
