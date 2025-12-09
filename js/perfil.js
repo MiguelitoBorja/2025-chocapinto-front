@@ -1,6 +1,7 @@
 import { API_URL } from "./env.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
+import { mostrarConfirmacion } from "../componentes/confirmacion.js";
 
 const LOGIN_URL = "index.html";
 
@@ -226,42 +227,52 @@ document.getElementById("passwordForm").addEventListener("submit", async (e) => 
 
 // --- 6. LÓGICA DE ELIMINAR CUENTA (Mantenida) ---
 
-document.getElementById("deleteAccountBtn").addEventListener("click", async () => {
-    if (!confirm("¿Seguro que querés eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
-    
-    const username = localStorage.getItem("username");
-    
-    try {
-        // Mostrar loader durante la eliminación
-        showLoader("Eliminando cuenta...");
-        
-        const res = await fetch(`${API_URL}/deleteUser`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username })
-        });
-        
-        const data = await res.json();
-        
-        if (data.success) {
-            showLoader("Cuenta eliminada! Redirigiendo...");
-            showNotification("success", "Cuenta eliminada correctamente");
-            localStorage.removeItem("username");
-            localStorage.removeItem("role");
+document.getElementById("deleteAccountBtn").addEventListener("click", () => {
+    mostrarConfirmacion(
+        "Eliminar cuenta",
+        "¿Seguro que querés eliminar tu cuenta? <br><br><strong>Esta acción no se puede deshacer.</strong>",
+        async () => {
+            const username = localStorage.getItem("username");
             
-            setTimeout(() => {
+            try {
+                // Mostrar loader durante la eliminación
+                showLoader("Eliminando cuenta...");
+                
+                const res = await fetch(`${API_URL}/deleteUser`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    showLoader("Cuenta eliminada! Redirigiendo...");
+                    showNotification("success", "Cuenta eliminada correctamente");
+                    localStorage.removeItem("username");
+                    localStorage.removeItem("role");
+                    
+                    setTimeout(() => {
+                        hideLoader();
+                        window.location.href = LOGIN_URL;
+                    }, 1500);
+                } else {
+                    hideLoader();
+                    showNotification("error", data.message || "No se pudo eliminar la cuenta");
+                }
+            } catch (error) {
+                console.error("Error al eliminar:", error);
                 hideLoader();
-                window.location.href = LOGIN_URL;
-            }, 1500);
-        } else {
-            hideLoader();
-            showNotification("error", data.message || "No se pudo eliminar la cuenta");
+                showNotification("error", "Error de conexión con el servidor");
+            }
+        },
+        null,
+        {
+            confirmText: "Eliminar cuenta",
+            cancelText: "Cancelar",
+            confirmClass: "green-btn"
         }
-    } catch (error) {
-        console.error("Error al eliminar:", error);
-        hideLoader();
-        showNotification("error", "Error de conexión con el servidor");
-    }
+    );
 });
 
 
@@ -278,23 +289,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function confirmarCerrarSesion() {
-  if (window.mostrarConfirmacion) {
-    window.mostrarConfirmacion(
-      "Cerrar sesión",
-      "¿Estás seguro de que querés cerrar sesión?",
-      cerrarSesion,
-      null,
-      {
-        confirmText: "Cerrar sesión",
-        cancelText: "Cancelar",
-        confirmClass: "red-btn",
-        cancelClass: "gray-btn"
-      }
-    );
-  } else {
-    const ok = confirm("¿Estás seguro de que querés cerrar sesión?");
-    if (ok) cerrarSesion();
-  }
+  mostrarConfirmacion(
+    "Cerrar sesión",
+    "¿Estás seguro de que querés cerrar sesión?",
+    cerrarSesion,
+    null,
+    {
+      confirmText: "Cerrar sesión",
+      cancelText: "Cancelar",
+      confirmClass: "orange-btn"
+    }
+  );
 }
 
 function cerrarSesion() {
