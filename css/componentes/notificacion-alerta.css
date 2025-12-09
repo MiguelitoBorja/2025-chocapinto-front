@@ -102,6 +102,21 @@
   color: #7b1fa2;
 }
 
+.notif-urgente .notif-icono {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.notif-success .notif-icono {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.notif-error .notif-icono {
+  background: #ffebee;
+  color: #c62828;
+}
+
 /* Contenido de la notificación */
 .notif-contenido {
   flex: 1;

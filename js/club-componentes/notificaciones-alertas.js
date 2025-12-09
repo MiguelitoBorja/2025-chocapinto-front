@@ -147,6 +147,14 @@ function crearTarjetaNotificacion(notif) {
       </svg>`;
       colorClase = 'notif-sesion';
       break;
+    case 'SESION_PROXIMA':
+      iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>`;
+      colorClase = 'notif-urgente';
+      break;
+    case 'VOTACION_ABIERTA':
     case 'VOTACION_INICIADA':
       iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 11H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"/>
@@ -154,12 +162,52 @@ function crearTarjetaNotificacion(notif) {
       </svg>`;
       colorClase = 'notif-votacion';
       break;
+    case 'VOTACION_POR_VENCER':
+      iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+        <path d="M12 2 L12 4"/>
+        <path d="M12 20 L12 22"/>
+        <path d="M4.93 4.93 L6.34 6.34"/>
+        <path d="M17.66 17.66 L19.07 19.07"/>
+      </svg>`;
+      colorClase = 'notif-urgente';
+      break;
+    case 'VOTACION_CERRADA':
+      iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>`;
+      colorClase = 'notif-success';
+      break;
+    case 'SOLICITUD_ACEPTADA':
+      iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>`;
+      colorClase = 'notif-success';
+      break;
+    case 'SOLICITUD_RECHAZADA':
+      iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>`;
+      colorClase = 'notif-error';
+      break;
     case 'LIBRO_AGREGADO':
       iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
       </svg>`;
       colorClase = 'notif-libro';
+      break;
+    case 'LECTURA_FINALIZADA':
+      iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        <polyline points="9 10 12 13 16 9"/>
+      </svg>`;
+      colorClase = 'notif-success';
       break;
     default:
       iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

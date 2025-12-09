@@ -1042,6 +1042,9 @@ async function gestionarSolicitudModal(solicitudId, aceptar) {
             // Actualizar los datos del club primero
             await renderClub();
             
+            if (window.clubData && typeof window.actualizarBadgeSolicitudes === 'function') {
+                window.actualizarBadgeSolicitudes(window.clubData);
+            }
             // Reabrir el modal con datos actualizados después de un pequeño delay
             setTimeout(() => {
                 mostrarSolicitudesModal();
