@@ -196,34 +196,48 @@ function crearTarjetaSesion(sesion, tipo) {
 
   return `
     <div class="sesion-card ${isPasada ? "sesion-pasada" : ""}" data-sesion-id="${sesion.id}">
-      <div class="sesion-header">
-        <div class="sesion-fecha-hora">
-          <div class="sesion-fecha">${fechaFormateada}</div>
-          <div class="sesion-hora">🕐 ${horaFormateada}</div>
+      <div class="sesion-card-header" onclick="toggleSesionCard(${sesion.id})">
+        <div class="sesion-card-left">
+          <div class="sesion-fecha-badge">
+            <div class="fecha-dia">${fecha.getDate()}</div>
+            <div class="fecha-mes">${fecha.toLocaleDateString("es-AR", { month: "short" }).toUpperCase()}</div>
+          </div>
+          <div class="sesion-header-info">
+            <h3 class="sesion-titulo">${sesion.titulo}</h3>
+            <div class="sesion-meta">
+              <span class="sesion-hora">🕐 ${horaFormateada}</span>
+              <span class="sesion-lugar-mini">📍 ${sesion.lugar}</span>
+            </div>
+          </div>
         </div>
-        ${userRole === "OWNER" || userRole === "MODERADOR" ? `
-          <div class="sesion-actions">
-            ${!isPasada ? `
-              <button class="btn-icon" onclick="window.editarSesion(${sesion.id})" title="Editar">
+        <div class="sesion-card-right">
+          ${userRole === "OWNER" || userRole === "MODERADOR" ? `
+            <div class="sesion-actions" onclick="event.stopPropagation()">
+              ${!isPasada ? `
+                <button class="btn-icon" onclick="window.editarSesion(${sesion.id})" title="Editar">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+              ` : ""}
+              <button class="btn-icon btn-danger" onclick="window.eliminarSesion(${sesion.id})" title="Eliminar">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                 </svg>
               </button>
-            ` : ""}
-            <button class="btn-icon btn-danger" onclick="window.eliminarSesion(${sesion.id})" title="Eliminar">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </button>
+            </div>
+          ` : ""}
+          <div class="toggle-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </div>
-        ` : ""}
+        </div>
       </div>
 
-      <div class="sesion-content">
-        <h3 class="sesion-titulo">${sesion.titulo}</h3>
-        
+      <div class="sesion-card-body" style="display: none;">
         ${sesion.clubBook ? `
           <div class="sesion-libro">
             <img src="${sesion.clubBook.book.portada || "../images/BooksyLogo.png"}" alt="${sesion.clubBook.book.title}">
@@ -238,8 +252,15 @@ function crearTarjetaSesion(sesion, tipo) {
           <div class="sesion-descripcion">${sesion.descripcion}</div>
         ` : ""}
 
-        <div class="sesion-lugar">
-          📍 ${sesion.lugar}
+        <div class="sesion-detalles-grid">
+          <div class="detalle-item">
+            <strong>📍 Lugar:</strong>
+            <span>${sesion.lugar}</span>
+          </div>
+          <div class="detalle-item">
+            <strong>📅 Fecha completa:</strong>
+            <span>${fechaFormateada}</span>
+          </div>
         </div>
 
         ${!isPasada ? `
@@ -259,15 +280,15 @@ function crearTarjetaSesion(sesion, tipo) {
             <div class="confirmacion-usuario">
               <button class="btn-confirmacion ${estadoUsuario === "ASISTIRE" ? "active" : ""}" 
                       onclick="window.confirmarAsistenciaSesion(${sesion.id}, 'ASISTIRE')">
-                Asistiré
+                ✓ Asistiré
               </button>
               <button class="btn-confirmacion ${estadoUsuario === "TAL_VEZ" ? "active" : ""}"
                       onclick="window.confirmarAsistenciaSesion(${sesion.id}, 'TAL_VEZ')">
-                Tal vez
+                ? Tal vez
               </button>
               <button class="btn-confirmacion ${estadoUsuario === "NO_VOY" ? "active" : ""}"
                       onclick="window.confirmarAsistenciaSesion(${sesion.id}, 'NO_VOY')">
-                No voy
+                ✗ No voy
               </button>
             </div>
           </div>
@@ -1153,4 +1174,26 @@ if (typeof window !== "undefined") {
   window.registrarAsistenciaSesion = registrarAsistenciaSesion;
   window.cerrarModalRegistrarAsistencia = cerrarModalRegistrarAsistencia;
   window.registrarAsistenciaSubmit = registrarAsistenciaSubmit;
+  window.toggleSesionCard = toggleSesionCard;
+}
+
+/**
+ * Toggle para expandir/colapsar tarjetas de sesión
+ */
+function toggleSesionCard(sesionId) {
+  const card = document.querySelector(`.sesion-card[data-sesion-id="${sesionId}"]`);
+  if (!card) return;
+  
+  const body = card.querySelector('.sesion-card-body');
+  const icon = card.querySelector('.toggle-icon svg');
+  
+  if (body.style.display === 'none' || body.style.display === '') {
+    body.style.display = 'block';
+    icon.style.transform = 'rotate(180deg)';
+    card.classList.add('expanded');
+  } else {
+    body.style.display = 'none';
+    icon.style.transform = 'rotate(0deg)';
+    card.classList.remove('expanded');
+  }
 }
