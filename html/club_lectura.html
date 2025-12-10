@@ -66,7 +66,6 @@
         <span id="comments-count">0</span>
       </div>
       <div id="comentariosList" class="comment-container">
-        <!-- Los comentarios se cargarán aquí dinámicamente -->
       </div>
     </div>
     <div class="text-box">
@@ -122,7 +121,6 @@
 <div id="modalLibro" class="modal-backdrop modal-agregar-libro" style="display:none;">
   <div class="modal-content modal-libro-content">
     
-    <!-- Header del Modal -->
     <div class="modal-header-libro">
       <div class="header-icon-libro">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -144,7 +142,6 @@
       </button>
     </div>
 
-    <!-- Body del Modal -->
     <div class="modal-body-libro">
       <div class="search-tabs-container">
   <button type="button" class="search-tab active" id="tab-libros" onclick="cambiarModoBusqueda('google')">
@@ -173,14 +170,12 @@
           <div class="search-hint">Usa palabras clave específicas para mejores resultados</div>
         </div>
 
-        <!-- Resultados de Búsqueda -->
         <div class="search-results-section" id="searchResultsSection" style="display: none;">
           <h4 class="results-title">Resultados de búsqueda</h4>
           <div id="resultadosBusquedaLibro" class="search-results-container"></div>
         </div>
       </div>
 
-      <!-- Libro Seleccionado -->
       <div class="selected-book-section" id="selectedBookSection" style="display: none;">
         <div class="selected-book-card">
           <div class="book-cover-preview">
@@ -206,16 +201,13 @@
         </div>
       </div>
 
-      <!-- Formulario Principal -->
       <form id="formLibro" class="form-libro">
         
-        <!-- Campos ocultos -->
         <input type="hidden" id="tituloLibro">
         <input type="hidden" id="autorLibro">
         <input type="hidden" id="portadaLibro">
         <input type="hidden" id="idApiLibro">
 
-        <!-- Sección de Categorías -->
         <div class="categories-section-libro">
           <div class="form-group-libro">
             <label class="form-label-libro">
@@ -229,10 +221,8 @@
             </label>
             <div class="categories-hint">Selecciona las categorías que mejor describan este libro</div>
             
-            <!-- Contenedor de categorías existentes -->
             <div class="categories-grid" id="categoriasContainer"></div>
             
-            <!-- Crear nueva categoría -->
             <div class="create-category-section">
               <h5 class="create-category-title">¿No encuentras la categoría perfecta?</h5>
               <div class="create-category-form">
@@ -249,7 +239,6 @@
           </div>
         </div>
 
-        <!-- Acciones del Modal -->
         <div class="modal-actions-libro">
           <button type="button" class="btn-cancel-libro" onclick="document.getElementById('modalLibro').style.display='none'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -270,7 +259,6 @@
         </div>
       </form>
 
-      <!-- Mensaje de error/éxito -->
       <div id="msgLibro" class="message-libro" style="display: none;"></div>
     </div>
 
@@ -299,7 +287,6 @@
       </div>
       
       <div id="rankingList" class="ranking-list" style="display:none;">
-        <!-- Los usuarios del ranking se cargarán aquí -->
       </div>
       
       <div id="rankingEmpty" class="ranking-empty" style="display:none;">
@@ -339,7 +326,6 @@
       </div>
       
       <div id="membersList" class="members-list" style="display:none;">
-        <!-- Los miembros se cargarán aquí -->
       </div>
       
       <div id="membersEmpty" class="members-empty" style="display:none;">
@@ -380,7 +366,6 @@
       </div>
       
       <div id="requestsList" class="requests-list" style="display:none;">
-        <!-- Las solicitudes se cargarán aquí -->
       </div>
       
       <div id="requestsEmpty" class="requests-empty" style="display:none;">
@@ -488,7 +473,6 @@
       </div>
       
       <div id="historialModalContent" class="historial-timeline-content" style="display:none;">
-        <!-- El contenido del historial se cargará aquí -->
       </div>
       
       <div id="historialModalEmpty" class="historial-empty" style="display:none;">
@@ -526,7 +510,6 @@
         </div>
         
         <div class="chart-legend" id="chartLegend">
-          
         </div>
       </div>
     </div>
@@ -560,7 +543,6 @@
       </div>
       
       <div id="periodosList" class="periodos-list" style="display:none;">
-        <!-- Los períodos se cargarán aquí dinámicamente -->
       </div>
       
       <div id="periodosEmpty" class="periodos-empty" style="display:none;">
@@ -712,7 +694,6 @@
               </div>
             </div>
             <div class="progress-list" id="progress-list">
-              <!-- Los libros en progreso se cargarán aquí dinámicamente -->
               <div class="progress-item-placeholder">
                 <div class="book-thumbnail-placeholder">📖</div>
                 <div class="book-info-placeholder">
@@ -810,7 +791,6 @@
               </button>
             </div>
             <div class="categories-list" id="categories-display-list">
-              <!-- Las categorías se cargarán aquí dinámicamente -->
               <div class="category-item-display">
                 <div class="category-info">
                   <span class="category-name">Cargando categorías...</span>
@@ -830,7 +810,6 @@
               <button class="ver-historial-btn" onclick="mostrarHistorialCompleto()">Ver Historial</button>
             </div>
             <div class="activity-list" id="recent-activity-list">
-              <!-- Las actividades se cargarán aquí dinámicamente -->
               <div class="activity-item">
                 <div class="activity-icon book">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -890,7 +869,6 @@
       
       </div>
       <div class="biblioteca-grid-container">
-        <!-- El filtro se insertará aquí dinámicamente por JavaScript -->
         <div id="libros-leidos-list" class="biblioteca-grid"></div>
         <div id="empty-state" class="empty-state" style="display:none;">
           <div class="empty-icon">
@@ -946,7 +924,6 @@
 
       <!-- Contenedor del calendario -->
       <div id="calendarioContainer" style="display: block;">
-        <!-- FullCalendar se renderizará aquí -->
       </div>
 
       <!-- Contenedor de la lista -->
@@ -961,7 +938,6 @@
         </div>
         
         <div id="sesionesContainer">
-          <!-- Las sesiones se cargarán aquí dinámicamente -->
         </div>
       </div>
     </div>
@@ -1068,7 +1044,6 @@
     </div>
     <div class="notificaciones-modal-body">
       <div id="notificacionesLista" class="notificaciones-lista">
-        <!-- Las notificaciones se cargarán aquí -->
       </div>
     </div>
   </div>
@@ -1085,7 +1060,6 @@
       <div class="asistencia-confirmados">
         <h3 style="margin-bottom: 12px; font-size: 16px;">Personas que confirmaron asistencia:</h3>
         <div id="listaConfirmados" style="max-height: 300px; overflow-y: auto;">
-          <!-- Se llena dinámicamente -->
         </div>
       </div>
 

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../css/componentes/loader.css">
 </head>
 <body>
-    <!--  HEADER  UNIFICADO -->
     <div id="app-header"></div>
     
     <main class="main-content">
@@ -155,13 +154,10 @@
         import { API_URL } from '../js/env.js';
         import { initAppHeader, setHeaderContext } from '../js/club-componentes/app-header.js';
         
-        // Exponer API_URL globalmente para el header
         window.API_URL = API_URL;
         
-        // Inicializar header
         initAppHeader();
         
-        // Configurar contexto del header
         setHeaderContext({
             icon: '✨',
             title: 'Crear Club de Lectura',
@@ -170,14 +166,12 @@
     </script>
     
     <script>
-        // Sincronizar las imágenes (hero y móvil) con el input de URL
         document.addEventListener('DOMContentLoaded', function() {
             const imagenInput = document.getElementById('imagenClubUrl');
             const heroImg = document.getElementById('heroPreviewImg');
             const mobileImg = document.getElementById('mobilePreviewImg');
             const defaultImg = 'https://img.lovepik.com/png/20231109/book-cartoon-illustration-school-start-reading-reading-book_539915_wh860.png';
             
-            // Función para actualizar ambas imágenes
             function updateImages(url) {
                 const imageUrl = url && url.trim() !== '' ? url : defaultImg;
                 
@@ -189,12 +183,10 @@
                 }
             }
             
-            // Escuchar cambios en el input de imagen
             imagenInput.addEventListener('input', function() {
                 updateImages(this.value);
             });
             
-            // Manejar errores de carga de imagen
             if (heroImg) {
                 heroImg.addEventListener('error', function() {
                     this.src = defaultImg;
