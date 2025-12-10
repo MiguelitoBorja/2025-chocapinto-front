@@ -268,43 +268,16 @@ main {
 /* ========================= */
 /* Secciones / Títulos       */
 /* ========================= */
-.mis-clubes-section, .main-sections, .recomendaciones-section{
+.mis-clubes-section, .main-sections{
   margin: 2rem auto; max-width: var(--page-max-width); padding-inline:0;
 }
-.mis-clubes-section h2, .main-sections h2, .recomendaciones-section h2{
+.mis-clubes-section h2, .main-sections h2, .recomendaciones-section h2 {
   font-size: clamp(1.6rem, 1vw + 1.2rem, 2.2rem);
   font-weight:700; color:var(--brand-dark); font-family:"Dancing Script", cursive; line-height:1.2;
   margin-bottom:1rem; padding-left:var(--page-padding-inline); padding-right:var(--page-padding-inline);
 }
 .mis-clubes-section h2{ margin-bottom:.75rem; } 
-/* Responsive específico para recomendaciones */
-.recomendaciones-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
 
-@media (max-width: 768px) {
-    .recomendaciones-section {
-        padding-inline: 0 !important;
-    }
-    
-    .recomendaciones-row {
-        gap: 0.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .recomendaciones-section {
-        padding-inline: 0 !important;
-    }
-    
-    .recomendaciones-row {
-        gap: 0.5rem;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-    }
-}
 
 /* ========================= */
 /* Grillas / Carruseles      */
@@ -326,6 +299,12 @@ main {
   -webkit-overflow-scrolling: touch;
 }
 
+.section.recomendacion-section{
+  display: flex;
+gap: 30px;
+padding-top: 1rem;
+align-items: flex-start;
+}
 /* Clubes de Lectura: SIN carrusel, límite de 2 visibles */
 .clubes-header {
     display: flex;
@@ -768,8 +747,7 @@ main {
         max-height: 500px;
     }
     .mis-clubes-section h2,
-    .main-sections h2,
-    .recomendaciones-section h2 {
+    .main-sections h2{
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
