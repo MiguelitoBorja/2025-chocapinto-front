@@ -587,7 +587,8 @@ main {
   backdrop-filter:blur(4px); box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 @media (hover:hover){ .book:hover .cover{ transition:.5s; transform:rotateY(-80deg); } }
-/* Responsive para libros 3D */
+
+/* Responsive para libros 3D - SOLO CARRUSEL HORIZONTAL */
 @media (max-width: 1024px) {
   .book, .cover {
     width: 160px !important;
@@ -603,18 +604,12 @@ main {
   .book .book-author {
     font-size: 12px;
   }
+  .book .book-content {
+    padding: 15px;
+  }
 }
 
 @media (max-width: 768px) {
-  .recomendaciones-row {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    overflow-x: visible !important;
-    gap: 1rem;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-  
   .book, .cover {
     width: 140px !important;
     min-width: 140px;
@@ -622,7 +617,6 @@ main {
     height: 200px !important;
     min-height: 200px;
     max-height: 200px;
-    margin: 0 auto;
   }
   
   .book .book-content {
@@ -639,11 +633,6 @@ main {
 }
 
 @media (max-width: 480px) {
-  .recomendaciones-row {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 0.8rem;
-  }
-  
   .book, .cover {
     width: 120px !important;
     min-width: 120px;
