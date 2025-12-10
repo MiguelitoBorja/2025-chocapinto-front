@@ -207,7 +207,7 @@ function crearTarjetaClub(club, esMiembro, esCreador, img) {
             <img src="${img}" alt="Logo del club" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
         </div>
         <h3 title="${club.name}">${club.name}</h3>
-        <p>${club.description}</p>
+        <p>${club.description.split(' ').slice(0, 15).join(' ')}${club.description.split(' ').length > 15 ? '...' : ''}</p>
         
         ${esMiembro ? '<span class="miembro-tag">Miembro Activo</span>' : '<button class="unirme-btn">Unirme</button>'}
         
