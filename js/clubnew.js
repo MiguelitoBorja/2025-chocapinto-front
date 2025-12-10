@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           : { role: 'LECTOR', isOwner: false, isModerator: false };
 
         const isOwner = userRoleInfo.isOwner;
-        const isModerador = userRoleInfo.isModerador;
+        const isModerador = userRoleInfo.isModerator;
         const isLector = userRoleInfo.role === 'LECTOR';
 
         addHeaderAction({

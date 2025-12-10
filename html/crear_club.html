@@ -5,8 +5,10 @@
     <title>Crear Club de Lectura</title>
     <link rel="stylesheet" href="../css/crearclub.css">
     <link rel="stylesheet" href="../css/app-header.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/componentes/notificaciones.css">
     <link rel="stylesheet" href="../css/componentes/loader.css">
+    <link rel ="stylesheet" href="../css/componentes/notificacion-alerta.css">
 </head>
 <body>
     <div id="app-header"></div>
@@ -147,6 +149,25 @@
         </div>
     </main>
     <div id="notifications" class="notification-container"></div>
+    
+    <!-- Modal de Notificaciones -->
+    <div id="modalNotificaciones" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 10000; justify-content: center; align-items: center;">
+        <div class="notificaciones-modal-content">
+            <div class="notificaciones-modal-header">
+                <h2>🔔 Notificaciones</h2>
+                <div class="notificaciones-actions">
+                    <button class="btn-secondary btn-small" onclick="marcarTodasLeidas()">
+                        Marcar todas como leídas
+                    </button>
+                    <button class="close-btn" onclick="cerrarModalNotificaciones()">✕</button>
+                </div>
+            </div>
+            <div class="notificaciones-modal-body">
+                <div id="notificacionesLista" class="notificaciones-lista">
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script type="module" src="../js/creacion_club.js"></script>
     

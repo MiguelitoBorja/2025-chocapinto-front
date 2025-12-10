@@ -878,3 +878,31 @@ main {
         min-width: 640px; /* ✅ ANCHO MÍNIMO MÁS SEGURO (AUMENTADO) */
     }
 }
+
+/* ========================= */
+/* Modal Notificaciones - Close Button */
+/* ========================= */
+.notificaciones-modal-content .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    border: none;
+    color: #2c5a91;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.notificaciones-modal-content .close-btn:hover {
+    background: #f0f0f0;
+    transform: scale(1.1);
+}
