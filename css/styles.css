@@ -587,6 +587,90 @@ main {
   backdrop-filter:blur(4px); box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 @media (hover:hover){ .book:hover .cover{ transition:.5s; transform:rotateY(-80deg); } }
+/* Responsive para libros 3D */
+@media (max-width: 1024px) {
+  .book, .cover {
+    width: 160px !important;
+    min-width: 160px;
+    max-width: 160px;
+    height: 240px !important;
+    min-height: 240px;
+    max-height: 240px;
+  }
+  .book .book-title {
+    font-size: 16px;
+  }
+  .book .book-author {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recomendaciones-row {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    overflow-x: visible !important;
+    gap: 1rem;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .book, .cover {
+    width: 140px !important;
+    min-width: 140px;
+    max-width: 140px;
+    height: 200px !important;
+    min-height: 200px;
+    max-height: 200px;
+    margin: 0 auto;
+  }
+  
+  .book .book-content {
+    padding: 12px;
+  }
+  
+  .book .book-title {
+    font-size: 14px;
+  }
+  
+  .book .book-author {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recomendaciones-row {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.8rem;
+  }
+  
+  .book, .cover {
+    width: 120px !important;
+    min-width: 120px;
+    max-width: 120px;
+    height: 170px !important;
+    min-height: 170px;
+    max-height: 170px;
+  }
+  
+  .book .book-content {
+    padding: 8px;
+  }
+  
+  .book .book-title {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .book .book-author {
+    font-size: 10px;
+  }
+  
+  .cover .cover-text {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
 
 /* ========================= */
 /* Responsive mínimos        */
