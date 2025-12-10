@@ -555,17 +555,45 @@ h2{ font-size: clamp(1.4rem, 1.2rem + 1vw, 1.8rem); }
 
 /* ----- Mobile (≤ 768px): retoques finos ----- */
 @media (max-width: 768px){
-  .profile-photo{ margin: 0 0 10px 0; }
+  .profile-photo{ 
+    margin: 0 auto 10px auto; /* Centrar foto en móvil */
+  }
+  
+  .perfil-sidebar {
+    text-align: center; /* Centrar contenido del sidebar */
+  }
+  
   .sidebar-actions{
     gap: 10px;
-    justify-content: flex-start;
+    justify-content: center;
   }
+  
+  .sidebar-info {
+    text-align: center; /* Centrar info del usuario */
+  }
+  
+  /* Los botones globales ahora se muestran */
+  .global-actions {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .global-actions button {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+  
   .form-actions{
     flex-direction: column;
     gap: 10px;
   }
-  .form-actions button{ width: 100%; }
-  .global-actions{ display: none; } /* simplifica el móvil; si querés, dejalo */
+  
+  .form-actions button{ 
+    width: 100%; 
+  }
 }
 
 /* ----- Mobile chico (≤ 480px): tipografía y espacios compactos ----- */
