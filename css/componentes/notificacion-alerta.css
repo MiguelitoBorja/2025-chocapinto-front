@@ -2,12 +2,13 @@
 .notificaciones-modal-content {
   background: white;
   border-radius: 16px;
-  width: 100%;
+  width: 95%;
   max-width: 600px;
-  max-height: 80vh;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
 .notificaciones-modal-header {
@@ -16,23 +17,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .notificaciones-modal-header h2 {
   margin: 0;
   color: #2c5a91;
   font-size: 20px;
+  flex: 1;
+  min-width: 150px;
 }
 
 .notificaciones-actions {
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .btn-small {
   padding: 6px 12px;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 .notificaciones-modal-body {
@@ -125,6 +132,7 @@
 /* Contenido de la notificación */
 .notif-contenido {
   flex: 1;
+  min-width: 0;
 }
 
 .notif-header {
@@ -132,6 +140,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4px;
+  gap: 8px;
 }
 
 .notif-titulo {
@@ -139,6 +148,7 @@
   font-size: 15px;
   font-weight: 600;
   color: #2c3e50;
+  word-break: break-word;
 }
 
 .notif-badge-nueva {
@@ -148,6 +158,7 @@
   border-radius: 10px;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .notif-mensaje {
@@ -155,12 +166,15 @@
   font-size: 14px;
   color: #636e72;
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .notif-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .notif-tiempo {
@@ -177,6 +191,7 @@
   font-size: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .btn-marcar-leida:hover {
@@ -212,22 +227,167 @@
   margin: 0;
 }
 
-/* Responsive */
+/* ============================================ */
+/* RESPONSIVE TABLET */
+/* ============================================ */
+@media (max-width: 1024px) {
+  .notificaciones-modal-content {
+    width: 90%;
+    max-width: 550px;
+  }
+  
+  .notificaciones-modal-header {
+    padding: 18px 20px;
+  }
+  
+  .notificaciones-modal-body {
+    padding: 14px 20px;
+  }
+}
+
+/* ============================================ */
+/* RESPONSIVE MOBILE */
+/* ============================================ */
 @media (max-width: 768px) {
   .notificaciones-modal-content {
+    width: 100%;
     max-width: 100%;
     margin: 0;
     border-radius: 0;
-    height: 100%;
-    max-height: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0 !important;
   }
 
-  .notificaciones-actions {
+  .notificaciones-modal-header {
+    padding: 16px;
     flex-direction: column;
     align-items: stretch;
   }
 
+  .notificaciones-modal-header h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .notificaciones-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .btn-small {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .notificaciones-modal-body {
+    padding: 12px 16px;
+  }
+
+  .notificacion-item {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .notif-icono {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .notif-titulo {
+    font-size: 14px;
+  }
+
+  .notif-mensaje {
+    font-size: 13px;
+  }
+
+  .notif-tiempo {
+    font-size: 11px;
+  }
+
+  .btn-marcar-leida {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .notif-badge-nueva {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .notificaciones-empty {
+    padding: 40px 16px;
+  }
+
+  .notificaciones-empty p {
+    font-size: 14px;
+  }
+}
+
+/* ============================================ */
+/* RESPONSIVE MOBILE PEQUEÑO */
+/* ============================================ */
+@media (max-width: 480px) {
+  .notificaciones-modal-header {
+    padding: 12px;
+  }
+
+  .notificaciones-modal-header h2 {
+    font-size: 16px;
+  }
+
+  .notificaciones-modal-body {
+    padding: 10px 12px;
+  }
+
+  .notificacion-item {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .notif-icono {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .notif-titulo {
+    font-size: 13px;
+  }
+
+  .notif-mensaje {
+    font-size: 12px;
+  }
+
+  .notif-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .btn-marcar-leida {
+    align-self: flex-start;
+  }
+
+  .notif-punto-azul {
+    top: 12px;
+    right: 12px;
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* ============================================ */
+/* FIX PARA SCROLL EN MOBILE */
+/* ============================================ */
+@media (max-width: 768px) {
+  body:has(.modal-overlay[style*="display: flex"]) {
+    overflow: hidden;
+    position: fixed;
     width: 100%;
   }
 }
