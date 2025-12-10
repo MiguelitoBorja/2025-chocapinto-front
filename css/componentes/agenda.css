@@ -618,36 +618,371 @@
   color: #d63031;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
+/* ============================================ */
+/* RESPONSIVE MODAL AGENDA */
+/* ============================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
   .agenda-modal-content {
+    max-width: 95vw;
+    max-height: 90vh;
+  }
+
+  .agenda-modal-header {
+    padding: 20px;
+  }
+
+  .agenda-modal-header h2 {
+    font-size: 22px;
+  }
+
+  .agenda-modal-body {
+    padding: 20px;
+  }
+
+  .sesion-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1.3em;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  #modalAgenda {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .agenda-modal-content {
+    width: 100%;
     max-width: 100%;
-    margin: 0;
+    height: 100vh;
+    max-height: 100vh;
     border-radius: 0;
-    height: 100%;
-    max-height: 100%;
+    margin: 0;
+  }
+
+  .agenda-modal-header {
+    padding: 16px;
+    flex-wrap: wrap;
+  }
+
+  .agenda-modal-header h2 {
+    font-size: 20px;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .agenda-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #btnCrearSesion,
+  .btn-secondary {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .agenda-modal-body {
+    padding: 16px;
+  }
+
+  /* Tabs responsive */
+  .agenda-tabs {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .agenda-tab {
+    flex: 1;
+    min-width: calc(50% - 4px);
+    padding: 10px 12px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* Sesión card responsive */
+  .sesion-card {
+    margin-bottom: 16px;
   }
 
   .sesion-header {
     flex-direction: column;
     gap: 12px;
+    padding: 14px;
+  }
+
+  .sesion-info h3 {
+    font-size: 16px;
+  }
+
+  .sesion-fecha,
+  .sesion-hora {
+    font-size: 13px;
+  }
+
+  .sesion-estado {
+    align-self: flex-start;
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .sesion-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sesion-actions button {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .sesion-body {
+    padding: 14px;
+  }
+
+  .sesion-descripcion p {
+    font-size: 14px;
+  }
+
+  /* Lista de confirmaciones responsive */
+  .confirmaciones-list {
+    gap: 10px;
   }
 
   .confirmacion-usuario {
     flex-direction: column;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .confirmacion-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .confirmacion-info {
+    flex: 1;
+    width: 100%;
+  }
+
+  .confirmacion-nombre {
+    font-size: 14px;
+  }
+
+  .confirmacion-estado {
+    font-size: 12px;
   }
 
   .btn-confirmacion {
     width: 100%;
+    margin-left: 0;
+    font-size: 13px;
+    padding: 8px 12px;
   }
 
-  .agenda-actions {
+  /* Ocultar calendario en móviles */
+  #calendarioContainer {
+    display: none !important;
+  }
+
+  /* Ocultar botones de cambio de vista */
+  #btnVistaCalendario,
+  #btnVistaLista {
+    display: none !important;
+  }
+
+  /* Lista siempre visible */
+  #listaContainer {
+    display: block !important;
+  }
+
+  /* Evento detalle responsive */
+  .evento-detalle-content {
+    padding: 16px;
+  }
+
+  .evento-detalle-header h3 {
+    font-size: 18px;
+  }
+
+  .evento-detalle-info {
+    gap: 10px;
+  }
+
+  .evento-detalle-item {
+    font-size: 13px;
+  }
+
+  .confirmacion-buttons {
     flex-direction: column;
+    gap: 10px;
+  }
+
+  .confirmacion-buttons > div {
+    flex-direction: column !important;
+    gap: 8px;
     width: 100%;
   }
 
-  #btnCrearSesion {
+  .btn-confirmar,
+  .btn-rechazar,
+  .btn-confirmado,
+  .btn-rechazado {
     width: 100%;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  .confirmacion-buttons p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* FullCalendar mobile adjustments */
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0.5em;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 18px;
+  }
+
+  .fc .fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Mobile pequeño */
+@media (max-width: 480px) {
+  .agenda-modal-header {
+    padding: 12px;
+  }
+
+  .agenda-modal-header h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .agenda-modal-body {
+    padding: 12px;
+  }
+
+  .agenda-tabs {
+    gap: 6px;
+  }
+
+  .agenda-tab {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .sesion-header {
+    padding: 12px;
+  }
+
+  .sesion-info h3 {
+    font-size: 15px;
+  }
+
+  .sesion-fecha,
+  .sesion-hora {
+    font-size: 12px;
+  }
+
+  .sesion-estado {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .sesion-body {
+    padding: 12px;
+  }
+
+  .sesion-descripcion p {
+    font-size: 13px;
+  }
+
+  .confirmacion-usuario {
+    padding: 10px;
+  }
+
+  .confirmacion-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .confirmacion-nombre {
+    font-size: 13px;
+  }
+
+  .confirmacion-estado {
+    font-size: 11px;
+  }
+
+  .btn-confirmacion {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .evento-detalle-content {
+    padding: 12px;
+  }
+
+  .evento-detalle-header h3 {
+    font-size: 16px;
+  }
+
+  .evento-detalle-item {
+    font-size: 12px;
+  }
+
+  .btn-confirmar,
+  .btn-rechazar,
+  .btn-confirmado,
+  .btn-rechazado {
+    font-size: 13px;
+    padding: 9px 14px;
+  }
+
+  #btnCrearSesion,
+  .btn-secondary {
+    font-size: 13px;
+    padding: 9px 14px;
+  }
+}
+
+/* Animaciones responsive */
+@media (max-width: 768px) {
+  .sesion-card {
+    animation: slideInMobile 0.3s ease-out;
+  }
+
+  @keyframes slideInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -943,44 +1278,3 @@
   color: #2c5a91;
 }
 
-@media (max-width: 768px) {
-  /* Ocultar calendario en móviles */
-  #calendarioContainer {
-    display: none !important;
-  }
-
-  /* Ocultar botones de cambio de vista calendario/lista */
-  #btnVistaCalendario,
-  #btnVistaLista {
-    display: none !important;
-  }
-
-  /* Asegurar que la lista siempre esté visible */
-  #listaContainer {
-    display: block !important;
-  }
-
-  .evento-detalle-content {
-    padding: 20px;
-  }
-  
-  .confirmacion-buttons div {
-    flex-direction: column !important;
-  }
-  
-  .btn-confirmar,
-  .btn-rechazar,
-  .btn-confirmado,
-  .btn-rechazado {
-    width: 100%;
-  }
-
-  .fc .fc-toolbar {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .fc .fc-toolbar-title {
-    font-size: 18px;
-  }
-}
