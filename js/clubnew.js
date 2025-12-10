@@ -20,11 +20,7 @@ import { showLoader, hideLoader } from "../componentes/loader.js";
 import { initClubVotingComponent } from './club-componentes/club-voting.js';
 import { initPeriodosHistoryComponent } from './club-componentes/club-periodos-history.js';
 
-console.log("Cargando coordinador principal club.js...");
-
 document.addEventListener("DOMContentLoaded", async () => {
-
-  console.log("DOM Content Loaded - Coordinador Principal");
 
   // Variables globales
   window.API_URL = API_URL;
@@ -35,14 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.currentBookId = null;
   window.modalComentarios = document.getElementById("modalComentarios");
 
-  // =======================
-  // 1) HEADER BASE
-  // =======================
   initAppHeader();
 
-  // =======================
-  // 2) Inicializar módulos UI
-  // =======================
   initNavigation();
   initLibrary();
   initClubVotingComponent();
@@ -53,24 +43,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHistoryModal();
   initInfoModals();
 
-  // =======================
-  // 3) Cargar club
-  // =======================
   showLoader("Cargando club...");
 
   setTimeout(async () => {
     try {
-      await renderClub(); // → carga club y setea window.clubData
+      await renderClub();
 
       hideLoader();
 
       if (window.clubData) {
         const clubData = window.clubData;
 
-        const clubLogo = clubData.imagen || null; // viene del campo imagen del esquema
+        const clubLogo = clubData.imagen || null;
 
         setHeaderContext({
-          icon: clubLogo || "📚",   // si no hay imagen, cae al emoji
+          icon: clubLogo || "📚",
           title: clubData.name || "Club de lectura",
           subtitle: `${clubData.members?.length || 0} miembros`,
         });
@@ -83,14 +70,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           : { role: 'LECTOR', isOwner: false, isModerator: false };
 
         const isOwner = userRoleInfo.isOwner;
-        const isModerador = userRoleInfo.isModerator;
+        const isModerador = userRoleInfo.isModerador;
         const isLector = userRoleInfo.role === 'LECTOR';
 
-        console.log("🔐 Rol del usuario:", userRoleInfo.role, { isOwner, isModerador, isLector });
-
-        // ========================
-        // 4) BOTÓN DE NOTIFICACIONES (TODOS LOS USUARIOS)
-        // ========================
         addHeaderAction({
           id: "notificacionesBtn",
           icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -100,13 +82,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           variant: "secondary",
           onClick: () => {
             mostrarModalNotificaciones();
-            // TODO: Implementar lógica de notificaciones
           }
         });
 
-        // ========================
-        // 5) BOTÓN ELIMINAR CLUB (SOLO OWNER)
-        // ========================
         if (isOwner) {
           addHeaderAction({
             id: "eliminarClubBtnHeader",
@@ -116,13 +94,9 @@ document.addEventListener("DOMContentLoaded", async () => {
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
             </svg>`,
             variant: "primary",
-            // sin onClick, lo conecta club-core.js
           });
         }
 
-        // ================================
-        // 6) BOTÓN DE SOLICITUDES (OWNER Y MODERADOR)
-        // ================================
         if (isOwner || isModerador) {
           const solicitudesBtn = addHeaderAction({
             id: "requestsBtn",
@@ -135,18 +109,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             onClick: () => {
               if (window.abrirModalSolicitudes) {
                 window.abrirModalSolicitudes();
-              } else {
-                console.warn("⚠️ abrirModalSolicitudes no está disponible");
               }
             }
           });
-          
-          console.log("✅ Botón de solicitudes creado:", !!solicitudesBtn);
         }
 
-        // ========================
-        // 7) BOTÓN SALIR DEL CLUB (MODERADOR Y LECTOR)
-        // ========================
         if (isModerador || isLector) {
           addHeaderAction({
             id: "salirClubBtnHeader",
@@ -160,21 +127,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
         }
 
-        // ========================
-        // 8) AHORA que los botones existen → conectar listeners
-        // ========================
         initCore();
         
-        // ========================
-        // 9) INICIALIZAR AGENDA (con rol del usuario)
-        // ========================
         if (window.clubData && window.clubData.id) {
           initAgenda(window.clubData.id, userRoleInfo.role);
         }
 
-        // ========================
-        // 10) ACTUALIZAR BADGE DE SOLICITUDES (después de crear los botones)
-        // ========================
         if (typeof window.actualizarBadgeSolicitudes === 'function') {
           window.actualizarBadgeSolicitudes(clubData);
         }
@@ -185,7 +143,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     } catch (error) {
       hideLoader();
-      console.error("Error en la carga inicial:", error);
     }
   }, 800);
 });
