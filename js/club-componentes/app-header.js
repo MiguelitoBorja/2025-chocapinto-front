@@ -298,7 +298,7 @@ export function initAppHeader(options = {}) {
 
 @media (max-width: 480px) {
   .app-logo-img {
-    height: 50px;
+    height: 30px;
   }
   
   .header-context-icon-image img {
