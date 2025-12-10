@@ -4,31 +4,22 @@ import { showNotification } from "../../componentes/notificacion.js";
 let notificacionesInterval = null;
 let notificacionesNoLeidas = 0;
 
-/**
- * Inicializa el sistema de notificaciones
- */
 export function initNotificaciones(userId) {
   if (!userId) {
-    console.warn("⚠️ No se puede inicializar notificaciones sin userId");
     return;
   }
 
-  // Cargar notificaciones iniciales
   cargarNotificaciones(userId);
 
-  // Actualizar cada 30 segundos
   if (notificacionesInterval) {
     clearInterval(notificacionesInterval);
   }
   
   notificacionesInterval = setInterval(() => {
     cargarContadorNoLeidas(userId);
-  }, 30000); // 30 segundos
+  }, 30000);
 }
 
-/**
- * Carga el contador de notificaciones no leídas
- */
 async function cargarContadorNoLeidas(userId) {
   try {
     const response = await fetch(`${API_URL}/api/notificaciones/${userId}/no-leidas/count`);
@@ -39,13 +30,9 @@ async function cargarContadorNoLeidas(userId) {
       actualizarBadgeNotificaciones(data.count);
     }
   } catch (error) {
-    console.error("Error al cargar contador de notificaciones:", error);
   }
 }
 
-/**
- * Actualiza el badge del botón de notificaciones
- */
 function actualizarBadgeNotificaciones(count) {
   const notifBtn = document.getElementById("notificacionesBtn");
   if (!notifBtn) return;
@@ -55,9 +42,6 @@ function actualizarBadgeNotificaciones(count) {
   }
 }
 
-/**
- * Carga todas las notificaciones del usuario
- */
 async function cargarNotificaciones(userId) {
   try {
     const response = await fetch(`${API_URL}/api/notificaciones/${userId}`);
@@ -73,18 +57,13 @@ async function cargarNotificaciones(userId) {
       notificacionesNoLeidas = data.notificaciones.filter(n => !n.leida).length;
       actualizarBadgeNotificaciones(notificacionesNoLeidas);
     } else {
-      console.error("Error en respuesta:", data.message);
       mostrarErrorNotificaciones("No se pudieron cargar las notificaciones");
     }
   } catch (error) {
-    console.error("Error al cargar notificaciones:", error);
     mostrarErrorNotificaciones("Error de conexión con el servidor");
   }
 }
 
-/**
- * Muestra un mensaje de error en el modal de notificaciones
- */
 function mostrarErrorNotificaciones(mensaje) {
   const container = document.getElementById("notificacionesLista");
   if (!container) return;
@@ -102,9 +81,6 @@ function mostrarErrorNotificaciones(mensaje) {
   `;
 }
 
-/**
- * Renderiza las notificaciones en el modal
- */
 function renderizarNotificaciones(notificaciones) {
   const container = document.getElementById("notificacionesLista");
   if (!container) return;
@@ -126,9 +102,6 @@ function renderizarNotificaciones(notificaciones) {
   container.innerHTML = html;
 }
 
-/**
- * Crea el HTML de una tarjeta de notificación
- */
 function crearTarjetaNotificacion(notif) {
   const fecha = new Date(notif.createdAt);
   const tiempoTranscurrido = calcularTiempoTranscurrido(fecha);
@@ -136,7 +109,6 @@ function crearTarjetaNotificacion(notif) {
   let iconoHTML = '';
   let colorClase = '';
   
-  // Iconos según el tipo de notificación
   switch(notif.tipo) {
     case 'SESION_CREADA':
       iconoHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -225,7 +197,6 @@ function crearTarjetaNotificacion(notif) {
       colorClase = 'notif-general';
   }
 
-  // Los datos ya vienen parseados desde el backend
   const datos = notif.datos || {};
   const clickHandler = datos.sesionId ? `onclick="window.abrirSesionDesdeNotificacion(${datos.sesionId})"` : '';
 
@@ -253,9 +224,6 @@ function crearTarjetaNotificacion(notif) {
   `;
 }
 
-/**
- * Calcula el tiempo transcurrido desde una fecha
- */
 function calcularTiempoTranscurrido(fecha) {
   const ahora = new Date();
   const diferencia = ahora - fecha;
@@ -269,9 +237,6 @@ function calcularTiempoTranscurrido(fecha) {
   return `Hace ${dias} día${dias > 1 ? 's' : ''}`;
 }
 
-/**
- * Muestra el modal de notificaciones
- */
 export function mostrarModalNotificaciones() {
   const modal = document.getElementById("modalNotificaciones");
   if (modal) {
@@ -284,9 +249,6 @@ export function mostrarModalNotificaciones() {
   }
 }
 
-/**
- * Cierra el modal de notificaciones
- */
 export function cerrarModalNotificaciones() {
   const modal = document.getElementById("modalNotificaciones");
   if (modal) {
@@ -294,7 +256,6 @@ export function cerrarModalNotificaciones() {
   }
 }
 
-// Cerrar modal al hacer clic fuera
 if (typeof document !== 'undefined') {
   document.addEventListener('click', (e) => {
     const modal = document.getElementById('modalNotificaciones');
@@ -304,9 +265,6 @@ if (typeof document !== 'undefined') {
   });
 }
 
-/**
- * Marca una notificación como leída
- */
 export async function marcarNotificacionLeida(notifId) {
   try {
     const response = await fetch(`${API_URL}/api/notificaciones/${notifId}/leer`, {
@@ -323,13 +281,9 @@ export async function marcarNotificacionLeida(notifId) {
       }
     }
   } catch (error) {
-    console.error("Error al marcar notificación como leída:", error);
   }
 }
 
-/**
- * Marca todas las notificaciones como leídas
- */
 export async function marcarTodasLeidas() {
   try {
     const userId = localStorage.getItem("userId");
@@ -347,33 +301,23 @@ export async function marcarTodasLeidas() {
       cargarNotificaciones(userId);
     }
   } catch (error) {
-    console.error("Error al marcar todas como leídas:", error);
   }
 }
 
-/**
- * Abre la agenda desde una notificación de sesión
- */
 export function abrirSesionDesdeNotificacion(sesionId) {
-  // Primero marcar la notificación como leída
   const notifElement = document.querySelector(`[data-notif-id]`);
   if (notifElement) {
     const notifId = notifElement.getAttribute('data-notif-id');
     marcarNotificacionLeida(notifId);
   }
 
-  // Cerrar modal de notificaciones
   cerrarModalNotificaciones();
 
-  // Abrir modal de agenda
   if (typeof window.mostrarAgenda === 'function') {
     window.mostrarAgenda();
   }
 }
 
-/**
- * Detiene las actualizaciones automáticas
- */
 export function detenerActualizacionesNotificaciones() {
   if (notificacionesInterval) {
     clearInterval(notificacionesInterval);
@@ -381,7 +325,6 @@ export function detenerActualizacionesNotificaciones() {
   }
 }
 
-// Exportar funciones globales
 if (typeof window !== "undefined") {
   window.mostrarModalNotificaciones = mostrarModalNotificaciones;
   window.cerrarModalNotificaciones = cerrarModalNotificaciones;
