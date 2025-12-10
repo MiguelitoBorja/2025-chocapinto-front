@@ -1,7 +1,7 @@
 // Nuevo header reutilizable
 import { initAppHeader, setHeaderContext, addHeaderAction } from './club-componentes/app-header.js';
 import { initNotificaciones, mostrarModalNotificaciones } from './club-componentes/notificaciones-alertas.js';
-
+import { showNotification } from '../componentes/notificacion.js';
 
 // Resto de módulos
 import { initNavigation } from './club-componentes/club-navegacion.js';
@@ -47,13 +47,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   setTimeout(async () => {
     try {
-      await renderClub();
-
+await renderClub();
+      
       hideLoader();
-
+      if (!window.clubData) {
+        showNotification("error", "El club no existe o no se pudo cargar");
+        setTimeout(() => {
+          window.location.href = "main.html";
+        }, 2000);
+        return;
+      }
+      
       if (window.clubData) {
         const clubData = window.clubData;
-
+        const userId = parseInt(localStorage.getItem("userId"));
+        
+        // VERIFICACIÓN DE ACCESO AL CLUB
+        if (!userId) {
+          showNotification("error", "Debes iniciar sesión para acceder");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+          return;
+        }
+        
+        // Verificar si el usuario es miembro o owner
+        const isMember = clubData.members?.some(member => member.id === userId);
+        const isOwner = clubData.id_owner === userId;
+        
+        if (!isMember && !isOwner) {
+          showNotification("error", "No tienes permiso para acceder a este club");
+          setTimeout(() => {
+            window.location.href = "main.html";
+          }, 2000);
+          return;
+        }
+        
+        // Si llegó aquí, tiene acceso - continuar normal
         const clubLogo = clubData.imagen || null;
 
         setHeaderContext({
@@ -61,15 +91,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           title: clubData.name || "Club de lectura",
           subtitle: `${clubData.members?.length || 0} miembros`,
         });
-     
-        const userId = parseInt(localStorage.getItem("userId"));
         
         // Obtener el rol del usuario
         const userRoleInfo = window.getUserRoleInClub
           ? window.getUserRoleInClub(clubData, userId)
           : { role: 'LECTOR', isOwner: false, isModerator: false };
 
-        const isOwner = userRoleInfo.isOwner;
         const isModerador = userRoleInfo.isModerator;
         const isLector = userRoleInfo.role === 'LECTOR';
 
