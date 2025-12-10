@@ -58,7 +58,8 @@ function crearMensajeMisClubesVacio() {
     return emptyState;
 }
 
-function createRankingItemHTML(user) {r.trim() !== '';
+function createRankingItemHTML(user) {
+    const hasAvatar = user.avatar && user.avatar.trim() !== '';
     const initials = user.username ? user.username.charAt(0).toUpperCase() : '?';
     
     const avatarHTML = hasAvatar 
@@ -125,6 +126,7 @@ async function loadRanking() {
         rankingGrid.innerHTML = rankingHTML;
 
     } catch (error) {
+        
         rankingGrid.innerHTML = '<p style="text-align:center; color:red; padding:15px;">No se pudo conectar con el servidor de ranking.</p>';
     }
 }
