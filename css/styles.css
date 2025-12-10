@@ -277,6 +277,34 @@ main {
   margin-bottom:1rem; padding-left:var(--page-padding-inline); padding-right:var(--page-padding-inline);
 }
 .mis-clubes-section h2{ margin-bottom:.75rem; } 
+/* Responsive específico para recomendaciones */
+.recomendaciones-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+@media (max-width: 768px) {
+    .recomendaciones-section {
+        padding-inline: 0 !important;
+    }
+    
+    .recomendaciones-row {
+        gap: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .recomendaciones-section {
+        padding-inline: 0 !important;
+    }
+    
+    .recomendaciones-row {
+        gap: 0.5rem;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
 
 /* ========================= */
 /* Grillas / Carruseles      */
