@@ -2,11 +2,6 @@ import { API_URL } from "./env.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 
-// ========== FUNCIONES DEL HEADER ==========
-
-/**
- * Cierra sesión del usuario
- */
 function logout() {
     localStorage.removeItem("username");
     localStorage.removeItem("userId");
@@ -14,9 +9,6 @@ function logout() {
     window.location.href = "index.html";
 }
 
-/**
- * Configura el dropdown del perfil
- */
 function configurarDropdownPerfil() {
     const dropdownBtn = document.getElementById("profileDropdownBtn");
     const dropdownContent = document.getElementById("profileDropdownContent");
@@ -44,9 +36,6 @@ function configurarDropdownPerfil() {
     }
 }
 
-/**
- * Actualiza el display del username en el header
- */
 function updateUsernameDisplay() {
     const username = localStorage.getItem("username");
     const usernameDisplay = document.getElementById("usernameDisplay");
@@ -58,20 +47,13 @@ function updateUsernameDisplay() {
     }
 }
 
-// Exponer funciones al ámbito global
 window.logout = logout;
 
-// ========== INICIALIZACIÓN ==========
-// Mostrar loader al cargar la página
 showLoader("Cargando formulario...");
-
-// Ocultar loader cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
-    // Configurar header
     updateUsernameDisplay();
     configurarDropdownPerfil();
     
-    // Simular un pequeño delay para mostrar el loader
     setTimeout(() => {
         hideLoader();
     }, 800);
@@ -108,7 +90,6 @@ fileInput.addEventListener("change", () => {
         }
 
         try {
-            // Mostrar loader durante la creación
             showLoader("Creando club...");
             
             const body = { name, description, ownerUsername, imagen };
@@ -122,7 +103,6 @@ fileInput.addEventListener("change", () => {
             const data = await res.json();
 
             if (data.success) {
-                // Cambiar mensaje del loader
                 showLoader("Club creado! Redirigiendo...");
                 showNotification("success","Club creado con éxito. Ahora eres moderador!");
                 setTimeout(() => {

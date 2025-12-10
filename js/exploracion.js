@@ -1,18 +1,11 @@
-// exploracion.js
-
-import { API_URL } from "./env.js"; 
-// Importamos las funciones necesarias desde principal.js
+import { API_URL } from "./env.js";
 import { crearTarjetaCrearClub, crearTarjetaClub, configurarEventosClub } from "./principal.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 
-
-// Inicialización de la página de exploración
 document.addEventListener("DOMContentLoaded", () => {
     cargarClubesExploracion();
 });
-/**
- * Carga y muestra todos los clubes en la grilla de exploración (sin limitación)
- */
+
 async function cargarClubesExploracion() {
     const username = localStorage.getItem("username");
     const clubesGrid = document.getElementById("clubesGridExploracion");
@@ -42,7 +35,6 @@ async function cargarClubesExploracion() {
             const esCreador = club.ownerUsername === username;
             const img = club.imagen || '../images/BooksyLogo.png';
             
-            // 1. Creamos la tarjeta
             const clubCard = crearTarjetaClub(club, esMiembro, esCreador, img);
 
             clubCard.addEventListener("click", (e) => {
@@ -54,16 +46,13 @@ async function cargarClubesExploracion() {
                 window.location.href = `club_lectura.html?clubId=${club.id}`;
             });
 
-            // 2. Agregamos a la grilla
             clubesGrid.appendChild(clubCard);
 
-            // 3. Configuramos los botones
             configurarEventosClub(clubCard, club, esMiembro, esCreador, username);
 
         });
         
     } catch (error) {
-        console.error("Error al cargar clubes en Exploración:", error);
         hideLoader();
     }
 }
