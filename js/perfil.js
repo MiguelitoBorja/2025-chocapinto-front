@@ -294,6 +294,7 @@ document.getElementById("passwordForm").addEventListener("submit", async (e) => 
         showLoader("Cambiando contraseña...");
         
         const res = await fetch(`${API_URL}/changePassword`, {
+             method: "POST", 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ currentUsername, currentPassword, newPassword })
         });
