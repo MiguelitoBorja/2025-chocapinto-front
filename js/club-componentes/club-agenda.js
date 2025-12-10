@@ -132,7 +132,6 @@ async function cargarSesiones(tipo = "proximas") {
       showNotification("error", data.message || "Error al cargar sesiones");
     }
   } catch (error) {
-    console.error("Error al cargar sesiones:", error);
     showNotification("error", "Error al cargar las sesiones");
   } finally {
     hideLoader();
@@ -364,9 +363,7 @@ async function cargarLibrosParaSesion() {
         });
       }
     }
-  } catch (error) {
-    console.error("Error al cargar libros:", error);
-  }
+  } catch (error) {}
 }
 
 /**
@@ -393,9 +390,7 @@ async function cargarLibrosParaEditar() {
         });
       }
     }
-  } catch (error) {
-    console.error("Error al cargar libros:", error);
-  }
+  } catch (error) {}
 }
 
 /**
@@ -443,7 +438,6 @@ export async function crearSesion(event) {
       showNotification("error", data.message || "Error al crear sesión");
     }
   } catch (error) {
-    console.error("Error al crear sesión:", error);
     showNotification("error", "Error al crear la sesión");
   } finally {
     hideLoader();
@@ -480,7 +474,6 @@ export async function confirmarAsistenciaSesion(sesionId, estado) {
       showNotification("error", data.message || "Error al confirmar asistencia");
     }
   } catch (error) {
-    console.error("Error al confirmar asistencia:", error);
     showNotification("error", "Error al confirmar asistencia");
   }
 }
@@ -536,7 +529,6 @@ async function renderizarCalendario() {
           const eventos = await cargarEventosParaCalendario(info.start, info.end);
           successCallback(eventos);
         } catch (error) {
-          console.error("Error cargando eventos:", error);
           failureCallback(error);
         }
       },
@@ -581,7 +573,6 @@ async function renderizarCalendario() {
     }, 100);
     
   } catch (error) {
-    console.error("Error al renderizar calendario:", error);
     showNotification("error", "Error al cargar el calendario");
   } finally {
     hideLoader();
@@ -619,8 +610,6 @@ function generarColorPorLibro(libroId) {
  */
 async function cargarEventosParaCalendario(start, end) {
   try {
-    console.log('Cargando eventos para calendario...');
-    
     const [sesionesRes, estadoRes, historialRes] = await Promise.all([
       fetch(`${API_URL}/api/sesiones/club/${clubIdActual}?tipo=todas`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -633,21 +622,9 @@ async function cargarEventosParaCalendario(start, end) {
       })
     ]);
     
-    if (!sesionesRes.ok) {
-      console.error('Error al cargar sesiones:', sesionesRes.status);
-    }
-    if (!estadoRes.ok) {
-      console.error('Error al cargar estado:', estadoRes.status);
-    }
-    if (!historialRes.ok) {
-      console.error('Error al cargar historial:', historialRes.status);
-    }
-    
     const sesionesData = await sesionesRes.json();
     const estadoData = await estadoRes.json();
     const historialData = await historialRes.json();
-    
-    console.log('Datos recibidos:', { sesionesData, estadoData, historialData });
     
     const eventos = [];
     
@@ -657,8 +634,6 @@ async function cargarEventosParaCalendario(start, end) {
         const libroId = sesion.clubBook?.book?.id || sesion.clubBook?.bookId || sesion.bookId;
         const colores = generarColorPorLibro(libroId);
         const color = sesion.estado === 'COMPLETADA' ? colores.completada : colores.normal;
-        
-        console.log('Sesión:', sesion.titulo, 'LibroID:', libroId, 'Estado:', sesion.estado, 'Color:', color);
         
         eventos.push({
           id: `sesion-${sesion.id}`,
@@ -716,10 +691,8 @@ async function cargarEventosParaCalendario(start, end) {
       });
     }
     
-    console.log(`Total eventos cargados: ${eventos.length}`, eventos);
     return eventos;
   } catch (error) {
-    console.error("Error cargando eventos:", error);
     return [];
   }
 }
@@ -906,7 +879,6 @@ export async function eliminarSesion(sesionId) {
           showNotification("error", data.message || "Error al eliminar sesión");
         }
       } catch (error) {
-        console.error("Error al eliminar sesión:", error);
         showNotification("error", "Error al eliminar la sesión");
       } finally {
         hideLoader();
@@ -961,7 +933,6 @@ export async function editarSesion(sesionId) {
       showNotification("error", data.message || "Error al cargar sesión");
     }
   } catch (error) {
-    console.error("Error al cargar sesión:", error);
     showNotification("error", "Error al cargar la sesión");
   } finally {
     hideLoader();
@@ -1020,7 +991,6 @@ export async function editarSesionSubmit(event) {
       showNotification("error", data.message || "Error al actualizar sesión");
     }
   } catch (error) {
-    console.error("Error al actualizar sesión:", error);
     showNotification("error", "Error al actualizar la sesión");
   } finally {
     hideLoader();
@@ -1095,7 +1065,6 @@ export async function registrarAsistenciaSesion(sesionId) {
       showNotification("error", data.message || "Error al cargar datos de la sesión");
     }
   } catch (error) {
-    console.error("Error al cargar datos para asistencia:", error);
     showNotification("error", "Error al cargar los datos");
   } finally {
     hideLoader();
@@ -1151,7 +1120,6 @@ export async function registrarAsistenciaSubmit(event) {
       showNotification("error", data.message || "Error al registrar asistencias");
     }
   } catch (error) {
-    console.error("Error al registrar asistencias:", error);
     showNotification("error", "Error al registrar las asistencias");
   } finally {
     hideLoader();
