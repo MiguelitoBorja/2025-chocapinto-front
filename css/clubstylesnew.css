@@ -3088,6 +3088,9 @@ main {
 
     /* Responsive Design for Ranking Modal */
     @media (max-width: 768px) {
+      .modalRanking{
+        padding-top: 20px;
+      }
       .ranking-card {
         width: 95vw;
         margin: 20px;
@@ -3137,8 +3140,7 @@ main {
       .ranking-card {
         width: 100vw;
         height: 100vh;
-        border-radius: 0;
-        max-height: none;
+       
       }
 
       .ranking-header {
@@ -4132,6 +4134,7 @@ main {
       50% { box-shadow: 0 3px 12px rgba(255, 215, 0, 0.5); }
     }
 
+
     /* Responsive para niveles */
     @media (max-width: 768px) {
       .member-level {
@@ -4145,7 +4148,7 @@ main {
         height: 12px;
       }
     }
-
+    
     .member-actions {
       margin-left: 12px;
       display: flex;
@@ -4301,6 +4304,9 @@ main {
 
     /* Responsive Design for Members Modal */
     @media (max-width: 768px) {
+      .modalMiembros {
+        padding-top: 20px;
+      }
       .members-card {
         width: 95vw;
         margin: 20px;
@@ -4345,11 +4351,11 @@ main {
     }
 
     @media (max-width: 480px) {
+      
       .members-card {
         width: 100vw;
         height: 100vh;
-        border-radius: 0;
-        max-height: none;
+        
       }
 
       .members-header {
