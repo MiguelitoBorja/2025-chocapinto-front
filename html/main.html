@@ -18,13 +18,10 @@
 
 <body class="main-body">
 
-  <!-- ✅ Contenedor de notificaciones -->
   <div id="notifications"></div>
 
-  <!--  HEADER  UNIFICADO -->
   <div id="app-header"></div>
 
-  <!-- ================= HERO ================= -->
   <section class="hero-card-section">
     <div class="hero-card">
       <div class="hero-text-content">
@@ -56,10 +53,8 @@
     </div>
   </section>
 
-  <!-- ================= CONTENIDO PRINCIPAL ================= -->
   <main class="contenedor-principal-columnas">
 
-    <!-- ====== COLUMNA CLUBES ====== -->
     <section class="columna-clubes">
 
       <div id="misClubesSection" class="mis-clubes-section">
@@ -78,7 +73,6 @@
 
     </section>
 
-    <!-- ====== COLUMNA RANKING ====== -->
     <section class="columna-ranking">
       <div class="ranking-usuarios-section">
         <h2>🏆 Ranking de Lectores</h2>
@@ -88,13 +82,11 @@
 
   </main>
 
-  <!-- ================= RECOMENDACIONES ================= -->
   <section class="recomendaciones-section">
     <h2>Recomendaciones de Libros</h2>
     <div class="recomendaciones-row" id="recomendacionesGrid"></div>
   </section>
 
-  <!-- ================= FOOTER ================= -->
   <footer class="main-footer">
     <p>
       ¿Deseás más información de los clubes?
@@ -118,18 +110,13 @@
       </div>
       <div class="notificaciones-modal-body">
         <div id="notificacionesLista" class="notificaciones-lista">
-          <!-- Las notificaciones se cargarán aquí -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= SCRIPTS ================= -->
-
-  <!-- ✅ JS PRINCIPAL (con header nuevo ya integrado) -->
   <script type="module" src="../js/principal.js"></script>
 
-  <!-- ================= ESTILOS DEL RANKING Y RESPONSIVE ================= -->
   <style>
     /* Estilos responsive adicionales para modal de notificaciones */
     @media (max-width: 768px) {
@@ -165,7 +152,6 @@
       }
     }
     
-    /* Mejorar scroll en listas largas */
     .mis-clubes-grid::-webkit-scrollbar,
     .recomendaciones-row::-webkit-scrollbar,
     .clubes-grid::-webkit-scrollbar {
