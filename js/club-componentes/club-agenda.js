@@ -750,14 +750,8 @@ function mostrarDetallesEvento(event) {
             ` : ''}
             <div class="evento-info-item">
               <strong>📊 Estado:</strong>
-              <span>${sesion.estado === 'COMPLETADA' ? '✅ Completada' : '⏳ Pendiente'}</span>
+              <span>${sesion.estado === 'COMPLETADA' ? '✅ Completada' : '⏳ PROGRAMADA'}</span>
             </div>
-            ${sesion.confirmaciones ? `
-              <div class="evento-info-item">
-                <strong>👥 Confirmados:</strong>
-                <span>${sesion.confirmaciones.filter(c => c.confirmado).length} personas</span>
-              </div>
-            ` : ''}
           </div>
           
           ${sesion.estado !== 'COMPLETADA' ? `
