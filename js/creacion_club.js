@@ -3,6 +3,7 @@ import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { initNotificaciones } from "./club-componentes/notificaciones-alertas.js";
 import { addHeaderAction } from "./club-componentes/app-header.js";
+import { initSessionManager } from "./sessionManager.js";
 
 function logout() {
     localStorage.removeItem("username");
@@ -89,6 +90,7 @@ window.marcarTodasLeidas = marcarTodasLeidas;
 
 showLoader("Cargando formulario...");
 document.addEventListener("DOMContentLoaded", () => {
+    initSessionManager();
     updateUsernameDisplay();
     configurarDropdownPerfil();
     

@@ -2,6 +2,7 @@
 import { initAppHeader, setHeaderContext, addHeaderAction } from './club-componentes/app-header.js';
 import { initNotificaciones, mostrarModalNotificaciones } from './club-componentes/notificaciones-alertas.js';
 import { showNotification } from '../componentes/notificacion.js';
+import{initSessionManager} from './sessionManager.js';
 
 // Resto de módulos
 import { initNavigation } from './club-componentes/club-navegacion.js';
@@ -21,7 +22,7 @@ import { initClubVotingComponent } from './club-componentes/club-voting.js';
 import { initPeriodosHistoryComponent } from './club-componentes/club-periodos-history.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
-
+  initSessionManager();
   // Variables globales
   window.API_URL = API_URL;
   window.showLoader = showLoader;

@@ -1,8 +1,10 @@
 import { API_URL } from "./env.js";
 import { crearTarjetaCrearClub, crearTarjetaClub, configurarEventosClub } from "./principal.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
+import { initSessionManager } from "./sessionManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    initSessionManager();
     cargarClubesExploracion();
 });
 

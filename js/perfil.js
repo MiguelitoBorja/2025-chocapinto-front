@@ -2,7 +2,7 @@ import { API_URL } from "./env.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { mostrarConfirmacion } from "../componentes/confirmacion.js";
-
+import { initSessionManager } from "./sessionManager.js"; 
 const LOGIN_URL = "../html/index.html";
 
 const AVATARS_POR_NIVEL = {
@@ -189,6 +189,8 @@ document.getElementById('showMyClubsBtn').addEventListener('click', () => switch
 document.getElementById('cancelPasswordBtn').addEventListener('click', () => switchSection('edit-profile'));
 
 document.addEventListener("DOMContentLoaded", async () => {
+    initSessionManager();
+    
     const currentUsername = localStorage.getItem("username");
     if (!currentUsername) {
         hideLoader();

@@ -4,8 +4,13 @@ import { showLoader, hideLoader } from "../componentes/loader.js";
 import { initAppHeader, setHeaderContext } from "./club-componentes/app-header.js";
 import { initNotificaciones } from "./club-componentes/notificaciones-alertas.js";
 import { addHeaderAction } from "./club-componentes/app-header.js";
+import { initSessionManager, stopSessionManager } from "./sessionManager.js";
+
 
 function logout() {
+    stopSessionManager();
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     window.location.href = "index.html";
@@ -288,7 +293,8 @@ function configurarDropdownPerfil() {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
+    initSessionManager();
 
     window.API_URL = API_URL;
 
