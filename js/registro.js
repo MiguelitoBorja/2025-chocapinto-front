@@ -1,24 +1,17 @@
-import { API_URL } from "./env.js"; // Express + Prisma (tu server.js)
+import { API_URL } from "./env.js";
 import { showNotification } from "../componentes/notificacion.js";
-
 
 const registerForm = document.getElementById("registerForm");
 if (registerForm) {
-
-  
-   
-   
-
     registerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-    const username = document.getElementById("reg-username").value;
-    const email = document.getElementById("reg-email").value;
-    const password = document.getElementById("reg-password").value;
-    const passwordRepeat = document.getElementById("reg-password-repeat").value;
+        const username = document.getElementById("reg-username").value;
+        const email = document.getElementById("reg-email").value;
+        const password = document.getElementById("reg-password").value;
+        const passwordRepeat = document.getElementById("reg-password-repeat").value;
         const passwordMsg = document.getElementById("registerPasswordMsg");
         passwordMsg.style.display = "none";
 
-        // Validación: mínimo 8 caracteres y una mayúscula
         const minLength = password.length >= 8;
         const hasUpper = /[A-Z]/.test(password);
         if (!minLength || !hasUpper) {
@@ -43,7 +36,6 @@ if (registerForm) {
                 showNotification("error", result.message || "Error en el registro");
             }
         } catch (error) {
-            
             showNotification("error", "Error de conexión con el servidor");
         }
     });
