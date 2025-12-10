@@ -1,4 +1,3 @@
-// js/forgot-password.js
 import { API_URL } from './env.js';
 import { showNotification } from '../componentes/notificacion.js';
 
@@ -46,7 +45,6 @@ async function handleForgotPassword(e) {
       showNotification('error', data.message || 'Error al enviar el correo');
     }
   } catch (error) {
-    console.error('Error:', error);
     messageEl.style.color = '#d63031';
     messageEl.textContent = 'Error de conexión. Intenta nuevamente.';
     
