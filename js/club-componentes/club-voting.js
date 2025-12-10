@@ -1,5 +1,10 @@
 import { showNotification } from "../../componentes/notificacion.js";
 
+function formatearFechaLocal(fecha) {
+  const offset = fecha.getTimezoneOffset() * 60000;
+  const localDate = new Date(fecha.getTime() - offset);
+  return localDate.toISOString().slice(0, 16);
+}
 function initClubVotingComponent() {
     const modal = document.getElementById('modalCrearVotacion');
     const openBtn = document.getElementById('btn-crear-votacion');
@@ -66,9 +71,9 @@ function abrirModalCrearVotacion() {
     const inputFechaLectura = document.getElementById('votacion-fin-lectura');
     
     if (inputNombre) inputNombre.value = `Lectura ${fechaVotacion.toLocaleDateString()}`;
-    if (inputFechaVotacion) inputFechaVotacion.value = fechaVotacion.toISOString().slice(0, 16);
-    if (inputFechaLectura) inputFechaLectura.value = fechaLectura.toISOString().slice(0, 16);
-  }
+    if (inputFechaVotacion) inputFechaVotacion.value = formatearFechaLocal(fechaVotacion);
+    if (inputFechaLectura) inputFechaLectura.value = formatearFechaLocal(fechaLectura);
+  } 
   
   if (bookListContainer) {
     bookListContainer.innerHTML = '<div class="loader-simple">Cargando libros...</div>';
