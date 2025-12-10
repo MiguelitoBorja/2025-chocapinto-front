@@ -1,4 +1,3 @@
-// js/reset-password.js
 import { API_URL } from './env.js';
 import { showNotification } from '../componentes/notificacion.js';
 
@@ -9,7 +8,6 @@ const token = urlParams.get('token');
 document.addEventListener('DOMContentLoaded', () => {
   const infoEl = document.getElementById('info');
   
-  // Verificar que hay token
   if (!token) {
     if (infoEl) {
       infoEl.style.color = '#d63031';
@@ -17,12 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     showNotification('error', 'El enlace de recuperación no es válido');
     
-    // Redirigir después de 3 segundos
     setTimeout(() => {
       window.location.href = 'forgot-password.html';
     }, 3000);
     
-    // Deshabilitar el formulario
     const form = document.getElementById('reset-form');
     if (form) {
       const inputs = form.querySelectorAll('input, button');
@@ -31,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
   
-  // Si hay token, configurar el formulario
   if (infoEl) {
     infoEl.style.color = '#636e72';
     infoEl.textContent = 'Ingresá tu nueva contraseña';
@@ -49,18 +44,13 @@ async function handleResetPassword(e) {
   const newPassword = document.getElementById('newPassword').value;
   const messageEl = document.getElementById('message');
   const submitBtn = e.target.querySelector('button[type="submit"]');
-   console.log('🔑 Token desde URL:', token); // AGREGAR ESTE LOG
-  console.log('🔑 Longitud:', token?.length); // AGREGAR ESTE LOG
   
-  
-  // Validar longitud de contraseña
   if (newPassword.length < 6) {
     messageEl.style.color = '#d63031';
     messageEl.textContent = 'La contraseña debe tener al menos 6 caracteres';
     return;
   }
   
-  // Deshabilitar botón
   submitBtn.disabled = true;
   submitBtn.textContent = 'Cambiando...';
   messageEl.textContent = '';
@@ -80,7 +70,6 @@ async function handleResetPassword(e) {
       
       showNotification('success', '¡Contraseña cambiada! Ahora podés iniciar sesión');
       
-      // Redirigir al login después de 2 segundos
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 2000);
@@ -95,7 +84,6 @@ async function handleResetPassword(e) {
       submitBtn.textContent = 'Cambiar contraseña';
     }
   } catch (error) {
-    console.error('Error:', error);
     messageEl.style.color = '#d63031';
     messageEl.textContent = 'Error de conexión. Intenta nuevamente.';
     
