@@ -1,3 +1,4 @@
+// 2025-chocapinto-front/js/app.js
 import { API_URL } from "./env.js";
 
 let isLoggingIn = false;
@@ -5,14 +6,12 @@ let isLoggingIn = false;
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     
-    // Prevenir múltiples clicks
     if (isLoggingIn) return;
     isLoggingIn = true;
     
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
     
-    // Deshabilitar botón
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.6';
     submitBtn.style.cursor = 'not-allowed';
@@ -31,19 +30,20 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         if (res.ok) {
             const data = await res.json();
 
+            // Guardar el JWT token
+            localStorage.setItem("token", data.token);  // ← NUEVO
             localStorage.setItem("username", username);
             localStorage.setItem("role", data.role);
-            if (data.id) {
-                localStorage.setItem("userId", data.id);
-            }
+            localStorage.setItem("userId", data.id);
 
             submitBtn.textContent = '✓ Redirigiendo...';
             window.location.href = "main.html";
         } else {
-            // Error de credenciales
-            document.getElementById("errorMsg").style.display = "block";
+            const errorData = await res.json();
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.textContent = errorData.message || "Credenciales inválidas";
+            errorMsg.style.display = "block";
             
-            // Rehabilitar botón
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
@@ -51,11 +51,9 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
             isLoggingIn = false;
         }
     } catch (error) {
-        // Error de conexión
         document.getElementById("errorMsg").textContent = "Error de conexión con el servidor";
         document.getElementById("errorMsg").style.display = "block";
         
-        // Rehabilitar botón
         submitBtn.disabled = false;
         submitBtn.style.opacity = '1';
         submitBtn.style.cursor = 'pointer';
