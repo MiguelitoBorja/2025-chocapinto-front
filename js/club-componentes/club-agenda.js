@@ -297,7 +297,7 @@ function crearTarjetaSesion(sesion, tipo) {
               ${sesion.asistencias.map(a => `
                 <div class="asistente-avatar" title="${a.user.username}">
                   ${a.user.avatar ? 
-                    `<img src="${a.user.avatar}" alt="${a.user.username}">` :
+                    `<img src="/images/avatars/${a.user.avatar}" alt="${a.user.username}">` :
                     `<div class="avatar-inicial">${a.user.username[0].toUpperCase()}</div>`
                   }
                 </div>
@@ -1012,7 +1012,7 @@ export async function registrarAsistenciaSesion(sesionId) {
             >
             <label for="asistente_${conf.userId}" style="display: flex; align-items: center; flex: 1; cursor: pointer; margin: 0;">
               ${conf.user.avatar ? 
-                `<img src="${conf.user.avatar}" alt="${conf.user.username}" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 12px; object-fit: cover;">` :
+                `<img src="/images/avatars/${conf.user.avatar}" alt="${conf.user.username}" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 12px; object-fit: cover;">` :
                 `<div style="width: 32px; height: 32px; border-radius: 50%; background: #2c5a91; color: white; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold;">${conf.user.username[0].toUpperCase()}</div>`
               }
               <div>

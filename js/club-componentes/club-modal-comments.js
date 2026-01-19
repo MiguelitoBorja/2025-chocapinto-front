@@ -208,7 +208,7 @@ async function cargarComentarios(bookId, clubId) {
           const hasAvatar = c.user.avatar && c.user.avatar.trim() !== '';
 
           const avatarHTML = hasAvatar 
-            ? `<img src="${c.user.avatar}" alt="Avatar de ${c.user.username}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            ? `<img src="/images/avatars/${c.user.avatar}" alt="Avatar de ${c.user.username}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                <div class="avatar-initials-comm" style="display:none;">R</div>`
             : `<div class="avatar-initials-comm">R</div>`;
 
