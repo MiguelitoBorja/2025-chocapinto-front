@@ -1,4 +1,4 @@
-import { API_URL } from "./env.js";
+import { authFetch } from './authFetch.js';
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { initNotificaciones } from "./club-componentes/notificaciones-alertas.js";
@@ -71,9 +71,8 @@ async function marcarTodasLeidas() {
     if (!userId) return;
     
     try {
-        const response = await fetch(`${API_URL}/notificaciones/marcar-todas-leidas/${userId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' }
+        const response = await authFetch(`/notificaciones/marcar-todas-leidas/${userId}`, {
+            method: 'PUT'
         });
         
         if (response.ok) {
@@ -151,9 +150,8 @@ fileInput.addEventListener("change", () => {
             
             const body = { name, description, ownerUsername, imagen };
 
-            const res = await fetch(`${API_URL}/createClub`, {
+            const res = await authFetch(`/createClub`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
 

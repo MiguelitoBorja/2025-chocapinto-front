@@ -1,5 +1,5 @@
 // 2025-chocapinto-front/js/app.js
-import { API_URL } from "./env.js";
+import { authFetch } from './authFetch.js';
 
 let isLoggingIn = false;
 
@@ -21,9 +21,8 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch(`${API_URL}/login`, {
+        const res = await authFetch(`/login`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password })
         });
 

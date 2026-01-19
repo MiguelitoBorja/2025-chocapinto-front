@@ -1,3 +1,4 @@
+import { authFetch } from './authFetch.js';
 import { API_URL } from "./env.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
@@ -154,7 +155,7 @@ async function cargarClubes() {
     
     try {
         showLoader();
-        const res = await fetch(`${API_URL}/clubs`);
+        const res = await authFetch(`/clubs`);
         const data = await res.json();
         
         setTimeout(() => {
@@ -242,9 +243,8 @@ async function manejarSolicitudIngreso(event, clubId, username) {
     event.stopPropagation();
     
     try {
-        const res = await fetch(`${API_URL}/clubSolicitud`, {
+        const res = await authFetch(`/clubSolicitud`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ clubId, username })
         });
         const data = await res.json();
@@ -364,7 +364,7 @@ async function cargarLibrosRecomendados() {
     grid.innerHTML = "";
     
     try {
-        const res = await fetch(`${API_URL}/api/books`);
+        const res = await authFetch(`/api/books`);
         const data = await res.json();
         
         if (!data.success || !data.books) {

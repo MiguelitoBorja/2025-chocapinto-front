@@ -1,4 +1,4 @@
-import { API_URL } from "./env.js";
+import { authFetch } from './authFetch.js';
 import { crearTarjetaCrearClub, crearTarjetaClub, configurarEventosClub } from "./principal.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { initSessionManager } from "./sessionManager.js";
@@ -22,7 +22,7 @@ async function cargarClubesExploracion() {
     
     try {
         showLoader("Cargando clubes...");
-        const res = await fetch(`${API_URL}/clubs`);
+        const res = await authFetch(`/clubs`);
         const data = await res.json();
         
         hideLoader();

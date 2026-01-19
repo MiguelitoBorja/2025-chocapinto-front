@@ -1,4 +1,3 @@
-import { API_URL } from "./env.js";
 import { authFetch } from "./authFetch.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
