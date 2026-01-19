@@ -686,7 +686,7 @@ async function seleccionarAvatar(nombreArchivo) {
             const defaultIcon = document.getElementById('defaultAvatarIcon');
             
             if (avatarImg && defaultIcon) {
-                avatarImg.src = data.avatar;
+                avatarImg.src = `../images/avatars/${nombreArchivo}`;
                 avatarImg.style.display = 'block';
                 defaultIcon.style.display = 'none';
             }
@@ -717,7 +717,7 @@ async function cargarAvatarActual() {
             const profilePhotoContainer = document.getElementById('profilePhotoContainer');
             
             if (data.user.avatar && avatarImg && defaultIcon) {
-                avatarImg.src = data.user.avatar;
+                avatarImg.src = `../images/avatars/${data.user.avatar}`;
                 avatarImg.style.display = 'block';
                 defaultIcon.style.display = 'none';
             }
@@ -725,7 +725,8 @@ async function cargarAvatarActual() {
             const userLevel = data.user.level || 1;
             const recompensas = obtenerRecompensas(userLevel);
             
-            if (profilePhotoContainer) {e('marco-bronce', 'marco-plata', 'marco-oro', 'marco-diamante');
+            if (profilePhotoContainer) {
+                profilePhotoContainer.classList.remove('marco-bronce', 'marco-plata', 'marco-oro', 'marco-diamante');
                 
                 if (recompensas.marco) {
                     profilePhotoContainer.classList.add(`marco-${recompensas.marco}`);
