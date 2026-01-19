@@ -461,7 +461,7 @@ function mostrarListaRanking(ranking, club) {
         const hasAvatar = miembro && miembro.avatar && miembro.avatar.trim() !== '';
         
         const avatarHTML = hasAvatar 
-            ? `<img src="/images/avatars/${miembro.avatar}" alt="Avatar de ${usuario.username}" class="ranking-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+            ? `<img src="../images/avatars/${miembro.avatar}" alt="Avatar de ${usuario.username}" class="ranking-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
             : '';
         
         const initialsHTML = `<div class="ranking-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${initials}</div>`;
@@ -585,7 +585,7 @@ function mostrarListaMiembros(miembros, club) {
         });
         
         const avatarHTML = hasAvatar 
-            ? `<img src="/images/avatars/${miembro.avatar}" alt="Avatar de ${miembro.username}" class="member-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+            ? `<img src="../images/avatars/${miembro.avatar}" alt="Avatar de ${miembro.username}" class="member-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
             : '';
         
         const initialsHTML = `<div class="member-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${initials}</div>`;
@@ -864,7 +864,7 @@ function mostrarListaSolicitudes(solicitudes) {
         const hasAvatar = solicitud.avatar && solicitud.avatar.trim() !== '';
         
         const avatarHTML = hasAvatar 
-            ? `<img src="/images/avatars/${solicitud.avatar}" alt="Avatar de ${solicitud.username}" class="request-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+            ? `<img src="../images/avatars/${solicitud.avatar}" alt="Avatar de ${solicitud.username}" class="request-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
             : '';
         
         const initialsHTML = `<div class="request-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${inicial}</div>`;

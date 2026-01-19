@@ -65,11 +65,12 @@ function crearMensajeMisClubesVacio() {
 }
 
 function createRankingItemHTML(user) {
+    
     const hasAvatar = user.avatar && user.avatar.trim() !== '';
     const initials = user.username ? user.username.charAt(0).toUpperCase() : '?';
-    
+    console.log(hasAvatar);
     const avatarHTML = hasAvatar 
-        ? `<img src="/images/avatars/${user.avatar}" alt="Avatar de ${user.username}" class="ranking-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+        ? `<img src="../images/avatars/${user.avatar}" alt="Avatar de ${user.username}" class="ranking-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
         : '';
     
     const initialsHTML = `<div class="ranking-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${initials}</div>`;
