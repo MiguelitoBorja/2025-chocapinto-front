@@ -556,7 +556,7 @@ function loadUserAvatar() {
         const initialsEl = document.getElementById("userInitials");
         
         if (avatarImg && initialsEl) {
-          avatarImg.src = data.user.avatar;
+          avatarImg.src = `/images/avatars/${data.user.avatar}`;
           avatarImg.style.display = 'block';
           initialsEl.style.display = 'none';
           
