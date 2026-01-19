@@ -52,8 +52,9 @@ function mostrarPeriodos(periodos) {
     const loader = document.getElementById('periodosLoader');
     const content = document.getElementById('periodosList');
     
+    
     periodos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    periodos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
     
     const periodosHTML = periodos.map(periodo => {
         const fechaCreacion = new Date(periodo.createdAt).toLocaleDateString('es-ES', {
@@ -64,27 +65,26 @@ function mostrarPeriodos(periodos) {
         
         const fechaFinVotacion = new Date(periodo.fechaFinVotacion).toLocaleDateString('es-ES', {
             day: 'numeric',
-            month: 'short'
+            month: 'short',
+            year: 'numeric'  // Agregar año
         });
         
         const fechaFinLectura = new Date(periodo.fechaFinLectura).toLocaleDateString('es-ES', {
             day: 'numeric',
-            month: 'short'
+            month: 'short',
+            year: 'numeric'  // Agregar año
         });
         
-        const fechaCierre = new Date(periodo.updatedAt).toLocaleDateString('es-ES', {
+        const fechaCierreDate = periodo.fechaCierre ? new Date(periodo.fechaCierre) : new Date(periodo.updatedAt);
+const fechaCierre = fechaCierreDate.toLocaleDateString('es-ES', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
         });
         
-        let statusClass = 'completado';
-        let statusText = 'Completado';
-        
-        if (periodo.estado === 'CERRADO') {
-            statusClass = 'completado';
-            statusText = 'Completado';
-        } else if (periodo.estado === 'VOTACION') {
+        let statusClass, statusText;
+
+        if (periodo.estado === 'VOTACION') {
             statusClass = 'activo';
             statusText = 'En Votación';
         } else if (periodo.estado === 'LEYENDO') {
@@ -93,6 +93,10 @@ function mostrarPeriodos(periodos) {
         } else if (periodo.estado === 'CANCELADO') {
             statusClass = 'cancelado';
             statusText = 'Cancelado';
+        } else {
+            // CERRADO o default
+            statusClass = 'completado';
+            statusText = 'Completado';
         }
         
         const libroGanador = periodo.libroGanador;

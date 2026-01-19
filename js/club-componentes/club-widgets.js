@@ -335,19 +335,27 @@ async function generarActividadDesdeClubData() {
     const eventos = [];
     const club = window.clubData;
     
-    // Eventos de libros agregados al club
+    // Obtener eventos de períodos de lectura (tienen fechas exactas)
+    try {
+        const eventosPeriodos = await obtenerEventosPeriodosLecturaActividad();
+        eventos.push(...eventosPeriodos);
+    } catch (error) {
+        console.error('Error al obtener eventos de períodos:', error);
+    }
+    
+    // Eventos de libros agregados al club (solo agregados, no lecturas)
     if (club.readBooks && Array.isArray(club.readBooks)) {
         club.readBooks.forEach(clubBook => {
-            // Buscar información del usuario que agregó el libro
             const usuario = club.members ? 
                 club.members.find(member => member.username === clubBook.addedBy) : 
                 { id: 0, username: clubBook.addedBy || 'Usuario desconocido' };
             
-            // Evento de libro agregado
+            // Solo agregar evento de "libro agregado"
+            // Las lecturas iniciadas/completadas vienen de los períodos
             eventos.push({
                 id: `libro-agregado-${clubBook.id}`,
                 tipo: 'libro_agregado',
-                estado: 'por_leer',
+                estado: 'agregado',
                 fechaCambio: clubBook.addedAt || new Date().toISOString(),
                 book: {
                     id: clubBook.id,
@@ -358,50 +366,72 @@ async function generarActividadDesdeClubData() {
                 user: usuario,
                 descripcion: `Agregó el libro "${clubBook.title}" al club`
             });
-            
-            // Si el libro está en estado "leyendo" o "leido", agregar esos eventos también
-            if (clubBook.estado === 'leyendo' || clubBook.estado === 'leido') {
-                eventos.push({
-                    id: `lectura-iniciada-${clubBook.id}`,
-                    tipo: 'lectura_iniciada', 
-                    estado: 'leyendo',
-                    fechaCambio: calcularFechaInicioLectura(clubBook.addedAt),
-                    fechaInicio: calcularFechaInicioLectura(clubBook.addedAt),
-                    book: {
-                        id: clubBook.id,
-                        title: clubBook.title,
-                        author: clubBook.author,
-                        thumbnail: clubBook.portada || ''
-                    },
-                    user: usuario,
-                    descripcion: `Comenzó a leer "${clubBook.title}"`
-                });
-            }
-            
-            // Si el libro está completado
-            if (clubBook.estado === 'leido') {
-                const fechaFin = calcularFechaFinLectura(clubBook.addedAt);
-                eventos.push({
-                    id: `lectura-completada-${clubBook.id}`,
-                    tipo: 'lectura_completada',
-                    estado: 'leido', 
-                    fechaCambio: fechaFin,
-                    fechaInicio: calcularFechaInicioLectura(clubBook.addedAt),
-                    fechaFin: fechaFin,
-                    book: {
-                        id: clubBook.id,
-                        title: clubBook.title,
-                        author: clubBook.author,
-                        thumbnail: clubBook.portada || ''
-                    },
-                    user: usuario,
-                    descripcion: `Completó la lectura de "${clubBook.title}"`
-                });
-            }
         });
     }
     
     return eventos;
+}
+
+async function obtenerEventosPeriodosLecturaActividad() {
+    try {
+        const clubId = getClubId();
+        const response = await authFetch(`/club/${clubId}/periodos/historial`);
+        const data = await response.json();
+        
+        if (data.success && data.historial) {
+            const eventosPeridos = [];
+            
+            data.historial.forEach(periodo => {
+                if (periodo.libroGanador && periodo.libroGanador.book) {
+                    const libro = periodo.libroGanador.book;
+                    const fechaInicio = periodo.createdAt;
+                    
+                    // Evento de inicio de período
+                    eventosPeridos.push({
+                        id: `periodo-iniciado-${periodo.id}`,
+                        tipo: 'periodo_iniciado',
+                        estado: 'leyendo',
+                        fechaCambio: fechaInicio,
+                        fechaInicio: fechaInicio,
+                        book: {
+                            id: libro.id,
+                            title: libro.title,
+                            author: libro.author,
+                            thumbnail: libro.portada || ''
+                        },
+                        user: { username: 'Club', id: 0 },
+                        descripcion: `Inició el período de lectura de "${libro.title}"`
+                    });
+                    
+                    // Evento de finalización si está cerrado
+                    if (periodo.estado === 'CERRADO') {
+                        eventosPeridos.push({
+                            id: `periodo-completado-${periodo.id}`,
+                            tipo: 'periodo_completado',
+                            estado: 'leido',
+                            fechaCambio: periodo.updatedAt,
+                            fechaInicio: fechaInicio,
+                            fechaFin: periodo.updatedAt,
+                            book: {
+                                id: libro.id,
+                                title: libro.title,
+                                author: libro.author,
+                                thumbnail: libro.portada || ''
+                            },
+                            user: { username: 'Club', id: 0 },
+                            descripcion: `Completó el período de lectura de "${libro.title}"`
+                        });
+                    }
+                }
+            });
+            
+            return eventosPeridos;
+        }
+    } catch (error) {
+        console.error('Error al obtener eventos de períodos para actividad:', error);
+    }
+    
+    return [];
 }
 
 function crearItemActividadReal(activity) {
@@ -447,6 +477,7 @@ function getActivityDisplayReal(activity) {
             };
             
         case 'lectura_iniciada':
+        case 'periodo_iniciado':
         case 'leyendo':
             return {
                 icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -458,6 +489,7 @@ function getActivityDisplayReal(activity) {
             };
             
         case 'lectura_completada':
+        case 'periodo_completado':
         case 'leido':
             const diasLectura = activity.fechaInicio && activity.fechaFin ? 
                 calcularDiasLectura(activity.fechaInicio, activity.fechaFin) : null;
@@ -528,18 +560,6 @@ function mostrarActividadError(container) {
     if (activityCount) {
         activityCount.textContent = 'Error';
     }
-}
-
-function calcularFechaInicioLectura(fechaAgregado) {
-    const fecha = new Date(fechaAgregado);
-    fecha.setDate(fecha.getDate() + 1); // Un día después de agregado
-    return fecha.toISOString();
-}
-
-function calcularFechaFinLectura(fechaAgregado) {
-    const fecha = new Date(fechaAgregado);
-    fecha.setDate(fecha.getDate() + Math.floor(Math.random() * 21) + 7); // Entre 7-28 días para más variación
-    return fecha.toISOString();
 }
 
 function calcularDiasLectura(fechaInicio, fechaFin) {

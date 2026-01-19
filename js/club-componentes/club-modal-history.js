@@ -131,24 +131,34 @@ async function cargarEstadisticasClub(filtros = {}) {
 }
 
 async function generarHistorialDesdeClubData() {
-    if (!window.clubData) {
-        return [];
-    }
+    if (!window.clubData) return [];
     
     const eventos = [];
     const club = window.clubData;
     
+    // Paso 1: Obtener IDs de libros que vienen de periodos para no duplicarlos
+    // (Asumiendo que puedes identificar si un libro vino de un periodo)
+    const eventosPeriodos = await obtenerEventosPeriodosLectura();
+    const librosEnPeriodosIds = new Set(eventosPeriodos.map(e => e.book.id));
+    
+    // Agregamos primero los eventos de periodos (tienen fechas más exactas)
+    eventos.push(...eventosPeriodos);
+
     if (club.readBooks && Array.isArray(club.readBooks)) {
         club.readBooks.forEach(clubBook => {
             const usuario = club.members ? 
                 club.members.find(member => member.username === clubBook.addedBy) : 
                 { id: 0, username: clubBook.addedBy || 'Usuario desconocido' };
             
+            const fechaAgregado = clubBook.addedAt || new Date().toISOString();
+
+            // Solo agregar evento de "libro agregado" al club
+            // Las lecturas iniciadas/completadas vienen de los períodos de lectura
             eventos.push({
                 id: `libro-agregado-${clubBook.id}`,
                 tipo: 'libro_agregado',
                 estado: 'agregado',
-                fechaCambio: clubBook.addedAt || new Date().toISOString(),
+                fechaCambio: fechaAgregado,
                 book: {
                     id: clubBook.id,
                     title: clubBook.title,
@@ -159,53 +169,10 @@ async function generarHistorialDesdeClubData() {
                 user: usuario,
                 descripcion: `Agregó el libro "${clubBook.title}" al club`
             });
-            
-            if (clubBook.estado === 'leyendo' || clubBook.estado === 'leido') {
-                eventos.push({
-                    id: `lectura-iniciada-${clubBook.id}`,
-                    tipo: 'lectura_iniciada', 
-                    estado: 'leyendo',
-                    fechaCambio: calcularFechaInicioLectura(clubBook.addedAt),
-                    fechaInicio: calcularFechaInicioLectura(clubBook.addedAt),
-                    book: {
-                        id: clubBook.id,
-                        title: clubBook.title,
-                        author: clubBook.author,
-                        thumbnail: clubBook.portada || ''
-                    },
-                    user: usuario,
-                    descripcion: `Comenzó a leer "${clubBook.title}"`
-                });
-            }
-            
-            if (clubBook.estado === 'leido') {
-                const fechaFin = calcularFechaFinLectura(clubBook.addedAt);
-                eventos.push({
-                    id: `lectura-completada-${clubBook.id}`,
-                    tipo: 'lectura_completada',
-                    estado: 'leido', 
-                    fechaCambio: fechaFin,
-                    fechaInicio: calcularFechaInicioLectura(clubBook.addedAt),
-                    fechaFin: fechaFin,
-                    book: {
-                        id: clubBook.id,
-                        title: clubBook.title,
-                        author: clubBook.author,
-                        thumbnail: clubBook.portada || ''
-                    },
-                    user: usuario,
-                    descripcion: `Completó la lectura de "${clubBook.title}"`
-                });
-            }
         });
     }
     
-    try {
-        const eventosPeridos = await obtenerEventosPeriodosLectura();
-        eventos.push(...eventosPeridos);
-    } catch (error) {
-    }
-    
+    // Ordenar descendente
     eventos.sort((a, b) => new Date(b.fechaCambio) - new Date(a.fechaCambio));
     return eventos;
 }
@@ -219,17 +186,34 @@ async function obtenerEventosPeriodosLectura() {
         if (data.success && data.historial) {
             const eventosPeridos = [];
             
+            // 🔍 DEBUG: Ver fechas de períodos
+            console.log('===== DEBUG PERÍODOS (Modal Historial) =====');
+            console.log('Total períodos:', data.historial.length);
+            data.historial.forEach((periodo, index) => {
+                console.log(`\n--- Período ${index + 1}: ${periodo.nombre} ---`);
+                console.log('Estado:', periodo.estado);
+                console.log('createdAt:', periodo.createdAt, '→', new Date(periodo.createdAt));
+                console.log('fechaFinVotacion:', periodo.fechaFinVotacion, '→', new Date(periodo.fechaFinVotacion));
+                console.log('fechaFinLectura:', periodo.fechaFinLectura, '→', new Date(periodo.fechaFinLectura));
+                console.log('updatedAt:', periodo.updatedAt, '→', new Date(periodo.updatedAt));
+                console.log('Libro ganador:', periodo.libroGanador?.book?.title || 'Sin libro');
+            });
+            console.log('========================================\n');
+            
             data.historial.forEach(periodo => {
                 if (periodo.libroGanador && periodo.libroGanador.book) {
                     const libro = periodo.libroGanador.book;
+                    
+                    // Usar createdAt como inicio del período
+                    const fechaInicio = periodo.createdAt;
                     
                     // Evento de inicio de período
                     eventosPeridos.push({
                         id: `periodo-iniciado-${periodo.id}`,
                         tipo: 'periodo_iniciado',
                         estado: 'leyendo',
-                        fechaCambio: periodo.fechaInicioLectura || periodo.fechaInicio,
-                        fechaInicio: periodo.fechaInicioLectura || periodo.fechaInicio,
+                        fechaCambio: fechaInicio,
+                        fechaInicio: fechaInicio,
                         book: {
                             id: libro.id,
                             title: libro.title,
@@ -240,21 +224,23 @@ async function obtenerEventosPeriodosLectura() {
                         descripcion: `Inició el período de lectura de "${libro.title}"`,
                         periodo: {
                             id: periodo.id,
-                            fechaInicio: periodo.fechaInicio,
+                            nombre: periodo.nombre,
+                            fechaInicio: fechaInicio,
+                            fechaFinVotacion: periodo.fechaFinVotacion,
                             fechaFinLectura: periodo.fechaFinLectura,
-                            totalVotos: periodo.opciones ? periodo.opciones.reduce((sum, op) => sum + (op._count?.votos || 0), 0) : 0
+                            totalVotos: periodo.totalVotosEmitidos || 0
                         }
                     });
                     
                     // Evento de finalización si está cerrado
-                    if (periodo.estado === 'CERRADO' && periodo.fechaFinLectura) {
+                    if (periodo.estado === 'CERRADO') {
                         eventosPeridos.push({
                             id: `periodo-completado-${periodo.id}`,
                             tipo: 'periodo_completado',
                             estado: 'leido',
-                            fechaCambio: periodo.fechaFinLectura,
-                            fechaInicio: periodo.fechaInicioLectura || periodo.fechaInicio,
-                            fechaFin: periodo.fechaFinLectura,
+                            fechaCambio: periodo.updatedAt,
+                            fechaInicio: fechaInicio,
+                            fechaFin: periodo.updatedAt,
                             book: {
                                 id: libro.id,
                                 title: libro.title,
@@ -265,33 +251,25 @@ async function obtenerEventosPeriodosLectura() {
                             descripcion: `Completó el período de lectura de "${libro.title}"`,
                             periodo: {
                                 id: periodo.id,
-                                fechaInicio: periodo.fechaInicio,
+                                nombre: periodo.nombre,
+                                fechaInicio: fechaInicio,
+                                fechaFinVotacion: periodo.fechaFinVotacion,
                                 fechaFinLectura: periodo.fechaFinLectura,
-                                totalVotos: periodo.opciones ? periodo.opciones.reduce((sum, op) => sum + (op._count?.votos || 0), 0) : 0
+                                totalVotos: periodo.totalVotosEmitidos || 0
                             }
                         });
                     }
                 }
             });
             
+            
             return eventosPeridos;
         }
     } catch (error) {
+        console.error('Error al obtener eventos de períodos:', error);
     }
     
     return [];
-}
-
-function calcularFechaInicioLectura(fechaAgregado) {
-    const fecha = new Date(fechaAgregado);
-    fecha.setDate(fecha.getDate() + 1); // Un día después de agregado
-    return fecha.toISOString();
-}
-
-function calcularFechaFinLectura(fechaAgregado) {
-    const fecha = new Date(fechaAgregado);
-    fecha.setDate(fecha.getDate() + 14); // 2 semanas después por defecto
-    return fecha.toISOString();
 }
 
 function generarEstadisticasDesdeHistorial(historial) {
