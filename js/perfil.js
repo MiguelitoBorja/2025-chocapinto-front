@@ -619,7 +619,7 @@ function generarGridAvataresPorNivel(userLevel) {
         
         avatarsHTML += `
             <div class="avatar-item">
-                <img src="../images/avatars/${avatar.archivo}" 
+                <img src="/images/avatars/${avatar.archivo}" 
                      class="${clases}" 
                      onclick="${onClick}" 
                      alt="${avatar.nombre}"
@@ -686,7 +686,7 @@ async function seleccionarAvatar(nombreArchivo) {
             const defaultIcon = document.getElementById('defaultAvatarIcon');
             
             if (avatarImg && defaultIcon) {
-                avatarImg.src = `../images/avatars/${nombreArchivo}`;
+                avatarImg.src = `/images/avatars/${nombreArchivo}`;
                 avatarImg.style.display = 'block';
                 defaultIcon.style.display = 'none';
             }
@@ -717,7 +717,7 @@ async function cargarAvatarActual() {
             const profilePhotoContainer = document.getElementById('profilePhotoContainer');
             
             if (data.user.avatar && avatarImg && defaultIcon) {
-                avatarImg.src = `../images/avatars/${data.user.avatar}`;
+                avatarImg.src = `/images/avatars/${data.user.avatar}`;
                 avatarImg.style.display = 'block';
                 defaultIcon.style.display = 'none';
             }
