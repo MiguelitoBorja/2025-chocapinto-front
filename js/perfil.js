@@ -1,4 +1,5 @@
 import { API_URL } from "./env.js";
+import { authFetch } from "./authFetch.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { mostrarConfirmacion } from "../componentes/confirmacion.js";
@@ -203,7 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         showLoader("Cargando datos del perfil...");
         
-        const res = await fetch(`${API_URL}/user/${currentUsername}`);
+        const res = await authFetch(`/user/${currentUsername}`);
         const data = await res.json();
         
         if (data.success && data.user) {
@@ -246,9 +247,8 @@ document.getElementById("perfilForm").addEventListener("submit", async (e) => {
     try {
         showLoader("Actualizando perfil...");
         
-        const res = await fetch(`${API_URL}/updateUser`, {
+        const res = await authFetch('/updateUser', {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ currentUsername, newUsername })
         });
 
@@ -295,9 +295,8 @@ document.getElementById("passwordForm").addEventListener("submit", async (e) => 
     try {
         showLoader("Cambiando contraseña...");
         
-        const res = await fetch(`${API_URL}/changePassword`, {
+        const res = await authFetch('/changePassword', {
              method: "POST", 
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ currentUsername, currentPassword, newPassword })
         });
 
@@ -332,9 +331,8 @@ document.getElementById("deleteAccountBtn").addEventListener("click", () => {
             try {
                 showLoader("Eliminando cuenta...");
                 
-                const res = await fetch(`${API_URL}/deleteUser`, {
+                const res = await authFetch('/deleteUser', {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username })
                 });
                 
@@ -413,7 +411,7 @@ async function loadMyClubs() {
     
 
     try {
-        const res = await fetch(`${API_URL}/user/${currentUsername}/clubs`);
+        const res = await authFetch(`/user/${currentUsername}/clubs`);
         
         if (!res.ok) {
             throw new Error(`Error en la API: ${res.status}`);
@@ -506,7 +504,7 @@ async function obtenerNivelUsuario() {
         const currentUsername = localStorage.getItem("username");
         if (!currentUsername) return null;
         
-        const res = await fetch(`${API_URL}/user/${currentUsername}`);
+        const res = await authFetch(`/user/${currentUsername}`);
         const data = await res.json();
         
         if (data.success && data.user && data.user.level) {
@@ -677,9 +675,8 @@ async function seleccionarAvatar(nombreArchivo) {
     try {
         showLoader("Actualizando avatar...");
         
-        const res = await fetch(`${API_URL}/users/${userId}/update-avatar`, {
+        const res = await authFetch(`/users/${userId}/update-avatar`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ avatarName: nombreArchivo })
         });
 
@@ -712,7 +709,7 @@ async function cargarAvatarActual() {
     if (!currentUsername) return;
     
     try {
-        const res = await fetch(`${API_URL}/user/${currentUsername}`);
+        const res = await authFetch(`/user/${currentUsername}`);
         const data = await res.json();
         
         if (data.success && data.user) {
