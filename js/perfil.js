@@ -676,7 +676,7 @@ async function seleccionarAvatar(nombreArchivo) {
         
         const res = await authFetch(`/users/${userId}/update-avatar`, {
             method: "PUT",
-            body: JSON.stringify({ avatarName: nombreArchivo })
+            body: JSON.stringify({ avatar: nombreArchivo })
         });
 
         const data = await res.json();
