@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 // Variables para filtros
 let filtroTexto = '';
 let filtroEstado = 'todos';
@@ -152,9 +154,8 @@ async function cambiarEstadoLibro(bookId, nuevoEstado) {
     showLoader("Actualizando estado del libro...");
     
     try {
-        const res = await fetch(`${API_URL}/club/${clubId}/book/${bookId}/estado`, {
+        const res = await authFetch(`/club/${clubId}/book/${bookId}/estado`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
                 estado: nuevoEstado,
                 username: username 
@@ -183,9 +184,8 @@ async function cambiarEstadoLibro(bookId, nuevoEstado) {
 async function eliminarLibro(bookId, clubId, username) {
     showLoader("Eliminando libro...");
     try {
-        const res = await fetch(`${API_URL}/club/${clubId}/deleteBook/${bookId}`, {
+        const res = await authFetch(`/club/${clubId}/deleteBook/${bookId}`, {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username })
         });
         const data = await res.json();

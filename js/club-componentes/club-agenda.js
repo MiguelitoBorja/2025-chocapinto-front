@@ -1,4 +1,5 @@
 import { API_URL } from "../env.js";
+import { authFetch } from "../authFetch.js";
 import { showNotification } from "../../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../../componentes/loader.js";
 import { mostrarConfirmacion } from "../../componentes/confirmacion.js";
@@ -119,9 +120,7 @@ async function cargarSesiones(tipo = "proximas") {
     showLoader("Cargando sesiones...");
     
     
-    const response = await fetch(`${API_URL}/api/sesiones/club/${clubIdActual}?tipo=${tipo}`
-
-    );
+    const response = await authFetch(`/api/sesiones/club/${clubIdActual}?tipo=${tipo}`);
 
     const data = await response.json();
     
@@ -343,7 +342,7 @@ export function cerrarModalCrearSesion() {
  */
 async function cargarLibrosParaSesion() {
   try {
-    const response = await fetch(`${API_URL}/club/${clubIdActual}`);
+    const response = await authFetch(`/club/${clubIdActual}`);
 
     const data = await response.json();
     
@@ -371,7 +370,7 @@ async function cargarLibrosParaSesion() {
  */
 async function cargarLibrosParaEditar() {
   try {
-    const response = await fetch(`${API_URL}/club/${clubIdActual}`);
+    const response = await authFetch(`/club/${clubIdActual}`);
     const data = await response.json();
     
     if (data.success) {
@@ -420,11 +419,8 @@ export async function crearSesion(event) {
   try {
     showLoader("Creando sesión...");
     
-    const response = await fetch(`${API_URL}/api/sesiones`, {
+    const response = await authFetch('/api/sesiones', {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: JSON.stringify(datos)
     });
 
@@ -449,11 +445,8 @@ export async function crearSesion(event) {
  */
 export async function confirmarAsistenciaSesion(sesionId, estado) {
   try {
-    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}/confirmar`, {
+    const response = await authFetch(`/api/sesiones/${sesionId}/confirmar`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: JSON.stringify({
         estado,
         username: localStorage.getItem("username")
@@ -611,15 +604,9 @@ function generarColorPorLibro(libroId) {
 async function cargarEventosParaCalendario(start, end) {
   try {
     const [sesionesRes, estadoRes, historialRes] = await Promise.all([
-      fetch(`${API_URL}/api/sesiones/club/${clubIdActual}?tipo=todas`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      }),
-      fetch(`${API_URL}/api/club/${clubIdActual}/estado-actual`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      }),
-      fetch(`${API_URL}/api/club/${clubIdActual}/periodos/historial`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      })
+      authFetch(`/api/sesiones/club/${clubIdActual}?tipo=todas`),
+      authFetch(`/api/club/${clubIdActual}/estado-actual`),
+      authFetch(`/api/club/${clubIdActual}/periodos/historial`)
     ]);
     
     const sesionesData = await sesionesRes.json();
@@ -854,11 +841,8 @@ export async function eliminarSesion(sesionId) {
       try {
         showLoader("Eliminando sesión...");
         
-        const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`, {
+        const response = await authFetch(`/api/sesiones/${sesionId}`, {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
           body: JSON.stringify({
             username: localStorage.getItem("username")
           })
@@ -895,7 +879,7 @@ export async function editarSesion(sesionId) {
     showLoader("Cargando sesión...");
     
     // Obtener datos de la sesión
-    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`);
+    const response = await authFetch(`/api/sesiones/${sesionId}`);
     const data = await response.json();
     
     if (data.success) {
@@ -967,11 +951,8 @@ export async function editarSesionSubmit(event) {
   try {
     showLoader("Guardando cambios...");
     
-    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`, {
+    const response = await authFetch(`/api/sesiones/${sesionId}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: JSON.stringify(datos)
     });
 
@@ -999,7 +980,7 @@ export async function registrarAsistenciaSesion(sesionId) {
     showLoader("Cargando datos de la sesión...");
     
     // Obtener datos de la sesión con confirmaciones y asistencias ya registradas
-    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}`);
+    const response = await authFetch(`/api/sesiones/${sesionId}`);
     const data = await response.json();
     
     if (data.success) {
@@ -1088,11 +1069,8 @@ export async function registrarAsistenciaSubmit(event) {
   try {
     showLoader("Guardando asistencias...");
     
-    const response = await fetch(`${API_URL}/api/sesiones/${sesionId}/asistencia`, {
+    const response = await authFetch(`/api/sesiones/${sesionId}/asistencia`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: JSON.stringify({
         usuariosPresentes,
         username: localStorage.getItem("username")

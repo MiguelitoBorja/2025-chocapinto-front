@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 function initHistoryModal() {
     setupHistorialClubEventListeners();
     window.mostrarHistorialCompleto = mostrarHistorialCompleto;
@@ -86,7 +88,7 @@ async function cargarHistorialClub(filtros = {}) {
             const clubId = getClubId();
             const params = new URLSearchParams(filtros);
             
-            const response = await fetch(`${API_URL}/club/${clubId}/reading-history?${params}`);
+            const response = await authFetch(`/club/${clubId}/reading-history?${params}`);
             const data = await response.json();
             
             if (data.success) {
@@ -115,7 +117,7 @@ async function cargarEstadisticasClub(filtros = {}) {
         const clubId = getClubId();
         const params = new URLSearchParams(filtros);
         
-        const response = await fetch(`${API_URL}/club/${clubId}/reading-stats?${params}`);
+        const response = await authFetch(`/club/${clubId}/reading-stats?${params}`);
         const data = await response.json();
         
         if (data.success) {
@@ -211,7 +213,7 @@ async function generarHistorialDesdeClubData() {
 async function obtenerEventosPeriodosLectura() {
     try {
         const clubId = getClubId();
-        const response = await fetch(`${API_URL}/club/${clubId}/periodos/historial`);
+        const response = await authFetch(`/club/${clubId}/periodos/historial`);
         const data = await response.json();
         
         if (data.success && data.historial) {

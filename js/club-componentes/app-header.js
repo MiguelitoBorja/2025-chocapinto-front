@@ -1,4 +1,5 @@
 import { mostrarConfirmacion } from '../../componentes/confirmacion.js';
+import { authFetch } from '../authFetch.js';
 const XP_PER_LEVEL = 500;
 
 // URL del login (ajustar si es otra)
@@ -547,7 +548,7 @@ function loadUserAvatar() {
   const username = localStorage.getItem("username");
   if (!username) return;
 
-  fetch(`${window.API_URL}/user/${username}`)
+  authFetch(`/user/${username}`)
     .then((res) => res.json())
     .then((data) => {
       if (data.success && data.user && data.user.avatar) {
@@ -585,7 +586,7 @@ function updateUserXpHeader() {
     return;
   }
 
-  fetch(`${window.API_URL}/user/${userId}`)
+  authFetch(`/user/${userId}`)
     .then((res) => res.json())
     .then((data) => {
       if (!data.success || !data.user) return;

@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 function initCommentsModal() {
     const modalComentarios = window.modalComentarios;
     const closeModalComentarios = document.getElementById("closeModalComentarios");
@@ -54,7 +56,7 @@ async function cargarComentarios(bookId, clubId) {
   const commentsCount = document.getElementById('comments-count');
   
   try {
-    const res = await fetch(`${API_URL}/comentario/book/${bookId}/club/${clubId}`);
+    const res = await authFetch(`/comentario/book/${bookId}/club/${clubId}`);
     const data = await res.json();
 
     if (data.success && Array.isArray(data.comentarios)) {
@@ -69,7 +71,7 @@ async function cargarComentarios(bookId, clubId) {
         comentariosList.innerHTML = "";
 
         const userId = Number(localStorage.getItem("userId"));
-        const clubRes = await fetch(`${API_URL}/club/${clubId}`);
+        const clubRes = await authFetch(`/club/${clubId}`);
         const clubData = await clubRes.json();
         
         // Usar el nuevo sistema de permisos basado en ClubMember
@@ -282,7 +284,7 @@ async function cargarComentarios(bookId, clubId) {
 async function eliminarComentario(comentarioId, bookId, clubId) {
   showLoader("Eliminando comentario...");
   try {
-    const res = await fetch(`${API_URL}/comentario/${comentarioId}`, {
+    const res = await authFetch(`/comentario/${comentarioId}`, {
       method: "DELETE"
     });
     const data = await res.json();
@@ -309,9 +311,8 @@ document.addEventListener('click', async (e) => {
     try {
       const userId = localStorage.getItem("userId");
       const clubId = getClubId();
-      const res = await fetch(`${API_URL}/comentario`, {
+      const res = await authFetch(`/comentario`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, bookId: window.currentBookId, clubId, content: texto })
       });
       const data = await res.json();

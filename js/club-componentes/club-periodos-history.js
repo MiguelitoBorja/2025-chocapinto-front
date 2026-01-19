@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 function initPeriodosHistoryComponent() {
     const historialBtn = document.getElementById('btn-historial-periodos');
     if (historialBtn) {
@@ -28,7 +30,7 @@ async function mostrarHistorialPeriodos() {
             throw new Error("No se pudo obtener el ID del club");
         }
         
-        const response = await fetch(`${window.API_URL}/api/club/${clubId}/periodos/historial`);
+        const response = await authFetch(`/api/club/${clubId}/periodos/historial`);
         const data = await response.json();
         
         if (response.ok && data.success) {

@@ -1,4 +1,4 @@
-import { API_URL } from "../env.js";
+import { authFetch } from '../authFetch.js';
 import { showNotification } from "../../componentes/notificacion.js";
 
 let notificacionesInterval = null;
@@ -22,7 +22,7 @@ export function initNotificaciones(userId) {
 
 async function cargarContadorNoLeidas(userId) {
   try {
-    const response = await fetch(`${API_URL}/api/notificaciones/${userId}/no-leidas/count`);
+    const response = await authFetch(`/api/notificaciones/${userId}/no-leidas/count`);
     const data = await response.json();
     
     if (data.success) {
@@ -44,7 +44,7 @@ function actualizarBadgeNotificaciones(count) {
 
 async function cargarNotificaciones(userId) {
   try {
-    const response = await fetch(`${API_URL}/api/notificaciones/${userId}`);
+    const response = await authFetch(`/api/notificaciones/${userId}`);
     
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -267,9 +267,8 @@ if (typeof document !== 'undefined') {
 
 export async function marcarNotificacionLeida(notifId) {
   try {
-    const response = await fetch(`${API_URL}/api/notificaciones/${notifId}/leer`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" }
+    const response = await authFetch(`/api/notificaciones/${notifId}/leer`, {
+      method: "PUT"
     });
 
     const data = await response.json();
@@ -289,9 +288,8 @@ export async function marcarTodasLeidas() {
     const userId = localStorage.getItem("userId");
     if (!userId) return;
 
-    const response = await fetch(`${API_URL}/api/notificaciones/${userId}/leer-todas`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" }
+    const response = await authFetch(`/api/notificaciones/${userId}/leer-todas`, {
+      method: "PUT"
     });
 
     const data = await response.json();

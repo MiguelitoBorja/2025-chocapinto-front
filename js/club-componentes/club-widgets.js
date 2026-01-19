@@ -1,4 +1,4 @@
-import { API_URL } from "../env.js";
+import { authFetch } from '../authFetch.js';
 import { getClubId } from "./club-utils.js";
 
 async function cargarProgresoLectura() {
@@ -11,8 +11,8 @@ async function cargarProgresoLectura() {
         
         // Obtener información del período activo y libros del club
         const [clubResponse, estadoResponse] = await Promise.all([
-            fetch(`${API_URL}/club/${clubId}`),
-            fetch(`${API_URL}/api/club/${clubId}/estado-actual`)
+            authFetch(`/club/${clubId}`),
+            authFetch(`/api/club/${clubId}/estado-actual`)
         ]);
         
         const clubData = await clubResponse.json();
@@ -136,7 +136,7 @@ async function cargarCategoriasClub() {
                 return;
             }
 
-            const response = await fetch(`${API_URL}/club/${clubId}`);
+            const response = await authFetch(`/club/${clubId}`);
             const data = await response.json();
             
             if (data.success && data.club && data.club.readBooks) {
@@ -296,7 +296,7 @@ async function cargarActividadReciente() {
     } catch (error) {
         try {
             const clubId = getClubId();
-            const res = await fetch(`${API_URL}/club/${clubId}/reading-history`);
+            const res = await authFetch(`/club/${clubId}/reading-history`);
             const data = await res.json();
             
             if (data.success && data.historial) {

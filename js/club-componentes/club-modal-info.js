@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 // Variables para el gráfico
 let graficoInstancia = null;
 
@@ -412,7 +414,7 @@ async function mostrarRanking() {
 
     try {
         const [rankingResponse, clubActualizado] = await Promise.all([
-            fetch(`${API_URL}/api/ranking/club/${clubId}/ranking`),
+            authFetch(`/api/ranking/club/${clubId}/ranking`),
             cargarDatosActualizadosClub()
         ]);
         
@@ -543,7 +545,7 @@ async function cargarDatosActualizadosClub() {
             throw new Error('No se encontró ID del club');
         }
 
-        const response = await fetch(`${window.API_URL}/club/${clubId}`);
+        const response = await authFetch(`/club/${clubId}`);
         const data = await response.json();
 
         if (!response.ok || !data.success) {
@@ -695,7 +697,7 @@ function eliminarMiembro(miembroId, username) {
             try {
                 showLoader(`Eliminando a ${username} del club...`);
                 
-                const res = await fetch(`${API_URL}/club/${clubId}/removeMember/${miembroId}`, {
+                const res = await authFetch(`/club/${clubId}/removeMember/${miembroId}`, {
                     method: "DELETE"
                 });
                 
@@ -748,11 +750,8 @@ async function cambiarRolMiembro(miembroId, username, nuevoRol) {
             try {
                 showLoader(`${nuevoRol === 'MODERADOR' ? 'Promoviendo' : 'Quitando rol de moderador a'} ${username}...`);
                 
-                const res = await fetch(`${API_URL}/club/${clubId}/change-role/${miembroId}`, {
+                const res = await authFetch(`/club/${clubId}/change-role/${miembroId}`, {
                     method: "PUT",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({
                         newRole: nuevoRol
                     })
@@ -916,9 +915,8 @@ async function gestionarSolicitudModal(solicitudId, aceptar) {
     try {
         showLoader(aceptar ? "Aceptando solicitud..." : "Rechazando solicitud...");
         
-        const res = await fetch(`${API_URL}/club/${clubId}/solicitud/${solicitudId}`, {
+        const res = await authFetch(`/club/${clubId}/solicitud/${solicitudId}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ aceptar })
         });
         

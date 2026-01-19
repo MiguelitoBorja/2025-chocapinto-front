@@ -1,3 +1,4 @@
+import { authFetch } from '../authFetch.js';
 import { showNotification } from "../../componentes/notificacion.js";
 
 function formatearFechaLocal(fecha) {
@@ -100,7 +101,7 @@ async function cargarLibrosPorLeer() {
     const clubId = window.getClubId();
     
    
-    const debugRes = await fetch(`${window.API_URL}/api/club/${clubId}/libros-debug`);
+    const debugRes = await authFetch(`/api/club/${clubId}/libros-debug`);
     const debugData = await debugRes.json();
     
     
@@ -191,9 +192,8 @@ async function handleCrearVotacion(e) {
     window.showLoader("Creando votación...");
     const clubId = window.getClubId();
     
-    const res = await fetch(`${window.API_URL}/api/club/${clubId}/periodos`, {
+    const res = await authFetch(`/api/club/${clubId}/periodos`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
     
@@ -240,9 +240,9 @@ async function actualizarBotonDinamico() {
         
         const estadoAnterior = window.ultimoEstadoClub || null;
         
-        const url = `${window.API_URL}/api/club/${clubId}/estado-actual`;
+        const url = `/api/club/${clubId}/estado-actual`;
         
-        const res = await fetch(url);
+        const res = await authFetch(url);
         
         if (!res.ok) {
             return;
@@ -620,7 +620,7 @@ async function votar(opcionId, libroTitulo) {
         const username = localStorage.getItem('username');
         const clubId = window.getClubId();
         
-        const estadoRes = await fetch(`${window.API_URL}/api/club/${clubId}/estado-actual`);
+        const estadoRes = await authFetch(`/api/club/${clubId}/estado-actual`);
         const estadoData = await estadoRes.json();
         const periodoId = estadoData.periodo?.id;
         
@@ -631,9 +631,8 @@ async function votar(opcionId, libroTitulo) {
         
         window.showLoader('Registrando voto...');
         
-        const res = await fetch(`${window.API_URL}/api/periodo/${periodoId}/votar`, {
+        const res = await authFetch(`/api/periodo/${periodoId}/votar`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ opcionId, username })
         });
         
@@ -679,9 +678,8 @@ async function cerrarVotacion(periodoId) {
                 
                 window.showLoader('Cerrando votación...');
                 
-                const res = await fetch(`${window.API_URL}/api/periodo/${periodoId}/cerrar-votacion`, {
+                const res = await authFetch(`/api/periodo/${periodoId}/cerrar-votacion`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username })
                 });
                 
@@ -750,9 +748,8 @@ async function concluirLectura(periodoId) {
                 
                 window.showLoader('Concluyendo lectura...');
                 
-                const res = await fetch(`${window.API_URL}/api/periodo/${periodoId}/concluir-lectura`, {
+                const res = await authFetch(`/api/periodo/${periodoId}/concluir-lectura`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username })
                 });
                 

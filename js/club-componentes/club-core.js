@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 window.clubData = null;
 
 function actualizarEstadisticas(club) {
@@ -57,7 +59,7 @@ async function renderClub() {
         return;
     }
     try {
-        const res = await fetch(`${API_URL}/club/${clubId}`);
+        const res = await authFetch(`/club/${clubId}`);
         const data = await res.json();
         
         if (!res.ok || !data.success) {
@@ -248,7 +250,7 @@ async function gestionarSolicitud(solicitudId, aceptar) {
     const clubId = getClubId();
     showLoader(aceptar ? "Aceptando solicitud..." : "Rechazando solicitud...");
     try {
-        const res = await fetch(`${API_URL}/club/${clubId}/solicitud/${solicitudId}`, {
+        const res = await authFetch(`/club/${clubId}/solicitud/${solicitudId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ aceptar })
@@ -409,7 +411,7 @@ async function eliminarClub(){
             const clubId = getClubId();
             showLoader("Eliminando club...");
             try {
-                const res = await fetch(`${API_URL}/deleteClub/${clubId}`, {
+                const res = await authFetch(`/deleteClub/${clubId}`, {
                     method: "DELETE"
                 });
                 const data = await res.json();
@@ -450,7 +452,7 @@ async function salirDelClub(){
             const userId = localStorage.getItem("userId");
             showLoader("Saliendo del club...");
             try {
-                const res = await fetch(`${API_URL}/club/${clubId}/removeMember/${userId}`, {
+                const res = await authFetch(`/club/${clubId}/removeMember/${userId}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" }
                 });

@@ -1,3 +1,5 @@
+import { authFetch } from '../authFetch.js';
+
 let categoriasDisponibles = [];
 
 // ========== VERIFICACIÓN DE ROLES ==========
@@ -15,7 +17,7 @@ async function verificarRolUsuario() {
             return { canManageCategories: false, role: 'LECTOR' };
         }
 
-        const response = await fetch(`${API_URL}/club/${clubId}`);
+        const response = await authFetch(`/club/${clubId}`);
         const data = await response.json();
         
         if (data.success && data.club && data.club.members) {
@@ -227,7 +229,7 @@ function cambiarLibroSeleccionado() {
 
 async function cargarCategorias() {
     try {
-        const res = await fetch(`${API_URL}/categorias`);
+        const res = await authFetch('/categorias');
         const data = await res.json();
         if (data.success && Array.isArray(data.categorias)) {
             categoriasDisponibles = data.categorias;
@@ -327,7 +329,7 @@ async function eliminarCategoria(categoriaId) {
   confirmarEliminacion("esta categoría", () => {
     showLoader("Eliminando categoría...");
     
-    fetch(`${API_URL}/categorias/${categoriaId}`, {
+    authFetch(`/categorias/${categoriaId}`, {
       method: "DELETE"
     })
       .then(res => res.json())
@@ -384,7 +386,7 @@ async function editarCategoria(categoriaId, nombreActual) {
 
   showLoader("Editando categoría...");
   
-  fetch(`${API_URL}/categorias/${categoriaId}`, {
+  authFetch(`/categorias/${categoriaId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nombre: nuevoNombre.trim() })
@@ -414,7 +416,7 @@ async function editarCategoria(categoriaId, nombreActual) {
 // Función para buscar cursos en tu API propia
 async function buscarCursosAPI(query) {
     try {
-        const res = await fetch(`${API_URL}/api/books/searchCursos?query=${encodeURIComponent(query)}`);
+        const res = await authFetch(`/api/books/searchCursos?query=${encodeURIComponent(query)}`);
         const data = await res.json();
         
         if (data.success && Array.isArray(data.cursos)) {
@@ -476,7 +478,7 @@ function configurarBotonAgregarCategoria() {
         
         showLoader("Creando categoría...");
         try {
-            const res = await fetch(`${API_URL}/categorias`, {
+            const res = await authFetch('/categorias', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ nombre })
@@ -652,7 +654,7 @@ function configurarFormularioLibro() {
     `;
     
     try {
-        const res = await fetch(`${API_URL}/club/${clubId}/addBook`, {
+        const res = await authFetch(`/club/${clubId}/addBook`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title, author, thumbnail, id_api, username, categorias: categoriasSeleccionadas })
