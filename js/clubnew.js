@@ -93,6 +93,30 @@ await renderClub();
           subtitle: `${clubData.members?.length || 0} miembros`,
         });
         
+        // Verificar si hay un parámetro 'view' en la URL para abrir vista específica
+        const urlParams = new URLSearchParams(window.location.search);
+        const view = urlParams.get('view');
+        
+        if (view) {
+          setTimeout(() => {
+            if (view === 'agenda' && typeof window.mostrarAgenda === 'function') {
+              window.mostrarAgenda();
+            } else if (view === 'votaciones') {
+              // Implementar mostrarVotaciones si existe o usar el método del sistema
+              const btnVotaciones = document.getElementById('btn-crear-votacion');
+              if (btnVotaciones) {
+                btnVotaciones.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            } else if (view === 'biblioteca') {
+              // Scroll a la sección de biblioteca
+              const btnAgregarLibro = document.querySelector('[onclick*="mostrarModalAgregarLibro"]');
+              if (btnAgregarLibro) {
+                btnAgregarLibro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }
+          }, 800);
+        }
+        
         // Obtener el rol del usuario
         const userRoleInfo = window.getUserRoleInClub
           ? window.getUserRoleInClub(clubData, userId)

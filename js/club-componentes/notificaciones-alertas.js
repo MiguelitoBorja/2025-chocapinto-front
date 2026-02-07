@@ -198,11 +198,19 @@ function crearTarjetaNotificacion(notif) {
   }
 
   const datos = notif.datos || {};
-  const clickHandler = datos.sesionId ? `onclick="window.abrirSesionDesdeNotificacion(${datos.sesionId})"` : '';
+  
+  // Determinar si la notificación es clickeable
+  let clickHandler = '';
+  let cursorStyle = '';
+  
+  if (datos.clubId) {
+    clickHandler = `onclick="window.redirigirDesdeNotificacion(${notif.id}, ${datos.clubId}, '${notif.tipo}')"`;
+    cursorStyle = 'style="cursor: pointer;"';
+  }
 
   return `
     <div class="notificacion-item ${!notif.leida ? 'notif-no-leida' : ''} ${colorClase}" 
-         data-notif-id="${notif.id}" ${clickHandler}>
+         data-notif-id="${notif.id}" ${clickHandler} ${cursorStyle}>
       <div class="notif-icono">${iconoHTML}</div>
       <div class="notif-contenido">
         <div class="notif-header">
@@ -302,17 +310,46 @@ export async function marcarTodasLeidas() {
   }
 }
 
-export function abrirSesionDesdeNotificacion(sesionId) {
-  const notifElement = document.querySelector(`[data-notif-id]`);
-  if (notifElement) {
-    const notifId = notifElement.getAttribute('data-notif-id');
-    marcarNotificacionLeida(notifId);
-  }
-
+export function redirigirDesdeNotificacion(notifId, clubId, tipoNotificacion) {
+  // Marcar como leída
+  marcarNotificacionLeida(notifId);
+  
   cerrarModalNotificaciones();
 
-  if (typeof window.mostrarAgenda === 'function') {
-    window.mostrarAgenda();
+  // Redirección según el tipo de notificación
+  switch(tipoNotificacion) {
+    case 'SESION_CREADA':
+    case 'SESION_PROXIMA':
+      // Redirigir al club y abrir agenda
+      window.location.href = `club_lectura.html?clubId=${clubId}&view=agenda`;
+      break;
+      
+    case 'VOTACION_ABIERTA':
+    case 'VOTACION_INICIADA':
+    case 'VOTACION_POR_VENCER':
+      // Redirigir al club y abrir votaciones
+      window.location.href = `club_lectura.html?clubId=${clubId}&view=votaciones`;
+      break;
+      
+    case 'VOTACION_CERRADA':
+    case 'LECTURA_FINALIZADA':
+      // Redirigir al club
+      window.location.href = `club_lectura.html?clubId=${clubId}`;
+      break;
+      
+    case 'SOLICITUD_ACEPTADA':
+      // Redirigir al club recién unido
+      window.location.href = `club_lectura.html?clubId=${clubId}`;
+      break;
+      
+    case 'LIBRO_AGREGADO':
+      // Redirigir al club y abrir biblioteca
+      window.location.href = `club_lectura.html?clubId=${clubId}&view=biblioteca`;
+      break;
+      
+    default:
+      // Por defecto, redirigir al club
+      window.location.href = `club_lectura.html?clubId=${clubId}`;
   }
 }
 
@@ -328,5 +365,5 @@ if (typeof window !== "undefined") {
   window.cerrarModalNotificaciones = cerrarModalNotificaciones;
   window.marcarNotificacionLeida = marcarNotificacionLeida;
   window.marcarTodasLeidas = marcarTodasLeidas;
-  window.abrirSesionDesdeNotificacion = abrirSesionDesdeNotificacion;
+  window.redirigirDesdeNotificacion = redirigirDesdeNotificacion;
 }
