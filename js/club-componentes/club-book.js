@@ -229,7 +229,9 @@ function cambiarLibroSeleccionado() {
 
 async function cargarCategorias() {
     try {
-        const res = await authFetch('/categorias');
+        const clubId = getClubId();
+        const url = clubId ? `/categorias?clubId=${clubId}` : '/categorias';
+        const res = await authFetch(url);
         const data = await res.json();
         if (data.success && Array.isArray(data.categorias)) {
             categoriasDisponibles = data.categorias;
@@ -240,7 +242,12 @@ async function cargarCategorias() {
     }
 }
 
-function esCategoriasPredeterminada(nombreCategoria) {
+function esCategoriasPredeterminada(categoria) {
+    // Es predeterminada si no tiene clubId (es global)
+    if (!categoria.clubId) {
+        return true;
+    }
+    
     const categoriasPredeterminadas = [
         'Ficción',
         'No Ficción', 
@@ -248,7 +255,7 @@ function esCategoriasPredeterminada(nombreCategoria) {
         'Fantasía',
         'Ensayo',
     ];
-    return categoriasPredeterminadas.includes(nombreCategoria);
+    return categoriasPredeterminadas.includes(categoria.nombre);
 }
 
 function renderCategoriasCheckboxes() {
@@ -280,7 +287,7 @@ function renderCategoriasCheckboxes() {
       label.appendChild(document.createTextNode(' ' + cat.nombre));
 
       // Si es OWNER o MODERADOR y la categoría NO es predeterminada, mostrar opciones de editar/eliminar
-      if (canManageCategories && !esCategoriasPredeterminada(cat.nombre)) {
+      if (canManageCategories && !esCategoriasPredeterminada(cat)) {
           const editBtn = document.createElement("span");
           editBtn.textContent = " ✏️";
           editBtn.style.cursor = "pointer";
@@ -478,10 +485,11 @@ function configurarBotonAgregarCategoria() {
         
         showLoader("Creando categoría...");
         try {
+            const clubId = getClubId();
             const res = await authFetch('/categorias', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nombre })
+                body: JSON.stringify({ nombre, clubId: Number(clubId) })
             });
             const data = await res.json();
             if (data.success && data.categoria) {
