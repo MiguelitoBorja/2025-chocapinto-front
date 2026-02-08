@@ -58,8 +58,9 @@ function verificarYActualizarSesiones() {
   let hayActualizacion = false;
   
   sesionesData.forEach(sesion => {
-    const fechaSesionString = sesion.fechaHora.replace('Z', '');
-    const fechaSesion = new Date(fechaSesionString);
+    // Remover Z para tratar la fecha como local, no como UTC
+    const fechaString = sesion.fechaHora.replace('Z', '');
+    const fechaSesion = new Date(fechaString);
     
     // Si la sesión ya pasó y está como PROGRAMADA, necesita actualización
     if (fechaSesion <= ahora && sesion.estado === "PROGRAMADA") {
@@ -171,7 +172,7 @@ function renderizarSesiones(tipo) {
  * Crea el HTML de una tarjeta de sesión
  */
 function crearTarjetaSesion(sesion, tipo) {
-  // Parsear fecha sin conversión UTC - remover la Z y tratarla como local
+  // Remover Z para tratar la fecha como local, no como UTC
   const fechaString = sesion.fechaHora.replace('Z', '');
   const fecha = new Date(fechaString);
   
@@ -400,11 +401,11 @@ export async function crearSesion(event) {
   
   const formData = new FormData(event.target);
   
-  // Obtener fecha local y construir ISO manualmente sin conversión
-  const fechaHoraLocal = formData.get("fechaHora"); // "2024-12-08T15:00"
-  // Agregar segundos, milisegundos y Z para que el backend lo tome como UTC
-  // pero en realidad es la hora local que queremos guardar
-  const fechaISO = fechaHoraLocal + ":00.000Z";
+  // Obtener fecha local del input (formato: "2024-12-08T15:00")
+  const fechaHoraLocal = formData.get("fechaHora");
+  // Crear objeto Date sin conversión de zona horaria y ajustar para guardar como UTC
+  const fecha = new Date(fechaHoraLocal);
+  const fechaISO = new Date(fecha.getTime() - fecha.getTimezoneOffset() * 60000).toISOString();
   
   const datos = {
     clubId: clubIdActual,
@@ -622,10 +623,13 @@ async function cargarEventosParaCalendario(start, end) {
         const colores = generarColorPorLibro(libroId);
         const color = sesion.estado === 'COMPLETADA' ? colores.completada : colores.normal;
         
+        // Remover Z para que FullCalendar trate la fecha como local
+        const fechaLocal = sesion.fechaHora.replace('Z', '');
+        
         eventos.push({
           id: `sesion-${sesion.id}`,
           title: sesion.titulo,
-          start: sesion.fechaHora,
+          start: fechaLocal,
           backgroundColor: color,
           borderColor: color,
           textColor: '#ffffff',
@@ -692,7 +696,10 @@ function mostrarDetallesEvento(event) {
   
   if (props.tipo === 'sesion') {
     const sesion = props.data;
-    const fechaHora = new Date(sesion.fechaHora.replace('Z', '')).toLocaleString('es-AR', {
+    // Remover Z para tratar la fecha como local
+    const fechaString = sesion.fechaHora.replace('Z', '');
+    const fecha = new Date(fechaString);
+    const fechaHora = fecha.toLocaleString('es-AR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -894,9 +901,8 @@ export async function editarSesion(sesionId) {
       document.getElementById("editSesionLibroId").value = sesion.clubBookId || "";
       
       // Convertir fecha ISO a formato datetime-local (YYYY-MM-DDTHH:MM)
-      // La fecha viene en formato ISO: "2024-12-08T15:00:00.000Z"
-      // Solo tomamos los primeros 16 caracteres para datetime-local
-      const fechaISO = sesion.fechaHora;
+      // Remover Z y tomar solo los primeros 16 caracteres
+      const fechaISO = sesion.fechaHora.replace('Z', '');
       document.getElementById("editSesionFechaHora").value = fechaISO.slice(0, 16);
       
       document.getElementById("editSesionLugar").value = sesion.lugar;
@@ -937,7 +943,9 @@ export async function editarSesionSubmit(event) {
   const sesionId = document.getElementById("editSesionId").value;
   const formData = new FormData(event.target);
   const fechaHoraLocal = formData.get("fechaHora");
-  const fechaISO = fechaHoraLocal + ":00.000Z";
+  // Crear objeto Date y ajustar para guardar como UTC manteniendo la hora local
+  const fecha = new Date(fechaHoraLocal);
+  const fechaISO = new Date(fecha.getTime() - fecha.getTimezoneOffset() * 60000).toISOString();
   
   const datos = {
     titulo: formData.get("titulo"),
