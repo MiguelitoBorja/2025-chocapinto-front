@@ -6,6 +6,7 @@ import { initAppHeader, setHeaderContext } from "./club-componentes/app-header.j
 import { initNotificaciones } from "./club-componentes/notificaciones-alertas.js";
 import { addHeaderAction } from "./club-componentes/app-header.js";
 import { initSessionManager, stopSessionManager } from "./sessionManager.js";
+import { escapeHtml, sanitizeText } from "./utils/sanitize.js";
 
 
 function logout() {
@@ -67,10 +68,12 @@ function crearMensajeMisClubesVacio() {
 function createRankingItemHTML(user) {
     
     const hasAvatar = user.avatar && user.avatar.trim() !== '';
+    const safeUsername = escapeHtml(user.username || '?');
     const initials = user.username ? user.username.charAt(0).toUpperCase() : '?';
     console.log(hasAvatar);
+    const safeAvatar = escapeHtml(user.avatar);
     const avatarHTML = hasAvatar 
-        ? `<img src="../images/avatars/${user.avatar}" alt="Avatar de ${user.username}" class="ranking-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+        ? `<img src="../images/avatars/${safeAvatar}" alt="Avatar de ${safeUsername}" class="ranking-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
         : '';
     
     const initialsHTML = `<div class="ranking-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${initials}</div>`;
@@ -83,7 +86,7 @@ function createRankingItemHTML(user) {
                 ${initialsHTML}
             </div>
             <div class="ranking-info">
-                <h4>${user.username}</h4>
+                <h4>${safeUsername}</h4>
                 <p>Clubes unidos:</p>
             </div>
             <span class="ranking-metrica">${user.clubsCount}</span>
@@ -204,12 +207,18 @@ function crearTarjetaClub(club, esMiembro, esCreador, img) {
     const clubCard = document.createElement("div");
     clubCard.className = "section-card club-card";
     
+    // Sanitizar datos del club para prevenir XSS
+    const safeName = escapeHtml(club.name);
+    const safeDescription = escapeHtml(club.description);
+    const shortDescription = safeDescription.split(' ').slice(0, 15).join(' ');
+    const descriptionEllipsis = club.description.split(' ').length > 15 ? '...' : '';
+    
     clubCard.innerHTML = `
         <div class="club-logo" style="width:70px;height:70px;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:50%;margin:0 auto 10px auto;border: 3px solid #eaf6ff;">
             <img src="${img}" alt="Logo del club" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
         </div>
-        <h3 title="${club.name}">${club.name}</h3>
-        <p>${club.description.split(' ').slice(0, 15).join(' ')}${club.description.split(' ').length > 15 ? '...' : ''}</p>
+        <h3 title="${safeName}">${safeName}</h3>
+        <p>${shortDescription}${descriptionEllipsis}</p>
         
         ${esMiembro ? '<span class="miembro-tag">Miembro Activo</span>' : '<button class="unirme-btn">Unirme</button>'}
         
@@ -388,17 +397,23 @@ function crearTarjetaLibro3D(libro) {
     
     const bookContent = document.createElement("div");
     bookContent.className = "book-content";
+    
+    // Sanitizar título y autor para prevenir XSS
+    const safeTitle = escapeHtml(libro.title);
+    const safeAuthor = escapeHtml(libro.author || "Autor desconocido");
+    
     bookContent.innerHTML = `
-        <div class="book-title">${libro.title}</div>
-        <div class="book-author">${libro.author ? libro.author : "Autor desconocido"}</div>
+        <div class="book-title">${safeTitle}</div>
+        <div class="book-author">${safeAuthor}</div>
     `;
     
     const cover = document.createElement("div");
     cover.className = "cover";
     
     if (libro.portada) {
+        const safeTitle = escapeHtml(libro.title);
         cover.innerHTML = `
-            <img src="${libro.portada}" alt="Portada de ${libro.title}">
+            <img src="${libro.portada}" alt="Portada de ${safeTitle}">
             <div class="cover-text" style="position:absolute;bottom:10px;">Ver detalles</div>
         `;
     } else {
@@ -464,13 +479,18 @@ function crearTarjetaBusquedaLibro(libro) {
     const card = document.createElement("div");
     card.className = "libro-busqueda-card";
     
+    // Sanitizar datos del libro
+    const safeTitle = escapeHtml(libro.title);
+    const safeAuthor = escapeHtml(libro.author);
+    const safeDescription = libro.description ? escapeHtml(libro.description.substring(0, 120)) + "..." : "";
+    
     card.innerHTML = `
         <div style="display:flex;gap:12px;">
             ${libro.thumbnail ? `<img src="${libro.thumbnail}" alt="Portada" style="width:60px;height:auto;border-radius:4px;">` : ""}
             <div>
-                <h4 style="margin:0 0 4px 0;">${libro.title}</h4>
-                <p style="margin:0 0 4px 0;font-size:0.95em;color:#636e72;">${libro.author}</p>
-                <p style="margin:0;font-size:0.9em;">${libro.description ? libro.description.substring(0, 120) + "..." : ""}</p>
+                <h4 style="margin:0 0 4px 0;">${safeTitle}</h4>
+                <p style="margin:0 0 4px 0;font-size:0.95em;color:#636e72;">${safeAuthor}</p>
+                <p style="margin:0;font-size:0.9em;">${safeDescription}</p>
             </div>
         </div>
     `;
@@ -506,7 +526,9 @@ function configurarBusquedaTiempoReal() {
         libros.forEach(libro => {
             const div = document.createElement("div");
             div.className = "busqueda-libro-item";
-            div.innerHTML = `<strong>${libro.title}</strong> <span style='color:#636e72;font-size:0.95em;'>${libro.author}</span>`;
+            const safeTitle = escapeHtml(libro.title);
+            const safeAuthor = escapeHtml(libro.author);
+            div.innerHTML = `<strong>${safeTitle}</strong> <span style='color:#636e72;font-size:0.95em;'>${safeAuthor}</span>`;
             resultados.appendChild(div);
         });
     });
@@ -553,6 +575,9 @@ function crearTarjetaLibroLegacy(libro) {
             `<span style="background:#eaf6ff;color:#2c5a91;padding:2px 6px;border-radius:8px;font-size:0.8rem;margin-right:4px;">${cat.nombre}</span>`
         ).join(" ") : "";
 
+    const safeTitle = escapeHtml(libro.title);
+    const safeAuthor = libro.author ? escapeHtml(libro.author) : '';
+    
     card.innerHTML = `
         <div style='width:100%;display:flex;flex-direction:column;align-items:center;'>
             ${libro.portada ? 
@@ -560,8 +585,8 @@ function crearTarjetaLibroLegacy(libro) {
                 `<div style='width:100%;height:150px;background:#eaf6ff;border-radius:8px;margin-bottom:1rem;'></div>`
             }
             <div style='text-align:center;'>
-                <strong style='color:#2c5a91;font-size:1.1rem;'>${libro.title}</strong>
-                ${libro.author ? `<br><span style="color:#636e72;font-size:0.9rem;">de ${libro.author}</span>` : ''}
+                <strong style='color:#2c5a91;font-size:1.1rem;'>${safeTitle}</strong>
+                ${safeAuthor ? `<br><span style="color:#636e72;font-size:0.9rem;">de ${safeAuthor}</span>` : ''}
                 <div style="margin-top:6px;">${categoriasHTML}</div>
             </div>
         </div>

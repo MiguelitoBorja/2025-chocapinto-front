@@ -1,4 +1,5 @@
 import { authFetch } from '../authFetch.js';
+import { escapeHtml } from '../utils/sanitize.js';
 
 function initPeriodosHistoryComponent() {
     const historialBtn = document.getElementById('btn-historial-periodos');
@@ -122,7 +123,7 @@ const fechaCierre = fechaCierreDate.toLocaleDateString('es-ES', {
                             <div class="libro-portada-pequena">
                                 ${libroGanador.book?.portada ? `
                                     <img src="${libroGanador.book.portada}" 
-                                         alt="Portada de ${libroGanador.book.title}" 
+                                         alt="Portada de ${escapeHtml(libroGanador.book.title)}" 
                                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <div class="placeholder-portada-pequena" style="display: none;">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -140,8 +141,8 @@ const fechaCierre = fechaCierreDate.toLocaleDateString('es-ES', {
                                 `}
                             </div>
                             <div class="libro-detalles">
-                                <h5>${libroGanador.book?.title || 'Libro no disponible'}</h5>
-                                <p>${libroGanador.book?.author || 'Autor desconocido'}</p>
+                                <h5>${escapeHtml(libroGanador.book?.title || 'Libro no disponible')}</h5>
+                                <p>${escapeHtml(libroGanador.book?.author || 'Autor desconocido')}</p>
                             </div>
                         </div>
                     ` : `

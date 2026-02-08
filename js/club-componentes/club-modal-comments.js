@@ -1,4 +1,5 @@
 import { authFetch } from '../authFetch.js';
+import { escapeHtml } from '../utils/sanitize.js';
 
 function initCommentsModal() {
     const modalComentarios = window.modalComentarios;
@@ -203,12 +204,16 @@ async function cargarComentarios(bookId, clubId) {
           const commentItem = document.createElement("div");
           commentItem.className = "comment-item";
           
+          // Sanitizar datos del usuario y comentario
+          const safeUsername = escapeHtml(c.user.username || 'Usuario');
+          const safeContent = escapeHtml(c.content);
+          const safeAvatar = escapeHtml(c.user.avatar);
           const avatarLetter = c.user.username ? c.user.username.charAt(0).toUpperCase() : 'U';
           
           const hasAvatar = c.user.avatar && c.user.avatar.trim() !== '';
 
           const avatarHTML = hasAvatar 
-            ? `<img src="../images/avatars/${c.user.avatar}" alt="Avatar de ${c.user.username}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            ? `<img src="../images/avatars/${safeAvatar}" alt="Avatar de ${safeUsername}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                <div class="avatar-initials-comm" style="display:none;">R</div>`
             : `<div class="avatar-initials-comm">R</div>`;
 
@@ -218,11 +223,11 @@ async function cargarComentarios(bookId, clubId) {
                 ${avatarHTML}
               </div>
               <div class="user-info">
-                <span>${c.user.username}</span>
+                <span>${safeUsername}</span>
                 <p>Hace un momento</p>
               </div>
             </div>
-            <p class="comment-content">${c.content}</p>
+            <p class="comment-content">${safeContent}</p>
           `;
 
           const isCommentOwner = c.userId === userId;

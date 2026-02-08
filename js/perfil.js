@@ -2,7 +2,8 @@ import { authFetch } from "./authFetch.js";
 import { showNotification } from "../componentes/notificacion.js";
 import { showLoader, hideLoader } from "../componentes/loader.js";
 import { mostrarConfirmacion } from "../componentes/confirmacion.js";
-import { initSessionManager } from "./sessionManager.js"; 
+import { initSessionManager } from "./sessionManager.js";
+import { escapeHtml } from "./utils/sanitize.js"; 
 const LOGIN_URL = "../html/index.html";
 
 const AVATARS_POR_NIVEL = {
@@ -436,7 +437,7 @@ async function loadMyClubs() {
                                 alt="Foto del club">
 
                             <div class="club-info">
-                                <h3 class="club-name">${club.name}</h3>
+                                <h3 class="club-name">${escapeHtml(club.name)}</h3>
 
                                 <p class="club-detail"><strong>Rol:</strong> ${roleText}</p>
                                 <p class="club-detail"><strong>Se unió el:</strong> ${new Date(club.joinedAt).toLocaleDateString()}</p>

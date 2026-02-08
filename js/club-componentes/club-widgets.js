@@ -1,5 +1,6 @@
 import { authFetch } from '../authFetch.js';
 import { getClubId } from "./club-utils.js";
+import { escapeHtml } from '../utils/sanitize.js';
 
 async function cargarProgresoLectura() {
     try {
@@ -81,13 +82,13 @@ function mostrarProgresoLectura(libros, periodoActivo = null) {
             <div class="progress-item" data-libro-id="${libro.id}">
                 <div class="book-thumbnail">
                     <img src="${libro.portada || '../images/book-placeholder.jpg'}" 
-                         alt="${libro.title}" 
+                         alt="${escapeHtml(libro.title)}" 
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="book-placeholder" style="display:none;">📖</div>
                 </div>
                 <div class="book-info">
-                    <h4>${libro.title || 'Título no disponible'}</h4>
-                    <p>${libro.author || 'Autor desconocido'}</p>
+                    <h4>${escapeHtml(libro.title || 'Título no disponible')}</h4>
+                    <p>${escapeHtml(libro.author || 'Autor desconocido')}</p>
                     <div class="progress-details">
                         <span>${detalleProgreso}</span>
                         <span>${porcentaje}%</span>
@@ -462,6 +463,11 @@ function getActivityDisplayReal(activity) {
     // Usar el tipo de evento si está disponible, sino usar el estado
     const tipoEvento = activity.tipo || activity.estado;
     
+    // Sanitizar datos para prevenir XSS
+    const safeUsername = escapeHtml(username);
+    const safeBookTitle = escapeHtml(bookTitle);
+    const safeBookAuthor = escapeHtml(bookAuthor);
+    
     switch (tipoEvento) {
         case 'libro_agregado':
         case 'por_leer':
@@ -472,7 +478,7 @@ function getActivityDisplayReal(activity) {
                     <line x1="12" y1="8" x2="12" y2="16"/>
                     <line x1="8" y1="12" x2="16" y2="12"/>
                 </svg>`,
-                text: `<strong>${username}</strong> agregó "${bookTitle}"${bookAuthor} al club`,
+                text: `<strong>${safeUsername}</strong> agregó "${safeBookTitle}"${safeBookAuthor} al club`,
                 color: 'book'
             };
             
@@ -484,7 +490,7 @@ function getActivityDisplayReal(activity) {
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                 </svg>`,
-                text: `<strong>${username}</strong> comenzó a leer "${bookTitle}"${bookAuthor}`,
+                text: `<strong>${safeUsername}</strong> comenzó a leer "${safeBookTitle}"${safeBookAuthor}`,
                 color: 'star'
             };
             
@@ -504,7 +510,7 @@ function getActivityDisplayReal(activity) {
                     <path d="M10 14.66V17c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2.34"/>
                     <path d="M2 14h20v-2c0-4.4-3.6-8-8-8H10c-4.4 0-8 3.6-8 8v2z"/>
                 </svg>`,
-                text: `<strong>${username}</strong> completó "${bookTitle}"${bookAuthor}${duracionTexto}`,
+                text: `<strong>${safeUsername}</strong> completó "${safeBookTitle}"${safeBookAuthor}${duracionTexto}`,
                 color: 'trophy'
             };
             
@@ -515,7 +521,7 @@ function getActivityDisplayReal(activity) {
                     <line x1="12" y1="8" x2="12" y2="12"/>
                     <line x1="12" y1="16" x2="12.01" y2="16"/>
                 </svg>`,
-                text: `<strong>${username}</strong> realizó una acción con "${bookTitle}"${bookAuthor}`,
+                text: `<strong>${safeUsername}</strong> realizó una acción con "${safeBookTitle}"${safeBookAuthor}`,
                 color: 'user'
             };
     }

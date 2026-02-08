@@ -1,4 +1,5 @@
 import { authFetch } from '../authFetch.js';
+import { escapeHtml } from '../utils/sanitize.js';
 
 // Variables para el gráfico
 let graficoInstancia = null;
@@ -455,13 +456,15 @@ function mostrarListaRanking(ranking, club) {
     
     const html = ranking.map((usuario, index) => {
         const positionClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+        const safeUsername = escapeHtml(usuario.username);
         const initials = usuario.username.charAt(0).toUpperCase();
         
         const miembro = club.members?.find(m => m.id === usuario.userId || m.username === usuario.username);
         const hasAvatar = miembro && miembro.avatar && miembro.avatar.trim() !== '';
+        const safeAvatar = miembro && miembro.avatar ? escapeHtml(miembro.avatar) : '';
         
         const avatarHTML = hasAvatar 
-            ? `<img src="../images/avatars/${miembro.avatar}" alt="Avatar de ${usuario.username}" class="ranking-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
+            ? `<img src="../images/avatars/${safeAvatar}" alt="Avatar de ${safeUsername}" class="ranking-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 
             : '';
         
         const initialsHTML = `<div class="ranking-avatar-initials" style="${hasAvatar ? 'display: none;' : 'display: flex;'}">${initials}</div>`;

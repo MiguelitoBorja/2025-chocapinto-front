@@ -1,5 +1,6 @@
 import { authFetch } from '../authFetch.js';
 import { showNotification } from "../../componentes/notificacion.js";
+import { escapeHtml } from '../utils/sanitize.js';
 
 function formatearFechaLocal(fecha) {
   const offset = fecha.getTimezoneOffset() * 60000;
