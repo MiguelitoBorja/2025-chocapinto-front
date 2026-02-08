@@ -1,5 +1,5 @@
 import { authFetch } from '../authFetch.js';
-
+import { GOOGLE_BOOKS_API_KEY } from '../env.js';
 let categoriasDisponibles = [];
 
 // ========== VERIFICACIÓN DE ROLES ==========
@@ -440,7 +440,7 @@ async function buscarCursosAPI(query) {
     }
 }
 async function buscarLibrosGoogleBooksAPI(query) {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${GOOGLE_BOOKS_API_KEY}`;
     try {
         const res = await fetch(url);
         const data = await res.json();
@@ -739,6 +739,7 @@ function initBookModal() {
     window.getRoleColor = getRoleColor;
     window.getRoleDisplayName = getRoleDisplayName;
     window.buscarCursosAPI = buscarCursosAPI;
+    
     
 }
 
