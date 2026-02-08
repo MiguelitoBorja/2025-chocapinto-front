@@ -359,6 +359,38 @@
   background-color: #fee2e2;
 }
 
+/* Button Icon Category Styles */
+.btn-icon-category {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #2c5a91;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+  border-radius: 4px;
+}
+
+.btn-icon-category svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-icon-category:hover {
+  background: #eaf6ff;
+}
+
+.btn-danger-category {
+  color: #e74c3c;
+}
+
+.btn-danger-category:hover {
+  background: #ffebee;
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
   .main-header {
@@ -2747,6 +2779,10 @@ main {
   align-items: center;
   justify-content: center;
   gap: 8px;
+}
+
+.search-tab svg {
+  flex-shrink: 0;
 }
 
 .search-tab:hover {
@@ -7973,6 +8009,10 @@ main {
   color: var(--gray-400);
 }
 
+.cover-placeholder svg {
+  opacity: 0.7;
+}
+
 .result-info {
   flex: 1;
   min-width: 0;
@@ -8001,6 +8041,15 @@ main {
 .result-action {
   color: var(--gray-400);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.result-action svg {
+  width: 20px;
+  height: 20px;
 }
 
 .search-result-item:hover .result-action {
