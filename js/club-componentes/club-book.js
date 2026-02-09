@@ -808,7 +808,9 @@ async function actualizarCategoriasEnModal(nuevaCategoria) {
             checkbox.classList.remove('categoria-nueva');
         }, 300);
         
-    } catch (error) {}
+    } catch (error) {
+        console.error('[ERROR] Error al actualizar categorías en modal:', error);
+    }
 }
 
 /**
@@ -824,7 +826,9 @@ async function actualizarCategoriasEnDashboard() {
             window.actualizarWidgetCategorias();
         }
         
-    } catch (error) {}
+    } catch (error) {
+        console.error('[ERROR] Error al actualizar categorías en dashboard:', error);
+    }
 }
 
 // Exponer las funciones globalmente

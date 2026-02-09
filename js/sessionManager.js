@@ -85,8 +85,6 @@ export function initSessionManager() {
     
     // Iniciar el temporizador
     resetInactivityTimer();
-    
-    console.log('Sistema de auto-logout inicializado (5 minutos de inactividad)');
 }
 
 /**

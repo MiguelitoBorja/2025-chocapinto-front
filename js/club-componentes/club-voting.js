@@ -264,6 +264,7 @@ async function actualizarBotonDinamico() {
         }
         
     } catch (error) {
+        console.error('[ERROR] Error al actualizar botón dinámico:', error);
     }
 }
 

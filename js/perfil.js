@@ -747,8 +747,7 @@ async function cargarAvatarActual() {
                 `;
             }
         }
-    } catch (error) {
-    }
+    } catch (error) {        console.error('[ERROR] Error al cargar recompensas de nivel:', error);    }
 }
 
 window.abrirModalAvatar = abrirModalAvatar;

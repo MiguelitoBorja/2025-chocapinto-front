@@ -389,7 +389,9 @@ async function cargarLibrosParaSesion() {
         });
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error('[ERROR] Error al cargar libros para crear sesión:', error);
+  }
 }
 
 /**
@@ -416,7 +418,9 @@ async function cargarLibrosParaEditar() {
         });
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error('[ERROR] Error al cargar libros para editar sesión:', error);
+  }
 }
 
 /**

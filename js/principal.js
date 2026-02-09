@@ -70,7 +70,6 @@ function createRankingItemHTML(user) {
     const hasAvatar = user.avatar && user.avatar.trim() !== '';
     const safeUsername = escapeHtml(user.username || '?');
     const initials = user.username ? user.username.charAt(0).toUpperCase() : '?';
-    console.log(hasAvatar);
     const safeAvatar = escapeHtml(user.avatar);
     const avatarHTML = hasAvatar 
         ? `<img src="../images/avatars/${safeAvatar}" alt="Avatar de ${safeUsername}" class="ranking-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` 

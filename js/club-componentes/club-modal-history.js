@@ -186,20 +186,6 @@ async function obtenerEventosPeriodosLectura() {
         if (data.success && data.historial) {
             const eventosPeridos = [];
             
-            // 🔍 DEBUG: Ver fechas de períodos
-            console.log('===== DEBUG PERÍODOS (Modal Historial) =====');
-            console.log('Total períodos:', data.historial.length);
-            data.historial.forEach((periodo, index) => {
-                console.log(`\n--- Período ${index + 1}: ${periodo.nombre} ---`);
-                console.log('Estado:', periodo.estado);
-                console.log('createdAt:', periodo.createdAt, '→', new Date(periodo.createdAt));
-                console.log('fechaFinVotacion:', periodo.fechaFinVotacion, '→', new Date(periodo.fechaFinVotacion));
-                console.log('fechaFinLectura:', periodo.fechaFinLectura, '→', new Date(periodo.fechaFinLectura));
-                console.log('updatedAt:', periodo.updatedAt, '→', new Date(periodo.updatedAt));
-                console.log('Libro ganador:', periodo.libroGanador?.book?.title || 'Sin libro');
-            });
-            console.log('========================================\n');
-            
             data.historial.forEach(periodo => {
                 if (periodo.libroGanador && periodo.libroGanador.book) {
                     const libro = periodo.libroGanador.book;

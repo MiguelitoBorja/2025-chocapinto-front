@@ -30,6 +30,7 @@ async function cargarContadorNoLeidas(userId) {
       actualizarBadgeNotificaciones(data.count);
     }
   } catch (error) {
+    console.error('[ERROR] Error al obtener contador de notificaciones:', error);
   }
 }
 
@@ -288,6 +289,7 @@ export async function marcarNotificacionLeida(notifId) {
       }
     }
   } catch (error) {
+    console.error('[ERROR] Error al marcar notificación como leída:', error);
   }
 }
 
@@ -307,6 +309,7 @@ export async function marcarTodasLeidas() {
       cargarNotificaciones(userId);
     }
   } catch (error) {
+    console.error('[ERROR] Error al marcar todas las notificaciones:', error);
   }
 }
 

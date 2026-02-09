@@ -568,7 +568,9 @@ function loadUserAvatar() {
         }
       }
     })
-    .catch(() => {});
+    .catch((error) => {
+      console.error('[ERROR] Error al cargar avatar del usuario:', error);
+    });
 }
 
 /**
@@ -615,5 +617,7 @@ function updateUserXpHeader() {
         xpFillEl.style.width = `${percent}%`;
       }
     })
-    .catch(() => {});
+    .catch((error) => {
+      console.error('[ERROR] Error al cargar XP del usuario:', error);
+    });
 }
