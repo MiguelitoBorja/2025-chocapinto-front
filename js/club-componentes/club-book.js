@@ -1,5 +1,5 @@
 import { authFetch } from '../authFetch.js';
-
+import { GOOGLE_BOOKS_API_KEY } from '../env.js';
 let categoriasDisponibles = [];
 
 // ========== VERIFICACIÓN DE ROLES ==========
